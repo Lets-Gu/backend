@@ -1,0 +1,6 @@
+[submodule "config"]
+	path = config
+	url = https://github.com/Likelion-Avengers/Backend-Security.git
+[submodule "module"]
+	path = module
+	url = https://github.com/Likelion-Avengers/Backend-Security.git
