@@ -37,6 +37,9 @@ dependencies {
 	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8'
 
+	// 테스트용 H2
+	testImplementation 'com.h2database:h2'
+
 }
 
 tasks.named('test') {
