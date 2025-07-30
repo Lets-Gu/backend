@@ -6,6 +6,7 @@ import avengers.lion.global.jwt.JwtAccessDeniedHandler;
 import avengers.lion.global.jwt.JwtAuthenticationFailEntryPoint;
 import avengers.lion.global.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,6 +24,9 @@ public class SecurityConfig {
     private final JwtFilter jwtFilter;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationFailEntryPoint jwtAuthenticationFailEntryPoint;
+
+    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+    private String REDIRECT_URL;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, OAuth2SuccessHandler oAuth2SuccessHandler) throws Exception {
@@ -45,7 +49,7 @@ public class SecurityConfig {
                         .authorizationEndpoint(authz -> authz
                                 .baseUri("/oauth2/authorize"))
                         .redirectionEndpoint(redir -> redir
-                                .baseUri("/oauth2/callback/*"))
+                                .baseUri(REDIRECT_URL))
                         .userInfoEndpoint(ui -> ui
                                 .userService(KakaoMemberDetailsService))
                         // 카카오 로그인에 성공하면, 실행
