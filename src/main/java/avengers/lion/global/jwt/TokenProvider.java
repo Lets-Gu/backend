@@ -74,7 +74,7 @@ public class TokenProvider {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
+                    .setSigningKey(secretkey)
                     .build()
                     .parseClaimsJws(token);
             return true;
