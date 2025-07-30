@@ -41,7 +41,7 @@ public class SecurityConfig {
                 // URL 접근 권한 설정
                 .authorizeHttpRequests(auth -> auth
                         // 로그인, 콜백, 퍼블릭 API 허용
-                        .requestMatchers("/", "/oauth2/**", "/login", "/error").permitAll()
+                        .requestMatchers("/", "/oauth2/**", "/login/**", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 // OAuth2 로그인 설정
@@ -49,7 +49,7 @@ public class SecurityConfig {
                         .authorizationEndpoint(authz -> authz
                                 .baseUri("/oauth2/authorize"))
                         .redirectionEndpoint(redir -> redir
-                                .baseUri(REDIRECT_URL))
+                                .baseUri("/login/oauth2/code/kakao"))
                         .userInfoEndpoint(ui -> ui
                                 .userService(KakaoMemberDetailsService))
                         // 카카오 로그인에 성공하면, 실행

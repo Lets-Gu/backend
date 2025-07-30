@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -31,6 +32,7 @@ import java.io.IOException;
 우리 서비스 전용 JWT를 발급하고, 클라이언트를 accessToken, refreshToken을 담은 URL로 리다이렉트 하는 역할
 SimpleUrl~~ : 스프링 시큐리티의 기본 성공 핸들러
  */
+@Slf4j
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final TokenProvider tokenProvider;
@@ -57,8 +59,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
-        SuccessResponseBody<TokenDto> successResponse = new SuccessResponseBody<>(tokenDto);
-
+        SuccessResponseBody<Void> successResponse = new SuccessResponseBody<>();
+        response.setHeader("Access-Token",tokenDto.accessToken());
+        response.setHeader("Refresh-Token",tokenDto.refreshToken());
+        log.info("로그인성공");
         try{
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonResponse = objectMapper.writeValueAsString(successResponse);
@@ -66,6 +70,5 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         } catch(IOException e){
             throw new BusinessException(ExceptionType.UNEXPECTED_SERVER_ERROR);
         }
-
     }
 }
