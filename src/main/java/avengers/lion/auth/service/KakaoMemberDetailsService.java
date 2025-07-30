@@ -7,6 +7,7 @@ import avengers.lion.auth.repository.MemberRepository;
 import avengers.lion.member.Member;
 import avengers.lion.member.MemberRole;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -22,6 +23,7 @@ import java.util.Collections;
 /*
 OAuth2 사용자 정보 처리
  */
+@Slf4j
 public class KakaoMemberDetailsService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
@@ -30,6 +32,7 @@ public class KakaoMemberDetailsService extends DefaultOAuth2UserService {
     @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
+        log.info("oAuth2User : {}", oAuth2User);
         // request 에서 사용자 정보가 담긴 객체를 가져옴
         KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
 
@@ -43,8 +46,9 @@ public class KakaoMemberDetailsService extends DefaultOAuth2UserService {
                                         .role(MemberRole.ROLE_USER)
                                         .build()
                         ));
+        log.info("member : {}", member);
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(member.getRole().name());
-        return new KakaoMemberDetails(String.valueOf(member.getEmail()),
+        return new KakaoMemberDetails(kakaoUserInfo.getEmail(),member.getMemberId(),
                 Collections.singletonList(authority),
                 oAuth2User.getAttributes());
     }

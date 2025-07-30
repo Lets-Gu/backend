@@ -106,25 +106,29 @@ public class TokenProvider {
         }
     }
 
-    // token으로부터 Authentication 객체를 만들어 리턴하는 메소드
+    /*
+    클라이언트가 보낸 JWT 토큰을 스프링 시큐리티가 이해하는 인증 객체로 변환
+     */
     public Authentication getAuthentication(String token) {
+        // 토큰 서명을 검증
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-
-        List<String> authorities = Arrays.asList(claims.get(AUTH_KEY)
-                .toString()
-                .split(","));
-
+        // 토큰의 권한을 리스트로 변환
         GrantedAuthority authority = new SimpleGrantedAuthority(claims.get(AUTH_KEY).toString());
         List<GrantedAuthority> simpleGrantedAuthorities = Collections.singletonList(authority);
-
+        // 사용자를 나타내는 principal 객체 생성
         KakaoMemberDetails principal = new KakaoMemberDetails(
-                claims.get(AUTH_MEMBER_ID).toString(),
+                null,
+                Long.valueOf(claims.get(AUTH_MEMBER_ID).toString()),
                 simpleGrantedAuthorities, Map.of());
-
+        /*
+        principal : 인증된 사용자 자체
+        credentials : 사용자 인증을 증명하는 비밀값, jwt에서는 토큰
+        authorities : 사용자가 가진 권한 목록
+         */
         return new UsernamePasswordAuthenticationToken(principal, token, simpleGrantedAuthorities);
     }
 }
