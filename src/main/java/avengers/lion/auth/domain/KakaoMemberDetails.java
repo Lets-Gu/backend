@@ -1,5 +1,6 @@
 package avengers.lion.auth.domain;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -16,6 +17,8 @@ OAuth2User 인터페이스의 구현체로 작성해야 Authentication 객체 �
 public class KakaoMemberDetails implements OAuth2User {
 
     private final String email;
+    @Getter
+    private final Long memberId;
     private final List<? extends GrantedAuthority> authorities;
     private final Map<String, Object> attributes;
 
