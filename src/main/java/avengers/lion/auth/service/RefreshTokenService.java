@@ -16,19 +16,19 @@ public class RefreshTokenService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final TokenProvider tokenProvider;
 
-    public void reissueRefreshToken(Long userId, String refreshToken, HttpServletResponse response){
+    public void reissueRefreshToken(Long memberId, String refreshToken, HttpServletResponse response){
         // 리프레시 토큰이 유효한지 확인
         if(!tokenProvider.validateToken(refreshToken))
             throw new BusinessException(ExceptionType.INVALID_REFRESH_TOKEN);
         // 레디스에 리프레시 토큰이 존재하지 않으면 로그인 실패
-        String redisRefreshToken = refreshTokenRepository.findRefreshToken(userId)
+        String redisRefreshToken = refreshTokenRepository.findRefreshToken(memberId)
                 .orElseThrow(()->new BusinessException(ExceptionType.EXPIRED_REFRESH_TOKEN));
         if(!refreshToken.equals(redisRefreshToken))
             throw new BusinessException(ExceptionType.INVALID_REFRESH_TOKEN);
         // 레디스에 리프레시 토큰이 존재하면, 액세스 토큰과 리프레시 토큰 재발급
-        TokenDto tokenDto = tokenProvider.createToken(userId, "ROLE_USER");
-        refreshTokenRepository.deleteRefreshToken(userId);
-        refreshTokenRepository.saveRefreshToken(userId, tokenDto.refreshToken());
+        TokenDto tokenDto = tokenProvider.createToken(memberId, "ROLE_USER");
+        refreshTokenRepository.deleteRefreshToken(memberId);
+        refreshTokenRepository.saveRefreshToken(memberId, tokenDto.refreshToken());
         response.setHeader("Access-Token", tokenDto.accessToken());
         response.setHeader("Refresh-Token", tokenDto.refreshToken());
     }

@@ -1,5 +1,6 @@
 package avengers.lion.auth;
 
+import avengers.lion.auth.domain.KakaoMemberDetails;
 import avengers.lion.auth.service.RefreshTokenService;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
@@ -22,9 +23,9 @@ public class RefreshTokenController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<ResponseBody<Void>> refreshToken(@AuthenticationPrincipal Long userId, @RequestHeader("Refresh-Token") String refreshToken,
+    public ResponseEntity<ResponseBody<Void>> refreshToken(@AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails, @RequestHeader("Refresh-Token") String refreshToken,
                                                            HttpServletResponse response){
-        refreshTokenService.reissueRefreshToken(userId, refreshToken, response);
+        refreshTokenService.reissueRefreshToken(kakaoMemberDetails.getMemberId(), refreshToken, response);
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse());
     }
 }
