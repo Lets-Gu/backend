@@ -26,7 +26,7 @@ public class RefreshTokenService {
         if(!refreshToken.equals(redisRefreshToken))
             throw new BusinessException(ExceptionType.INVALID_REFRESH_TOKEN);
         // 레디스에 리프레시 토큰이 존재하면, 액세스 토큰과 리프레시 토큰 재발급
-        TokenDto tokenDto = tokenProvider.createToken(userId.toString(), "ROLE_USER");
+        TokenDto tokenDto = tokenProvider.createToken(userId, "ROLE_USER");
         refreshTokenRepository.deleteRefreshToken(userId);
         refreshTokenRepository.saveRefreshToken(userId, tokenDto.refreshToken());
         response.setHeader("Access-Token", tokenDto.accessToken());

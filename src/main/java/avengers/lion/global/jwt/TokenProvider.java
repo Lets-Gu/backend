@@ -1,10 +1,12 @@
 package avengers.lion.global.jwt;
 
 import avengers.lion.auth.domain.KakaoMemberDetails;
+import avengers.lion.auth.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,10 +22,12 @@ import java.util.*;
 토큰 생성, 검증 클래스
  */
 @Component
+@RequiredArgsConstructor
 public class TokenProvider {
 
     private static final String AUTH_KEY = "AUTHORITY";
-    private static final String AUTH_EMAIL = "EMAIL";
+    private static final String AUTH_MEMBER_ID = "MEMBER_ID";
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Value("${jwt.secret-key}")
     private String secretKey;
@@ -43,7 +47,7 @@ public class TokenProvider {
     /*
     Access, Refresh token 생성
      */
-    public TokenDto createToken(String email, String role){
+    public TokenDto createToken(Long memberId, String role){
         long now = (new Date()).getTime();
 
         Date accessValidity = new Date(now + this.accessTokenValidityMilliSeconds);
@@ -51,7 +55,7 @@ public class TokenProvider {
 
         // 액세스 토큰 생성
         String accessToken = Jwts.builder()
-                .addClaims(Map.of(AUTH_EMAIL, email))
+                .addClaims(Map.of(AUTH_MEMBER_ID, memberId))
                 .addClaims(Map.of(AUTH_KEY, role))
                 .signWith(secretkey, SignatureAlgorithm.HS256)
                 .setExpiration(accessValidity)
@@ -59,12 +63,12 @@ public class TokenProvider {
 
         // 리프레시 토큰 생성
         String refreshToken = Jwts.builder()
-                .addClaims(Map.of(AUTH_EMAIL, email))
+                .addClaims(Map.of(AUTH_MEMBER_ID, memberId))
                 .addClaims(Map.of(AUTH_KEY, role))
                 .signWith(secretkey, SignatureAlgorithm.HS256)
                 .setExpiration(refreshValidity)
                 .compact();
-
+        refreshTokenRepository.saveRefreshToken(memberId, refreshToken);
         return new TokenDto(accessToken, refreshToken);
     }
 
