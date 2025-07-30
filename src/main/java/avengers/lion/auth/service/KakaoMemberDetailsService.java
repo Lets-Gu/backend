@@ -47,6 +47,5 @@ public class KakaoMemberDetailsService extends DefaultOAuth2UserService {
         return new KakaoMemberDetails(String.valueOf(member.getEmail()),
                 Collections.singletonList(authority),
                 oAuth2User.getAttributes());
-
     }
 }

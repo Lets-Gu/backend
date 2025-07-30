@@ -5,7 +5,6 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,13 +13,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
-@RequiredArgsConstructor
+
 /*
 토큰 생성, 검증 클래스
  */
@@ -31,11 +26,11 @@ public class TokenProvider {
     private static final String AUTH_EMAIL = "EMAIL";
 
     @Value("${jwt.secret-key}")
-    private final String secretKey;
+    private String secretKey;
     @Value("${jwt.access-token-validity-milli-seconds}")
-    private final long accessTokenValidityMilliSeconds;
+    private long accessTokenValidityMilliSeconds;
     @Value("${jwt.refresh-token-validity-milli-seconds}")
-    private final long refreshTokenValidityMilliSeconds;
+    private long refreshTokenValidityMilliSeconds;
 
     private Key secretkey;
 
@@ -119,9 +114,8 @@ public class TokenProvider {
                 .toString()
                 .split(","));
 
-        List<? extends GrantedAuthority> simpleGrantedAuthorities = authorities.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        GrantedAuthority authority = new SimpleGrantedAuthority(claims.get(AUTH_KEY).toString());
+        List<GrantedAuthority> simpleGrantedAuthorities = Collections.singletonList(authority);
 
         KakaoMemberDetails principal = new KakaoMemberDetails(
                 (String) claims.get(AUTH_EMAIL),

@@ -45,17 +45,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // 파싱하기 위한 래퍼 클래스
         KakaoUserInfo kakaoUserInfo = new KakaoUserInfo(oAuth2User.getAttributes());
 
-        // DB에 이메일로 가입된 유저가 있는지 확인, 없으면 신규 회원 생성
+        // DB에 이메일로 가입된 유저가 있는지 확인
         Member member = memberRepository.findByEmail(kakaoUserInfo.getEmail())
-                .orElseGet(()->
-                        memberRepository.save(
-                                Member.builder()
-                                        .email(kakaoUserInfo.getEmail())
-                                        .nickname(kakaoUserInfo.getNickname())
-                                        .profileImageUrl(kakaoUserInfo.getProfileImageUrl())
-                                        .role(MemberRole.ROLE_USER)
-                                        .build()
-                        ));
+                .orElseThrow(()->new BusinessException(ExceptionType.MEMBER_NOT_FOUND));
 
         // 사용자 식별 정보를 이용해 토큰 발급
         TokenDto tokenDto = tokenProvider.createToken(member.getEmail(), member.getRole().name());
@@ -66,9 +58,14 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.setStatus(HttpServletResponse.SC_OK);
 
         SuccessResponseBody<TokenDto> successResponse = new SuccessResponseBody<>(tokenDto);
-        
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonResponse = objectMapper.writeValueAsString(successResponse);
-        response.getWriter().write(jsonResponse);
+
+        try{
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResponse = objectMapper.writeValueAsString(successResponse);
+            response.getWriter().write(jsonResponse);
+        } catch(IOException e){
+            throw new BusinessException(ExceptionType.UNEXPECTED_SERVER_ERROR);
+        }
+
     }
 }
