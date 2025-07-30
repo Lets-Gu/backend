@@ -59,20 +59,6 @@ public class GlobalExceptionHandler {
                 .body(ResponseUtil.createFailureResponse(ExceptionType.INVALID_ENDPOINT));
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ResponseBody<Void>> handleAccessDeniedException(AccessDeniedException e) {
-        log.error("AccessDeniedException : {}", e);
-        return ResponseEntity
-                .status(ExceptionType.ACCESS_DENIED.getStatus())
-                .body(ResponseUtil.createFailureResponse(ExceptionType.ACCESS_DENIED));
-    }
-
-    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
-    public ResponseEntity<ResponseBody<Void>> handleAuthenticationCredentialsNotFoundException(AuthenticationCredentialsNotFoundException e) {
-        return ResponseEntity
-                .status(ExceptionType.NEED_AUTHORIZED.getStatus())
-                .body(ResponseUtil.createFailureResponse(ExceptionType.NEED_AUTHORIZED));
-    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseBody<Void>> handleException(Exception e){
