@@ -122,7 +122,7 @@ public class TokenProvider {
         List<GrantedAuthority> simpleGrantedAuthorities = Collections.singletonList(authority);
 
         KakaoMemberDetails principal = new KakaoMemberDetails(
-                (String) claims.get(AUTH_EMAIL),
+                claims.get(AUTH_MEMBER_ID).toString(),
                 simpleGrantedAuthorities, Map.of());
 
         return new UsernamePasswordAuthenticationToken(principal, token, simpleGrantedAuthorities);
