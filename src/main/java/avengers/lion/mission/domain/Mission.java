@@ -3,8 +3,11 @@ package avengers.lion.mission.domain;
 import avengers.lion.global.base.BaseEntity;
 import avengers.lion.review.domain.Review;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /*
@@ -29,6 +32,17 @@ public class Mission extends BaseEntity {
 
     @Column(name = "status", nullable = false)
     private MissionStatus status;
+
+    @Column(name = "latitude", precision = 10, scale = 8)
+    @DecimalMin(value = "-90.0")
+    @DecimalMax(value = "90.0")
+    private BigDecimal latitude;
+
+    @Column(name = "longitude", precision = 11, scale = 8)
+    @DecimalMin(value = "-180.0")
+    @DecimalMax(value = "180.0")
+
+    private BigDecimal longitude;
 
     @ManyToOne
     @JoinColumn(name = "mission_batch_id", nullable = false)
