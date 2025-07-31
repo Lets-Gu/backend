@@ -19,7 +19,7 @@ public class CompletedMission {
     @Column(name = "completed_mission_id", nullable = false)
     private Long CompletedMissionId;
 
-    @Column(name = "member_id", nullable = false)
+    @Column(name = "completed_at", nullable = false)
     private LocalDateTime completedAt;
 
     @Column(name = "image_url")
