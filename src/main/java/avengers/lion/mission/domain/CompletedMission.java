@@ -35,5 +35,4 @@ public class CompletedMission {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
-
 }

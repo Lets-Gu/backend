@@ -29,6 +29,6 @@ public class MissionBatches {
     @Column(name = "batch_status", nullable = false)
     private BatchStatus batchStatus;
 
-    @OneToMany(mappedBy = "missionBatch")
+    @OneToMany(mappedBy = "missionBatches")
     private List<Mission> missions;
 }

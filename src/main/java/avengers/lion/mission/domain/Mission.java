@@ -47,7 +47,4 @@ public class Mission extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "mission_batch_id", nullable = false)
     private MissionBatches missionBatches;
-
-    @OneToMany(mappedBy = "mission")
-    private List<Review> reviews;
 }

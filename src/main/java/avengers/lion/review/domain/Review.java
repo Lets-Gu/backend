@@ -2,6 +2,7 @@ package avengers.lion.review.domain;
 
 import avengers.lion.global.base.BaseEntity;
 import avengers.lion.member.Member;
+import avengers.lion.mission.domain.CompletedMission;
 import avengers.lion.mission.domain.Mission;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
@@ -28,6 +29,6 @@ public class Review extends BaseEntity {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mission_id")
-    private Mission mission;
+    @JoinColumn(name = "completed_mission_id")
+    private CompletedMission completedMission;
 }
