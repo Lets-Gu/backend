@@ -1,14 +1,19 @@
 package avengers.lion.member;
 
+import avengers.lion.global.base.BaseEntity;
+import avengers.lion.mission.domain.CompletedMission;
+import avengers.lion.review.domain.Review;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
-public class Member {
+public class Member extends BaseEntity {
 
     @Id 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +35,12 @@ public class Member {
 
     @Column(name = "point", nullable = false)
     private int point;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CompletedMission> completedMissions;
 
     @Builder
     public Member(String email, String nickname, MemberRole role, String profileImageUrl) {
