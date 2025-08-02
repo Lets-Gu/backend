@@ -27,8 +27,12 @@ jobs:
       # 2) CI가 푸시한 최신 이미지 Pull (태그: sha-<SHA>)
       - name: Pull Docker image
         run: |
-          IMAGE=ghcr.io/likelion-avengers/backend:sha-${{ github.event.workflow_run.head_sha }}
-          docker pull "$IMAGE"
+          FULL_SHA=${{ github.event.workflow_run.head_sha }}
+          SHORT_SHA=${FULL_SHA:0:7}    # 앞 7글자만 자르기
+          IMAGE=ghcr.io/likelion-avengers/backend:sha-$SHORT_SHA
+          echo "Pulling $IMAGE"
+          docker pull $IMAGE
+
 
       # 3) 기존 컨테이너 종료 (있으면 제거)
       - name: Remove old container
