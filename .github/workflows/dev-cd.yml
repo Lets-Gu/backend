@@ -24,6 +24,7 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
+          token: ${{ secrets.ACTION_TOKEN }}
 
       # 2) CI에서 업로드한 JAR (build/libs/*.jar) 과 Dockerfile 을 워크스페이스에 추가로 가져옵니다.
       - name: Download artifact (jar only)
