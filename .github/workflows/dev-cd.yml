@@ -48,8 +48,16 @@ jobs:
             | xargs -r docker rmi -f || true
 
       - name: Run new container
+        env:
+          CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
+          NETWORK_NAME:   ${{ vars.NETWORK_NAME }}
+          DEV_WEB_PORT:   ${{ secrets.DEV_WEB_PORT }}
         run: |
+          FULL_SHA=${{ github.event.workflow_run.head_sha }}
+          SHORT_SHA=${FULL_SHA:0:7}
           IMAGE=ghcr.io/likelion-avengers/backend:sha-${SHORT_SHA}
+
+          echo "Running $IMAGE"
           docker run -d \
             --name "$CONTAINER_NAME" \
             --network "$NETWORK_NAME" \
@@ -57,3 +65,4 @@ jobs:
             -e USE_PROFILE=dev \
             -e TZ=Asia/Seoul \
             "$IMAGE"
+
