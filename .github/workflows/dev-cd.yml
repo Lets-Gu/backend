@@ -2,81 +2,21 @@ name: CD with Docker
 
 on:
   workflow_run:
-    workflows: [ "Java CI with Gradle" ]
+    workflows: [ "Java CI & Docker Build" ]
     types: [ completed ]
     branches: [ "dev" ]
 
 permissions:
   contents: read
-  packages: write
+  packages: read
 
 jobs:
-  build:
-    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'dev' }}
-    runs-on: ubuntu-latest
-    outputs:
-      image-tag: ${{ steps.meta.outputs.tags }}
-
-    steps:
-      # 1) 전체 소스 코드 + 서브모듈 내려받기
-      - name: Checkout source and submodules
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-          fetch-depth: 0
-          token: ${{ secrets.ACTION_TOKEN }}
-
-      # 2) CI에서 업로드한 JAR(및 Dockerfile, module/**) 추가 다운로드
-      - name: Download artifact (jar, Dockerfile, module)
-        uses: actions/download-artifact@v4
-        with:
-          run-id: ${{ github.event.workflow_run.id }}
-          name: build-libs
-
-      # 3) 멀티플랫폼 Docker 빌드를 위한 Buildx 설정
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        with:
-          driver: docker-container
-          driver-opts: |
-            network=host
-
-      # 4) GHCR 로그인 (이미지 푸시 준비)
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.ACTION_TOKEN }}
-
-      # 5) 이미지 메타데이터(태그, 레이블) 추출
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/${{ github.repository }}
-          tags: |
-            type=sha
-
-      # 6) Docker 이미지 빌드 및 GHCR 푸시
-      - name: Build and Push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
   deploy:
-    needs: build
-    runs-on: [self-hosted]
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: self-hosted
 
     steps:
-      # 7) EC2(self-hosted runner)에서 GHCR 로그인
+      # 1) GHCR 로그인 (PAT 사용)
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -84,26 +24,32 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.ACTION_TOKEN }}
 
-      # 8) 최신 이미지 Pull
-      - name: Pull latest image
-        run: docker pull ${{ needs.build.outputs.image-tag }}
-
-      # 9) 이전 컨테이너 종료 및 불필요한 이미지 정리
-      - name: Clean up old container and image
+      # 2) 최신 이미지 Pull (SHA 태그)
+      - name: Pull Docker image
         run: |
-          docker rm -f ${{ vars.CONTAINER_NAME }} || true
+          IMAGE=ghcr.io/${{ github.repository }}:${{ github.event.workflow_run.head_sha }}
+          docker pull $IMAGE
+
+      # 3) 기존 컨테이너 종료
+      - name: Remove old container
+        run: docker rm -f ${{ vars.CONTAINER_NAME }} || true
+
+      # 4) 오래된 이미지 정리
+      - name: Prune old images
+        run: |
           docker images "ghcr.io/${{ github.repository }}" \
-            --format "{{ .Repository }}:{{ .Tag }}" \
-            | grep -v "${{ needs.build.outputs.image-tag }}" \
+            --format "{{.Repository}}:{{.Tag}}" \
+            | grep -v "${{ github.event.workflow_run.head_sha }}" \
             | xargs -r docker rmi -f || true
 
-      # 10) 새 컨테이너 실행
+      # 5) 새 컨테이너 실행
       - name: Run new container
         run: |
+          IMAGE=ghcr.io/${{ github.repository }}:${{ github.event.workflow_run.head_sha }}
           docker run -d \
             --name ${{ vars.CONTAINER_NAME }} \
             --network ${{ vars.NETWORK_NAME }} \
             -p ${{ secrets.DEV_WEB_PORT }}:8080 \
             -e USE_PROFILE=dev \
             -e TZ=Asia/Seoul \
-            ${{ needs.build.outputs.image-tag }}
+            $IMAGE
