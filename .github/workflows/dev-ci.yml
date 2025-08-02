@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) 소스 코드와 서브모듈 체크아웃 (개인 PAT 사용)
+      # 1) 소스 코드 + 서브모듈 체크아웃 (PAT 사용)
       - name: Checkout source & submodules
         uses: actions/checkout@v4
         with:
@@ -40,7 +40,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # 5) 실제 빌드 수행
+      # 5) 실제 빌드 수행 (Fat JAR 생성)
       - name: Build with Gradle
         run: ./gradlew clean bootJar --no-daemon
 
@@ -51,7 +51,7 @@ jobs:
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
 
-      # 7) 빌드 산출물 업로드
+      # 7) 빌드 산출물 업로드 (JAR, Dockerfile, module 서브모듈)
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
