@@ -1,9 +1,8 @@
 name: CD with Docker
 
-
 on:
   workflow_run:
-    workflows: [ "Java CI WITH Gradle" ]
+    workflows: [ "Java CI with Gradle" ]  # CI 워크플로우 이름과 정확히 일치
     types: [ completed ]
     branches: [ "dev" ]
 
@@ -25,17 +24,17 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.ACTION_TOKEN }}
 
-      # 2) 최신 이미지 Pull (SHA 태그)
+      # 2) CI가 푸시한 최신 이미지 Pull (커밋 SHA 태그)
       - name: Pull Docker image
         run: |
           IMAGE=ghcr.io/${{ github.repository }}:${{ github.event.workflow_run.head_sha }}
           docker pull $IMAGE
 
-      # 3) 기존 컨테이너 종료
+      # 3) 기존 컨테이너 종료 (있으면 제거)
       - name: Remove old container
         run: docker rm -f ${{ vars.CONTAINER_NAME }} || true
 
-      # 4) 오래된 이미지 정리
+      # 4) 오래된 이미지 정리 (선택)
       - name: Prune old images
         run: |
           docker images "ghcr.io/${{ github.repository }}" \
