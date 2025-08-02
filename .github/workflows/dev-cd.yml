@@ -18,15 +18,21 @@ jobs:
       image-tag: ${{ steps.meta.outputs.tags }}
 
     steps:
-      # 도커 이미지 빌드를 위한 빌드 파일 내려 받기
-      - name: Download artifact
+      # 1) 소스 코드와 서브모듈을 내려받아 src/, module/, Dockerfile 등이 워크스페이스에 존재하도록 합니다.
+      - name: Checkout source and submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      # 2) CI에서 업로드한 JAR (build/libs/*.jar) 과 Dockerfile 을 워크스페이스에 추가로 가져옵니다.
+      - name: Download artifact (jar only)
         uses: actions/download-artifact@v4
         with:
           run-id: ${{ github.event.workflow_run.id }}
-          github-token: ${{ secrets.ACTION_TOKEN }}
           name: build-libs
 
-      # 도커 이미지 빌드를 위한 Docker Buildx 내려 받기
+      # 3) 멀티플랫폼 도커 빌드를 위한 Buildx 환경 설정
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
@@ -34,18 +40,15 @@ jobs:
           driver-opts: |
             network=host
 
-      # 도커 이미지 업로드를 위한 GitHub Container Registry 로그인
-      # https://docs.github.com/ko/packages/working-with-a-github-packages-registry/working-with-the-container-registry
+      # 4) GHCR 로그인 (이미지 푸시 준비)
       - name: Login to Github Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          # 개인 사용자 토큰의 소유자가 변경되면 이 설정 파일을 다시 커밋하여
-          # GitHub Actions 최초 실행 사용자를 변경해야 합니다.
           username: ${{ github.actor }}
           password: ${{ secrets.ACTION_TOKEN }}
 
-      # 메타 데이터를 추출해 이미지 태그 및 레이블 생성
+      # 5) 이미지 태그·레이블 생성 (커밋 SHA 기반)
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@v5
@@ -54,6 +57,7 @@ jobs:
           tags: |
             type=sha
 
+      # 6) Docker 이미지 빌드 & GHCR 푸시
       - name: Build and Push Docker image
         uses: docker/build-push-action@v6
         with:
@@ -70,7 +74,7 @@ jobs:
     needs: build
     runs-on: [self-hosted]
     steps:
-      # Docker 이미지 내려 받기를 위한 GHCR 로그인
+      # 7) 서버(EC2 등 self-hosted runner)에서 GHCR 로그인
       - name: Login to GHCR
         uses: docker/login-action@v3
         with:
@@ -78,20 +82,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.ACTION_TOKEN }}
 
-      # 이미지 내려 받기
+      # 8) 최신 이미지 다운로드
       - name: Pull latest image
         run: docker pull ${{ needs.build.outputs.image-tag }}
 
-      # 실행 중인 컨테이너 정리 및 기존 이미지 삭제
+      # 9) 이전 컨테이너 종료 및 불필요한 이미지 정리
       - name: Clean up old container and image
         run: |
           docker rm -f ${{ vars.CONTAINER_NAME }} || true
           docker images "ghcr.io/${{ github.repository }}" \
-          --format "{{.Repository}}:{{.Tag}}" \
-          | grep -v "${{ needs.build.outputs.image-tag }}" \
-          | xargs -r docker rmi -f || true
+            --format "{{.Repository}}:{{.Tag}}" \
+            | grep -v "${{ needs.build.outputs.image-tag }}" \
+            | xargs -r docker rmi -f || true
 
-      # 새로운 이미지로 새로운 컨테이너 생성하여 실행
+      # 10) 새 이미지를 기반으로 컨테이너 실행
       - name: Run New Container
         run: |
           docker run -d \
