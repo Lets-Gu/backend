@@ -37,15 +37,15 @@ jobs:
       # 4) 오래된 이미지 정리 (선택)
       - name: Prune old images
         run: |
-          docker images "ghcr.io/${{ github.repository }}" \
-            --format "{{.Repository}}:{{.Tag}}" \
-            | grep -v "${{ github.event.workflow_run.head_sha }}" \
-            | xargs -r docker rmi -f || true
+         docker images "ghcr.io/likelion-avengers/backend" \
+           --format "{{.Repository}}:{{.Tag}}" \
+           | grep -v "sha-${{ github.event.workflow_run.head_sha }}" \
+           | xargs -r docker rmi -f || true
 
       # 5) 새 컨테이너 실행
       - name: Run new container
         run: |
-          IMAGE=ghcr.io/${{ github.repository }}:${{ github.event.workflow_run.head_sha }}
+         IMAGE=ghcr.io/likelion-avengers/backend:sha-${{ github.event.workflow_run.head_sha }}
           docker run -d \
             --name ${{ vars.CONTAINER_NAME }} \
             --network ${{ vars.NETWORK_NAME }} \
@@ -53,3 +53,4 @@ jobs:
             -e USE_PROFILE=dev \
             -e TZ=Asia/Seoul \
             $IMAGE
+
