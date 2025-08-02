@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: Java CI & Docker Build
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1) 소스 코드 + 서브모듈 체크아웃 (PAT 사용)
+      # 1) 소스 코드 + 서브모듈 체크아웃
       - name: Checkout source & submodules
         uses: actions/checkout@v4
         with:
@@ -40,23 +40,47 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      # 5) 실제 빌드 수행 (Fat JAR 생성)
+      # 5) 애플리케이션 빌드 (Fat JAR 생성)
       - name: Build with Gradle
         run: ./gradlew clean bootJar --no-daemon
 
-      # 6) 테스트 결과 리포트
+      # 6) 테스트 결과 리포트 (선택)
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v5
         if: success() || failure()
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
 
-      # 7) 빌드 산출물 업로드 (JAR, Dockerfile, module 서브모듈)
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
+      # 7) Docker Buildx 설치
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
         with:
-          name: build-libs
-          path: |
-            build/libs/*.jar
-            Dockerfile
-            module/**
+          driver: docker-container
+
+      # 8) GHCR 로그인 (PAT 사용)
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.ACTION_TOKEN }}
+
+      # 9) 이미지 메타데이터 추출 (태그: sha-<SHA>)
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/likelion-avengers/backend
+          tags: |
+            type=sha
+
+      # 10) Docker 이미지 빌드 & 푸시
+      - name: Build and Push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
