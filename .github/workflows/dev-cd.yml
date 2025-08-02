@@ -3,7 +3,7 @@ name: CD with Docker
 
 on:
   workflow_run:
-    workflows: [ "Java CI & Docker Build" ]
+    workflows: [ "Java CI WITH Gradle" ]
     types: [ completed ]
     branches: [ "dev" ]
 
