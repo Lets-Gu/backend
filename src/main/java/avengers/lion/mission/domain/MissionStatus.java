@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum MissionStatus {
 
-    ACTICE("활성화"),
+    ACTIVE("활성화"),
     INACTIVE("비활성화");
 
     MissionStatus(String name){
