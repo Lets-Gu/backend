@@ -24,7 +24,7 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.ACTION_TOKEN }}
 
       # 2) CI에서 업로드한 JAR(및 Dockerfile, module/**) 추가 다운로드
       - name: Download artifact (jar, Dockerfile, module)
@@ -47,7 +47,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.ACTION_TOKEN }}
 
       # 5) 이미지 메타데이터(태그, 레이블) 추출
       - name: Extract metadata
@@ -82,7 +82,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.ACTION_TOKEN }}
 
       # 8) 최신 이미지 Pull
       - name: Pull latest image
