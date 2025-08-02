@@ -57,11 +57,23 @@ jobs:
 
       # 6) 새 컨테이너 실행
       - name: Run new container
+        env:
+          CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
+          NETWORK_NAME:   ${{ vars.NETWORK_NAME }}
+          DEV_WEB_PORT:   ${{ vars.DEV_WEB_PORT }}
         run: |
+          # ① 전체 SHA 가져오기
+          FULL_SHA=${{ github.event.workflow_run.head_sha }}
+          # ② short SHA (7글자) 자르기
+          SHORT_SHA=${FULL_SHA:0:7}
+          IMAGE=ghcr.io/likelion-avengers/backend:sha-${SHORT_SHA}
+
+          echo "Running $IMAGE"
           docker run -d \
             --name "$CONTAINER_NAME" \
             --network "$NETWORK_NAME" \
             -p "$DEV_WEB_PORT:8080" \
             -e USE_PROFILE=dev \
             -e TZ=Asia/Seoul \
-            "ghcr.io/likelion-avengers/backend:sha-${SHORT_SHA}"
+            "$IMAGE"
+
