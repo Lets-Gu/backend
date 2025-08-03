@@ -2,7 +2,7 @@ name: CD with Docker
 
 on:
   workflow_run:
-    workflows: [ "Java CI & Docker Build" ]  # CI 워크플로우 name 과 정확히 일치
+    workflows: [ "Java CI & Docker Build" ]  # CI 워크플로우 name과 정확히 일치
     types: [ completed ]
     branches: [ "dev" ]
 
@@ -16,9 +16,10 @@ jobs:
     runs-on: self-hosted
     env:
       CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
-      NETWORK_NAME:   ${{ vars.NETWORK_NAME }}
-      DEV_WEB_PORT:   ${{ vars.DEV_WEB_PORT }}
-
+      NETWORK_NAME: ${{ vars.NETWORK_NAME }}
+      DEV_WEB_PORT: ${{ vars.DEV_WEB_PORT }}
+      FULL_SHA: ${{ github.event.workflow_run.head_sha }}
+      
     steps:
       # 1) GHCR 로그인
       - name: Login to GHCR
@@ -28,47 +29,41 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.ACTION_TOKEN }}
 
-      # 2) 네트워크가 없으면 생성
+      # 2) SHA 변수 설정
+      - name: Set SHORT_SHA
+        run: |
+          echo "SHORT_SHA=${FULL_SHA:0:7}" >> $GITHUB_ENV
+
+      # 3) 네트워크가 없으면 생성
       - name: Ensure Docker network exists
         run: |
           docker network inspect $NETWORK_NAME >/dev/null 2>&1 \
             || docker network create $NETWORK_NAME
 
-      # 3) 이미지 Pull (short SHA)
+      # 4) 이미지 Pull
       - name: Pull Docker image
         run: |
-          FULL_SHA=${{ github.event.workflow_run.head_sha }}
-          SHORT_SHA=${FULL_SHA:0:7}
           IMAGE=ghcr.io/likelion-avengers/backend:sha-${SHORT_SHA}
           echo "Pulling $IMAGE"
           docker pull "$IMAGE"
 
-      # 4) 기존 컨테이너 제거
+      # 5) 기존 컨테이너 제거
       - name: Remove old container
         run: docker rm -f "$CONTAINER_NAME" || true
 
-      # 5) 오래된 이미지 정리
+      # 6) 오래된 이미지 정리
       - name: Prune old images
         run: |
           docker images ghcr.io/likelion-avengers/backend \
             --format '{{.Repository}}:{{.Tag}}' \
-            | grep -v sha-${SHORT_SHA} \
+            | grep -v "sha-${SHORT_SHA}" \
             | xargs -r docker rmi -f || true
 
-      # 6) 새 컨테이너 실행
+      # 7) 새 컨테이너 실행 (dev 프로파일로 실행)
       - name: Run new container
-        env:
-          CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
-          NETWORK_NAME:   ${{ vars.NETWORK_NAME }}
-          DEV_WEB_PORT:   ${{ vars.DEV_WEB_PORT }}
         run: |
-          # ① 전체 SHA 가져오기
-          FULL_SHA=${{ github.event.workflow_run.head_sha }}
-          # ② short SHA (7글자) 자르기
-          SHORT_SHA=${FULL_SHA:0:7}
           IMAGE=ghcr.io/likelion-avengers/backend:sha-${SHORT_SHA}
-
-          echo "Running $IMAGE"
+          echo "Running $IMAGE with dev profile"
           docker run -d \
             --name "$CONTAINER_NAME" \
             --network "$NETWORK_NAME" \
@@ -76,4 +71,3 @@ jobs:
             -e USE_PROFILE=dev \
             -e TZ=Asia/Seoul \
             "$IMAGE"
-
