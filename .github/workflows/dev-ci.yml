@@ -15,56 +15,56 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
       # 1) 소스 코드 + 서브모듈 체크아웃
       - name: Checkout source & submodules
         uses: actions/checkout@v4
         with:
-          submodules: true
+          submodules: recursive  # 서브모듈까지 재귀적으로 체크아웃
           fetch-depth: 0
           token: ${{ secrets.ACTION_TOKEN }}
-
+          
       # 2) gradlew 실행 권한 부여
       - name: Grant execute permission to gradlew
         run: chmod +x gradlew
-
+        
       # 3) JDK 21 설치
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-
+          
       # 4) Gradle 캐싱 및 설정
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
-
-      # 5) 애플리케이션 빌드 (Fat JAR 생성)
+        
+      # 5) 애플리케이션 빌드 (dev 프로파일로 빌드)
       - name: Build with Gradle
-        run: ./gradlew clean bootJar --no-daemon
-
-      # 6) 테스트 결과 리포트 (선택)
+        run: ./gradlew clean bootJar --no-daemon -Dspring.profiles.active=dev
+        
+      # 6) 테스트 결과 리포트
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v5
         if: success() || failure()
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
-
+          
       # 7) Docker Buildx 설치
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
           driver: docker-container
-
-      # 8) GHCR 로그인 (PAT 사용)
+          
+      # 8) GHCR 로그인
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.ACTION_TOKEN }}
-
+          
       # 9) 이미지 메타데이터 추출 (태그: sha-<SHA>)
       - name: Extract Docker metadata
         id: meta
@@ -73,7 +73,7 @@ jobs:
           images: ghcr.io/likelion-avengers/backend
           tags: |
             type=sha
-
+            
       # 10) Docker 이미지 빌드 & 푸시
       - name: Build and Push Docker image
         uses: docker/build-push-action@v6
