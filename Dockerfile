@@ -1,19 +1,16 @@
-FROM openjdk:21-jdk-slim
+FROM openjdk:21-jre-slim
 
 WORKDIR /app
 
-COPY gradlew .
-COPY gradle gradle
-COPY build.gradle .
-COPY settings.gradle .
-COPY src src
-COPY module module
+# 로그 디렉토리 생성
+RUN mkdir -p /app/logs
 
-RUN chmod +x gradlew
-RUN ./gradlew bootJar --no-daemon
+# JAR 파일 복사
+COPY build/libs/*.jar app.jar
 
+# 포트 노출
 EXPOSE 8080
 
-RUN mv build/libs/*.jar app.jar
-
-CMD ["sh", "-c", "java $JAVA_OPTS -Dspring.profiles.active=$SPRING_PROFILES_ACTIVE -Dspring.config.location=$CONFIG_LOCATION -jar app.jar"]
+# 애플리케이션 실행
+# USE_PROFILE 환경변수를 통해 프로파일 설정 (기본값: local)
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=${USE_PROFILE:local}"]
