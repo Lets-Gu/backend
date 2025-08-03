@@ -1,4 +1,9 @@
-FROM openjdk:21-jre-slim
+FROM eclipse-temurin:21-jre-alpine
+
+# 시간대 설정 및 필요한 패키지 설치
+RUN apk add --no-cache tzdata && \
+    cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime && \
+    echo "Asia/Seoul" > /etc/timezone
 
 WORKDIR /app
 
