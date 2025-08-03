@@ -11,11 +11,13 @@ WORKDIR /app
 RUN mkdir -p /app/logs
 
 # JAR 파일 복사
-COPY build/libs/*.jar app.jar
+ARG APP_JAR=build/libs/app.jar
+COPY ${APP_JAR} app.jar
 
 # 포트 노출
 EXPOSE 8080
 
 # 애플리케이션 실행
 # USE_PROFILE 환경변수를 통해 프로파일 설정 (기본값: local)
-ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=${USE_PROFILE:local}"]
+ENV USE_PROFILE=local
+ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=${USE_PROFILE}"]
