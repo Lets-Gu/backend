@@ -64,3 +64,30 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+task copySubmoduleConfigs(type: Copy) {
+    from('module') {
+        include '**/*.yml'
+    }
+    into 'src/main/resources'
+    
+    doFirst {
+        println "Copying configuration files from module to src/main/resources"
+    }
+    
+    doLast {
+        println "Configuration files copied successfully"
+    }
+}
+
+// processResources 태스크가 실행되기 전에 설정 파일 복사
+processResources.dependsOn copySubmoduleConfigs
+
+// JAR 파일명 고정
+bootJar {
+    archiveFileName = 'app.jar'
+}
+
+jar {
+    enabled = false
+}

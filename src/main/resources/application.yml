@@ -1,7 +1,9 @@
 spring:
   profiles:
     active: ${USE_PROFILE:local}
-
+  config:
+    import:
+      - "optional:classpath:module/"
   # 공통 JPA 설정
   jpa:
     hibernate:
