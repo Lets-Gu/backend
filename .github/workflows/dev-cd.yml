@@ -43,7 +43,7 @@ jobs:
       # 4) 이미지 Pull
       - name: Pull Docker image
         run: |
-          IMAGE=ghcr.io/Lets-Gu/backend:sha-${SHORT_SHA}
+          IMAGE=ghcr.io/lets-gu/backend:sha-${SHORT_SHA}
           echo "Pulling $IMAGE"
           docker pull "$IMAGE"
 
@@ -54,7 +54,7 @@ jobs:
       # 6) 오래된 이미지 정리
       - name: Prune old images
         run: |
-          docker images ghcr.io/Lets-Gu/backend \
+          docker images ghcr.io/lets-gu/backend \
             --format '{{.Repository}}:{{.Tag}}' \
             | grep -v "sha-${SHORT_SHA}" \
             | xargs -r docker rmi -f || true
@@ -62,7 +62,7 @@ jobs:
       # 7) 새 컨테이너 실행 (dev 프로파일로 실행)
       - name: Run new container
         run: |
-          IMAGE=ghcr.io/Lets-Gu/backend:sha-${SHORT_SHA}
+          IMAGE=ghcr.io/lets-gu/backend:sha-${SHORT_SHA}
           echo "Running $IMAGE with dev profile"
           docker run -d \
             --name "$CONTAINER_NAME" \
