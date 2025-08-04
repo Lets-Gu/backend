@@ -22,7 +22,10 @@ public enum ExceptionType {
 
     //Auth
     EXPIRED_REFRESH_TOKEN(UNAUTHORIZED,"A001","리프레시 토큰이 만료되었습니다."),
-    INVALID_REFRESH_TOKEN(UNAUTHORIZED, "A002","리프레시 토큰이 유효하지 않습니다");
+    INVALID_REFRESH_TOKEN(UNAUTHORIZED, "A002","리프레시 토큰이 유효하지 않습니다"),
+
+    // place
+    PLACE_FORMAT_ERROR(INTERNAL_SERVER_ERROR,"P001","장소 변환 에러");
 
     private final HttpStatus status;
     private final String code;
