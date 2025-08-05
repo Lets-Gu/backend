@@ -18,7 +18,7 @@ public class ReviewService {
     리뷰 전체조회
      */
     public List<ReviewDto> getAllReviews(Long memberId){
-        List<Review> reviewDtos= reviewRepository.findAllByMemberId(memberId);
+        List<Review> reviewDtos= reviewRepository.findAllByMemberMemberId(memberId);
 
         return reviewDtos.stream()
                 .map(ReviewDto::from)
