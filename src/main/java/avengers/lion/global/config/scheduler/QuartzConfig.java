@@ -6,6 +6,10 @@ import org.quartz.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 @Configuration
 public class QuartzConfig {
 
@@ -22,6 +26,11 @@ public class QuartzConfig {
      */
     @Bean
     public Trigger jobTrigger(JobDetail missionGenerateJobDetail){
+        Date startTime = Date.from(
+                LocalDateTime.now().plusHours(1)
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant()
+        );
         return TriggerBuilder.newTrigger()
                 .forJob(missionGenerateJobDetail)  // 어떤 JobDetail을 실행할지
                 .withIdentity("myTrigger")  // 트리거 고유 ID
@@ -30,7 +39,7 @@ public class QuartzConfig {
                                 .withIntervalInHours(24*14)  // 14일 마다
                                 .repeatForever()   // 무한 반복
                 )
-                .startNow()  // 앱 실행 시 즉시 시작
+                .startAt(startTime)  // 앱 실행 시 즉시 시작
                 .build();
     }
 
@@ -44,6 +53,11 @@ public class QuartzConfig {
 
     @Bean
     public Trigger googleApiJobTrigger(JobDetail googleApiJobDetail){
+        Date startTime = Date.from(
+                LocalDateTime.now().plusHours(1)
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant()
+        );
         return TriggerBuilder.newTrigger()
                 .forJob(googleApiJobDetail)
                 .withIdentity("placeTrigger")
@@ -52,7 +66,7 @@ public class QuartzConfig {
                                 .withIntervalInHours(24*20)
                                 .repeatForever()
                 )
-                .startNow()
+                .startAt(startTime)
                 .build();
     }
 

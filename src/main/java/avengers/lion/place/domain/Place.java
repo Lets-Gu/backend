@@ -17,7 +17,7 @@ Google Geocoding API 호출용 장소명 보관
 @Getter
 public class Place {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "place_id")
     private Long placeId;
 
@@ -54,5 +54,10 @@ public class Place {
     public void setGeocodingResult(BigDecimal latitude, BigDecimal longitude){
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+    
+    public void updateSelectionInfo() {
+        this.lastSearchDate = LocalDateTime.now();
+        this.selectionCount += 1;
     }
 }
