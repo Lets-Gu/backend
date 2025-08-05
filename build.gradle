@@ -51,6 +51,13 @@ dependencies {
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+	implementation 'org.springframework.boot:spring-boot-starter-quartz'
+
+	// Google Geocoding API
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'       // 캐싱(Optional)
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
 
 }
 

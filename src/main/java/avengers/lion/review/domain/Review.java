@@ -5,9 +5,11 @@ import avengers.lion.member.Member;
 import avengers.lion.mission.domain.CompletedMission;
 import avengers.lion.mission.domain.Mission;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor
 public class Review extends BaseEntity {
 
