@@ -48,11 +48,10 @@ public class Place {
 
     private BigDecimal longitude;
 
-    @Column(name = "selection_count")
-    private int selectionCount;
+    @Column(name = "selection_count", nullable = false, columnDefinition = "INT DEFAULT 0")
+    private int selectionCount=0;
 
-    public void setGeocodingResult(String address, BigDecimal latitude, BigDecimal longitude){
-        this.address = address;
+    public void setGeocodingResult(BigDecimal latitude, BigDecimal longitude){
         this.latitude = latitude;
         this.longitude = longitude;
     }
