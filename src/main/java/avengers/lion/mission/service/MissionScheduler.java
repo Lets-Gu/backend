@@ -11,13 +11,7 @@ public class MissionScheduler implements Job {
         JobDataMap jobDataMap = jobExecutionContext.getMergedJobDataMap();
         String jobType = jobDataMap.getString("jobType");
 
-        if("mission".equals(jobType)){
-
-        }else if("place".equals(jobType)){
-
-        } else {
-
-        }
+       
     }
 
     /*

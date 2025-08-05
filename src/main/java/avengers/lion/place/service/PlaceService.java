@@ -24,12 +24,8 @@ public class PlaceService {
     @Value("${google.places.api-key}")
     private String apiKey;
 
-    @Value("${google.places.textsearch-url}")
-    private String textSearchUrl;
-
-    @Value("${google.geocoding.url}")  // 예: https://maps.googleapis.com/maps/api/geocode/json
-    private String geocodeUrl;
-
+    @Value("${google.places.url}")
+    private String url;
 
     public GeocodeInfo geocode(String placeName) {
         return tryGooglePlacesTextSearch(placeName);
@@ -57,7 +53,7 @@ public class PlaceService {
         try {
             // POST 요청 보내기
             ResponseEntity<String> response = restTemplate.exchange(
-                    "https://places.googleapis.com/v1/places:searchText",
+                    url,
                     HttpMethod.POST,
                     entity,
                     String.class
