@@ -1,5 +1,7 @@
 package avengers.lion.mission.service;
 
+import avengers.lion.global.exception.BusinessException;
+import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.mission.domain.BatchStatus;
 import avengers.lion.mission.domain.Mission;
 import avengers.lion.mission.domain.MissionBatches;
@@ -46,7 +48,8 @@ public class MissionScheduler implements Job {
         for(PlaceCategory category : PlaceCategory.values()){
             // 현재일 기준으로, 20일 전에 조회된 데이터는 제외
             LocalDateTime now = LocalDate.now().minusDays(20).atStartOfDay();
-            Place place = placeRepository.findByCategoryWithSelectionCriteria(category,now);
+            Place place = placeRepository.findByCategoryWithSelectionCriteria(category,now)
+                    .orElseThrow(()->new BusinessException(ExceptionType.PLACE_NOT_FOUND));
             // 마지막으로 조회된 날짜, 카운트 개수 설정
             place.updateSelectionInfo();
             places.add(place);
