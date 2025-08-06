@@ -12,6 +12,6 @@ public interface CompletedMissionRepository extends JpaRepository<CompletedMissi
     @Query("SELECT cm FROM CompletedMission cm" +
            " JOIN FETCH cm.mission m" +
            " WHERE cm.member.id = :memberId" +
-           " AND cm.reviewStatus = 'INACTIVE'")
+           " AND cm.reviewStatus = avengers.lion.mission.domain.ReviewStatus.INACTIVE")
     List<CompletedMission> getUnwrittenReviewsByMemberId(@Param("memberId") Long memberId);
 }
