@@ -2,10 +2,22 @@ package avengers.lion.review.repository;
 
 import avengers.lion.review.domain.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findAllByMemberMemberId(Long memberId);
+
+
+    /*
+    해당 미션에 대한 리뷰를 모두 가져옴
+     */
+    @Query("SELECT r FROM Review r " +
+            "JOIN FETCH r.member m " +
+            "WHERE r.mission.missionId = :missionId")
+    List<Review> findAllReviewByMissionId(@Param("missionId") Long missionId);
 }
+
