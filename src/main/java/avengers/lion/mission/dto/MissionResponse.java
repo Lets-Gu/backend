@@ -8,7 +8,7 @@ public record MissionResponse(Long missionId, String placeName, String title, St
 
     public static MissionResponse from(Mission mission){
         return new MissionResponse(
-                mission.getMissionId(),
+                mission.getId(),
                 mission.getPlaceName(),
                 mission.getTitle(),
                 mission.getDescription(),

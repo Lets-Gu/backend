@@ -9,7 +9,7 @@ public record MissionReviewResponse(Long reviewId, String memberName, String rev
 
     public static MissionReviewResponse from(Review review){
         return new MissionReviewResponse(
-                review.getReviewId(),
+                review.getId(),
                 review.getMember().getNickname(),
                 review.getContent(),
                 review.getImageUrl(),

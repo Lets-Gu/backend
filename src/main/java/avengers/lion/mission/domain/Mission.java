@@ -21,9 +21,9 @@ import java.util.List;
 @Getter
 public class Mission extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mission_id", nullable = false)
-    private Long missionId;
+    private Long id;
 
     @Column(name = "place_name", nullable = false)
     private String placeName;
@@ -37,6 +37,9 @@ public class Mission extends BaseEntity {
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private MissionStatus status;
+
+    @Column(name = "address", nullable = false)
+    private String address;
 
     @Column(name = "latitude", precision = 10, scale = 8)
     @DecimalMin(value = "-90.0")
@@ -55,10 +58,11 @@ public class Mission extends BaseEntity {
     @JoinColumn(name = "mission_batch_id", nullable = false)
     private MissionBatches missionBatches;
 
-    public Mission(Long missionId, String placeName, String title, String description, MissionStatus status, BigDecimal latitude, BigDecimal longitude, MissionBatches missionBatches) {
-        this.missionId = missionId;
+    public Mission(Long id, String placeName, String title, String address, String description, MissionStatus status, BigDecimal latitude, BigDecimal longitude, MissionBatches missionBatches) {
+        this.id = id;
         this.placeName = placeName;
         this.title = title;
+        this.address = address;
         this.description = description;
         this.status = status;
         this.latitude = latitude;
@@ -72,6 +76,7 @@ public class Mission extends BaseEntity {
             null,
             place.getName(),
             title,
+            place.getAddress(),
             description,
             MissionStatus.ACTIVE,
             place.getLatitude(),
