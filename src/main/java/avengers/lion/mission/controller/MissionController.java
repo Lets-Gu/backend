@@ -33,6 +33,7 @@ public class MissionController {
     미션에 대한 리뷰 전체조회
      */
     @GetMapping("/{missionId}/reviews")
+    @PreAuthorize( "hasRole('ROLE_USER')")
     public ResponseEntity<ResponseBody<List<MissionReviewResponse>>> getMissionReviews(@PathVariable Long missionId){
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(missionService.getMissionReviews(missionId)));
     }
@@ -41,8 +42,9 @@ public class MissionController {
      미션 인증하기  -> gps 인증
      */
     @PostMapping("/{missionId}/gps")
+    @PreAuthorize( "hasRole('ROLE_USER')")
     public ResponseEntity<ResponseBody<Void>> gpsAuthentication(@PathVariable Long missionId, @RequestBody GpsAuthenticationRequest gpsAuthenticationRequest){
-        missionService.GpsAuthentication(missionId, gpsAuthenticationRequest);
+        missionService.gpsAuthentication(missionId, gpsAuthenticationRequest);
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse());
     }
     //TODO: 사진 인증  SSE 구현

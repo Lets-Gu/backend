@@ -25,8 +25,6 @@ public class MissionService {
 
     private final MissionRepository missionRepository;
     private final ReviewRepository reviewRepository;
-    private final CompletedMissionRepository completedMissionRepository;
-    private final Cloudinary cloudinary;
 
     /*
     미션 전체조회
@@ -52,7 +50,7 @@ public class MissionService {
     /*
     미션 GPS 인증
      */
-    public void GpsAuthentication(Long missionId, GpsAuthenticationRequest gpsAuthenticationRequest) {
+    public void gpsAuthentication(Long missionId, GpsAuthenticationRequest gpsAuthenticationRequest) {
         double userLat = gpsAuthenticationRequest.latitude();
         double userLng = gpsAuthenticationRequest.longitude();
         Mission mission = missionRepository.findById(missionId)

@@ -32,7 +32,7 @@ public enum ExceptionType {
     // Mission
     COMPLETED_MISSION_NOT_FOUND(NOT_FOUND, "M001","완료된 미션을 찾을 수 없습니다."),
     MISSION_NOT_FOUND(NOT_FOUND, "M002", "미션을 찾을 수 없습니다."),
-    GPS_AUTH_FAILED(UNAUTHORIZED,"M0O3", "GPS 인증에 실패하였습니다."),
+    GPS_AUTH_FAILED(UNAUTHORIZED,"M003", "GPS 인증에 실패하였습니다."),
     
     // Review
     ACCESS_DENIED(FORBIDDEN, "R001", "접근 권한이 없습니다."),
