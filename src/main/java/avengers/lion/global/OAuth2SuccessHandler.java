@@ -8,7 +8,6 @@ import avengers.lion.global.jwt.TokenDto;
 import avengers.lion.global.jwt.TokenProvider;
 import avengers.lion.global.response.SuccessResponseBody;
 import avengers.lion.member.Member;
-import avengers.lion.member.MemberRole;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -52,7 +51,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .orElseThrow(()->new BusinessException(ExceptionType.MEMBER_NOT_FOUND));
 
         // 사용자 식별 정보를 이용해 토큰 발급
-        TokenDto tokenDto = tokenProvider.createToken(member.getMemberId(), member.getRole().name());
+        TokenDto tokenDto = tokenProvider.createToken(member.getId(), member.getRole().name());
 
         // JSON 응답으로 토큰 반환
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);

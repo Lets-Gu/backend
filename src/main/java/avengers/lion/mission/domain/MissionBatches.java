@@ -18,9 +18,9 @@ import java.util.List;
 @Getter
 public class MissionBatches {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "mission_batch_id", nullable = false)
-    private Long missionBatchId;
+    private Long id;
 
     @Column(name = "batch_name", nullable = false)
     private String batchName;
