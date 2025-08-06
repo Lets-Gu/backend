@@ -9,7 +9,7 @@ public record  ReviewDto(Long reviewId, String content, String imageUrl, String 
                 review.getId(),
                 review.getContent(),
                 review.getImageUrl(),
-                review.getMission().getPlaceName(),
-                review.getMission().getAddress());
+                review.getCompletedMission().getMission().getPlaceName(),
+                review.getCompletedMission().getMission().getAddress());
     };
 }

@@ -11,8 +11,9 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     @Query("SELECT r FROM Review r"+
-           " JOIN FETCH r.mission m " +
-           " WHERE r.completedMission.reviewStatus = :reviewStatus" +
+           " JOIN FETCH r.completedMission cm " +
+           " JOIN FETCH cm.mission m " +
+           " WHERE cm.reviewStatus = :reviewStatus" +
            " AND r.member.id = :memberId")
     List<Review> findAllByMemberId(@Param("memberId") Long memberId, @Param("reviewStatus") ReviewStatus reviewStatus);
 
@@ -22,10 +23,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
      */
     @Query("SELECT r FROM Review r " +
             "JOIN FETCH r.member m " +
-            "WHERE r.mission.id = :missionId")
+            "JOIN FETCH r.completedMission cm " +
+            "JOIN FETCH cm.mission mission " +
+            "WHERE cm.mission.id = :missionId")
     List<Review> findAllReviewByMissionId(@Param("missionId") Long missionId);
-
-    Review findReviewByCompletedMissionId(Long completedMissionId);
-
 }
 

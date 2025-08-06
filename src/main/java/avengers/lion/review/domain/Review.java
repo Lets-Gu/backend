@@ -3,7 +3,6 @@ package avengers.lion.review.domain;
 import avengers.lion.global.base.BaseEntity;
 import avengers.lion.member.Member;
 import avengers.lion.mission.domain.CompletedMission;
-import avengers.lion.mission.domain.Mission;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +20,7 @@ public class Review extends BaseEntity {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,16 +31,11 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "completed_mission_id")
     private CompletedMission completedMission;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mission_id")
-    private Mission mission;
-
     @Builder
-    public Review(String content, String imageUrl, Member member, CompletedMission completedMission, Mission mission) {
+    public Review(String content, String imageUrl, Member member, CompletedMission completedMission) {
         this.content = content;
         this.imageUrl = imageUrl;
         this.member = member;
         this.completedMission = completedMission;
-        this.mission = mission;
     }
 }

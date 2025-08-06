@@ -68,7 +68,6 @@ public class Mission extends BaseEntity {
         this.latitude = latitude;
         this.longitude = longitude;
         this.missionBatches = missionBatches;
-        this.reviews = new ArrayList<>();
     }
 
     public static Mission createFromPlace(Place place, String title, String description, MissionBatches batch) {

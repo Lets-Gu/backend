@@ -53,14 +53,12 @@ public class ReviewService {
         if (completedMission.getReviewStatus() == ReviewStatus.ACTIVE) {
             throw new BusinessException(ExceptionType.REVIEW_ALREADY_EXISTS);
         }
-        log.info("하이요");
 
         Review review = Review.builder()
                 .content(writeReviewRequest.content())
                 .imageUrl(completedMission.getImageUrl())
                 .member(completedMission.getMember())
                 .completedMission(completedMission)
-                .mission(completedMission.getMission())
                 .build();
         reviewRepository.save(review);
         
