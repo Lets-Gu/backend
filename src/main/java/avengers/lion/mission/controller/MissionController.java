@@ -35,7 +35,7 @@ public class MissionController {
     미션에 대한 리뷰 전체조회
      */
     @GetMapping("/{missionId}/reviews")
-    public ResponseEntity<ResponseBody<List<MissionReviewResponse>>> getMissionDetail(@PathVariable Long missionId){
+    public ResponseEntity<ResponseBody<List<MissionReviewResponse>>> getMissionReview(@PathVariable Long missionId){
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(missionService.getMissionReviews(missionId)));
     }
 

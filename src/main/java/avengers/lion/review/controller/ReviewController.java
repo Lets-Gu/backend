@@ -7,6 +7,7 @@ import avengers.lion.review.dto.ReviewDto;
 import avengers.lion.review.dto.UnWrittenReviewResponse;
 import avengers.lion.review.dto.WriteReviewRequest;
 import avengers.lion.review.service.ReviewService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,7 +34,7 @@ public class ReviewController {
     작성 가능한 리뷰 리뷰 작성하기
      */
     @PostMapping
-    public ResponseEntity<ResponseBody<Void>> writeUnWrittenReview(@AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails, @RequestBody WriteReviewRequest writeReviewRequest){
+    public ResponseEntity<ResponseBody<Void>> writeUnWrittenReview(@AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails, @Valid @RequestBody WriteReviewRequest writeReviewRequest){
         reviewService.writeUnWrittenReview(kakaoMemberDetails.getMemberId(), writeReviewRequest);
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse());
     }

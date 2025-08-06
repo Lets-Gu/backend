@@ -1,4 +1,12 @@
 package avengers.lion.review.dto;
 
-public record WriteReviewRequest(Long completedMissionId, String content)      {
-}
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record WriteReviewRequest(
+        @NotNull
+        Long completedMissionId,
+        @NotBlank(message = "content를 입력해주세요.")
+        String content
+)
+{}
