@@ -2,21 +2,22 @@ package avengers.lion.mission.domain;
 
 import avengers.lion.global.base.BaseEntity;
 import avengers.lion.place.domain.Place;
+import avengers.lion.review.domain.Review;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 실제 미션 데이터 -> 구글 api + ai로 생성된 미션 정보
  */
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 public class Mission extends BaseEntity {
 
@@ -47,9 +48,24 @@ public class Mission extends BaseEntity {
     @DecimalMax(value = "180.0")
     private BigDecimal longitude;
 
+    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
+    private List<Review> reviews = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "mission_batch_id", nullable = false)
     private MissionBatches missionBatches;
+
+    public Mission(Long missionId, String placeName, String title, String description, MissionStatus status, BigDecimal latitude, BigDecimal longitude, MissionBatches missionBatches) {
+        this.missionId = missionId;
+        this.placeName = placeName;
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.missionBatches = missionBatches;
+        this.reviews = new ArrayList<>();
+    }
 
     public static Mission createFromPlace(Place place, String title, String description, MissionBatches batch) {
         return new Mission(
