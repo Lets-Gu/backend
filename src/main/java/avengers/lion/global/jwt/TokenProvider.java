@@ -32,9 +32,9 @@ public class TokenProvider {
     @Value("${jwt.secret-key}")
     private String secretKey;
     @Value("${jwt.access-token-validity-in-seconds}")
-    private long accessTokenValidityMilliSeconds;
+    private long accessTokenValiditySeconds;
     @Value("${jwt.refresh-token-validity-in-seconds}")
-    private long refreshTokenValidityMilliSeconds;
+    private long refreshTokenValiditySeconds;
 
     private Key secretkey;
 
@@ -50,8 +50,8 @@ public class TokenProvider {
     public TokenDto createToken(Long memberId, String role){
         long now = (new Date()).getTime();
 
-        Date accessValidity = new Date(now + this.accessTokenValidityMilliSeconds);
-        Date refreshValidity = new Date(now + this.refreshTokenValidityMilliSeconds);
+        Date accessValidity = new Date(now + this.accessTokenValiditySeconds * 1000);
+        Date refreshValidity = new Date(now + this.refreshTokenValiditySeconds * 1000);
 
         // 액세스 토큰 생성
         String accessToken = Jwts.builder()
@@ -97,7 +97,7 @@ public class TokenProvider {
     public boolean validateExpire(String token) {
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
+                    .setSigningKey(secretkey)
                     .build()
                     .parseClaimsJws(token);
             return true;
@@ -112,7 +112,7 @@ public class TokenProvider {
     public Authentication getAuthentication(String token) {
         // 토큰 서명을 검증
         Claims claims = Jwts.parserBuilder()
-                .setSigningKey(secretKey)
+                .setSigningKey(secretkey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
