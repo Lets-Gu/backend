@@ -1,10 +1,10 @@
 package avengers.lion.mission.dto;
 
 import avengers.lion.mission.domain.Mission;
+import avengers.lion.place.domain.PlaceCategory;
 
-import java.math.BigDecimal;
 
-public record MissionResponse(Long missionId, String placeName, String title, String description, BigDecimal latitude, BigDecimal longitude) {
+public record MissionResponse(Long missionId, String placeName, String title, String description, Double latitude, Double longitude, PlaceCategory placeCategory) {
 
     public static MissionResponse from(Mission mission){
         return new MissionResponse(
@@ -13,6 +13,8 @@ public record MissionResponse(Long missionId, String placeName, String title, St
                 mission.getTitle(),
                 mission.getDescription(),
                 mission.getLatitude(),
-                mission.getLongitude());
-    }
+                mission.getLongitude(),
+                mission.getPlaceCategory()
+        );
+    };
 }

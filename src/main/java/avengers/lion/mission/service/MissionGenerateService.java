@@ -34,14 +34,10 @@ public class MissionGenerateService {
 
         for (Place place : places) {
             try {
-                log.info(">> Generating mission for place: {} (category={})",
-                        place.getName(), place.getCategory());
                 MissionContent content = generateMissionForPlace(place);
-                log.info("<< Received mission for {}: title='{}', description='{}'",
-                        place.getName(), content.title(), content.description());
 
                 Mission mission = Mission.createFromPlace(
-                        place, content.title(), content.description(), batch);
+                        place, content.title(), place.getCategory(), content.description(), batch);
                 missions.add(mission);
             } catch (Exception e) {
                 log.error("❌ Failed to generate mission for place: {}", place.getName(), e);
@@ -53,10 +49,8 @@ public class MissionGenerateService {
 
     private MissionContent generateMissionForPlace(Place place) {
         String prompt = createMissionPrompt(place);
-        log.debug("---- Prompt >>>\n{}", prompt);
 
         String gptResponse = callOpenAI(prompt);
-        log.debug("---- GPT Raw Response >>>\n{}", gptResponse);
 
         return parseMissionResponse(gptResponse);
     }
@@ -102,8 +96,6 @@ public class MissionGenerateService {
             }
             """, prompt.replace("\"", "\\\"").replace("\n", "\\n"));
 
-        log.debug("---- Request Body >>>\n{}", requestBody);
-
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
         try {
@@ -115,13 +107,10 @@ public class MissionGenerateService {
             );
 
             String body = response.getBody();
-            log.debug("---- HTTP Status: {}, Headers: {}", response.getStatusCode(), response.getHeaders());
-            log.debug("---- Response Body >>>\n{}", body);
 
             JsonNode root = objectMapper.readTree(body);
             JsonNode choices = root.path("choices");
             if (choices.isEmpty()) {
-                log.warn("No choices in OpenAI response, using fallback.");
                 return generateFallbackMission();
             }
 
@@ -147,16 +136,13 @@ public class MissionGenerateService {
     private MissionContent parseMissionResponse(String gptResponse) {
         try {
             String jsonPart = extractJsonFromResponse(gptResponse);
-            log.debug("---- Extracted JSON for parsing >>>\n{}", jsonPart);
 
             JsonNode json = objectMapper.readTree(jsonPart);
             String title = json.path("title").asText();
             String desc  = json.path("description").asText();
-            log.debug("---- Parsed title='{}', description='{}'", title, desc);
 
             return new MissionContent(title, desc);
         } catch (Exception e) {
-            log.error("파싱 중 예외 발생:", e);
             return new MissionContent(
                     "장소 탐방 미션",
                     "해당 장소를 방문하여 인증 사진을 촬영해주세요."

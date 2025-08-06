@@ -2,6 +2,7 @@ package avengers.lion.mission.domain;
 
 import avengers.lion.global.base.BaseEntity;
 import avengers.lion.place.domain.Place;
+import avengers.lion.place.domain.PlaceCategory;
 import avengers.lion.review.domain.Review;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
@@ -34,6 +35,9 @@ public class Mission extends BaseEntity {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "place_category", nullable = false)
+    private PlaceCategory placeCategory;
+
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private MissionStatus status;
@@ -41,42 +45,37 @@ public class Mission extends BaseEntity {
     @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "latitude", precision = 10, scale = 8)
-    @DecimalMin(value = "-90.0")
-    @DecimalMax(value = "90.0")
-    private BigDecimal latitude;
+    @Column(name = "latitude", columnDefinition = "DECIMAL(10,8)")
+    private Double latitude;
 
-    @Column(name = "longitude", precision = 11, scale = 8)
-    @DecimalMin(value = "-180.0")
-    @DecimalMax(value = "180.0")
-    private BigDecimal longitude;
-
-    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
-    private List<Review> reviews = new ArrayList<>();
+    @Column(name = "longitude", columnDefinition = "DECIMAL(11,8)")
+    private Double longitude;
 
     @ManyToOne
     @JoinColumn(name = "mission_batch_id", nullable = false)
     private MissionBatches missionBatches;
 
-    public Mission(Long id, String placeName, String title, String address, String description, MissionStatus status, BigDecimal latitude, BigDecimal longitude, MissionBatches missionBatches) {
+    public Mission(Long id, String placeName, String title, String address, String description, PlaceCategory placeCategory, MissionStatus status, Double latitude, Double longitude, MissionBatches missionBatches) {
         this.id = id;
         this.placeName = placeName;
         this.title = title;
         this.address = address;
         this.description = description;
+        this.placeCategory = placeCategory;
         this.status = status;
         this.latitude = latitude;
         this.longitude = longitude;
         this.missionBatches = missionBatches;
     }
 
-    public static Mission createFromPlace(Place place, String title, String description, MissionBatches batch) {
+    public static Mission createFromPlace(Place place, String title, PlaceCategory placeCategory, String description, MissionBatches batch) {
         return new Mission(
             null,
             place.getName(),
             title,
             place.getAddress(),
             description,
+            placeCategory,
             MissionStatus.ACTIVE,
             place.getLatitude(),
             place.getLongitude(),
