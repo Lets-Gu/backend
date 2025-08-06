@@ -1,5 +1,6 @@
 package avengers.lion.review.repository;
 
+import avengers.lion.mission.domain.ReviewStatus;
 import avengers.lion.review.domain.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,7 +10,11 @@ import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    List<Review> findAllByMemberMemberId(Long memberId);
+    @Query("SELECT r FROM Review r"+
+           " JOIN FETCH r.mission m " +
+           " WHERE r.completedMission.reviewStatus = :reviewStatus" +
+           " AND r.member.id = :memberId")
+    List<Review> findAllByMemberId(@Param("memberId") Long memberId, @Param("reviewStatus") ReviewStatus reviewStatus);
 
 
     /*
@@ -17,7 +22,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
      */
     @Query("SELECT r FROM Review r " +
             "JOIN FETCH r.member m " +
-            "WHERE r.mission.missionId = :missionId")
+            "WHERE r.mission.id = :missionId")
     List<Review> findAllReviewByMissionId(@Param("missionId") Long missionId);
+
+    Review findReviewByCompletedMissionId(Long completedMissionId);
+
 }
 

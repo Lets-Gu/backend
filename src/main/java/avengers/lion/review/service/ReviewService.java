@@ -1,25 +1,77 @@
 package avengers.lion.review.service;
 
+import avengers.lion.global.exception.BusinessException;
+import avengers.lion.global.exception.ExceptionType;
+import avengers.lion.mission.domain.CompletedMission;
+import avengers.lion.mission.domain.ReviewStatus;
+import avengers.lion.mission.repository.CompletedMissionRepository;
 import avengers.lion.review.domain.Review;
 import avengers.lion.review.dto.ReviewDto;
+import avengers.lion.review.dto.UnWrittenReviewResponse;
+import avengers.lion.review.dto.WriteReviewRequest;
 import avengers.lion.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final CompletedMissionRepository completedMissionRepository;
+
+    /*
+    작성 가능한 리뷰 조회
+     */
+    public List<UnWrittenReviewResponse> getUnWrittenReview(Long memberId){
+        List<CompletedMission> unWrittenReviews = completedMissionRepository.getUnwrittenReviewsByMemberId(memberId);
+        return unWrittenReviews.stream()
+                .map(UnWrittenReviewResponse::from)
+                .toList();
+    }
+
+    /*
+    작성 가능한 리뷰 작성하기
+     */
+    @Transactional
+    public void writeUnWrittenReview(Long memberId, WriteReviewRequest writeReviewRequest){
+        Long completedMissionId = writeReviewRequest.completedMissionId();
+        CompletedMission completedMission = completedMissionRepository.findById(completedMissionId)
+                        .orElseThrow(()-> new BusinessException(ExceptionType.COMPLETED_MISSION_NOT_FOUND));
+        
+        // 권한 검증: 본인의 CompletedMission인지 확인
+        if (!completedMission.getMember().getId().equals(memberId)) {
+            throw new BusinessException(ExceptionType.ACCESS_DENIED);
+        }
+        
+        // 중복 리뷰 작성 방지
+        if (completedMission.getReviewStatus() == ReviewStatus.ACTIVE) {
+            throw new BusinessException(ExceptionType.REVIEW_ALREADY_EXISTS);
+        }
+        log.info("하이요");
+
+        Review review = Review.builder()
+                .content(writeReviewRequest.content())
+                .imageUrl(completedMission.getImageUrl())
+                .member(completedMission.getMember())
+                .completedMission(completedMission)
+                .mission(completedMission.getMission())
+                .build();
+        reviewRepository.save(review);
+        
+        completedMission.updateReviewStatus(ReviewStatus.ACTIVE);
+    }
 
     /*
     리뷰 전체조회
      */
     public List<ReviewDto> getAllReviews(Long memberId){
-        List<Review> reviews= reviewRepository.findAllByMemberMemberId(memberId);
-
+        List<Review> reviews= reviewRepository.findAllByMemberId(memberId,  ReviewStatus.ACTIVE);
         return reviews.stream()
                 .map(ReviewDto::from)
                 .toList();
