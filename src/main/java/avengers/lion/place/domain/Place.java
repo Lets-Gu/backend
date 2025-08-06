@@ -37,21 +37,16 @@ public class Place {
 
     private String address;
 
-    @Column(name = "latitude", precision = 10, scale = 8)
-    @DecimalMin(value = "-90.0")
-    @DecimalMax(value = "90.0")
-    private BigDecimal latitude;
+    @Column(name = "latitude", columnDefinition = "DECIMAL(10,8)")
+    private Double latitude;
 
-    @Column(name = "longitude", precision = 11, scale = 8)
-    @DecimalMin(value = "-180.0")
-    @DecimalMax(value = "180.0")
-
-    private BigDecimal longitude;
+    @Column(name = "longitude", columnDefinition = "DECIMAL(11,8)")
+    private Double longitude;
 
     @Column(name = "selection_count", nullable = false, columnDefinition = "INT DEFAULT 0")
     private int selectionCount=0;
 
-    public void setGeocodingResult(BigDecimal latitude, BigDecimal longitude){
+    public void setGeocodingResult(Double latitude, Double longitude){
         this.latitude = latitude;
         this.longitude = longitude;
     }

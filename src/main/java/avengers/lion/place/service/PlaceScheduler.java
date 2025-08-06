@@ -30,8 +30,8 @@ public class PlaceScheduler implements Job {
         List<Place> places = placeRepository.findAll();
         for(Place place : places) {
             GeocodeInfo info = placeService.geocode(place.getName());
-            BigDecimal lat = BigDecimal.valueOf(info.lat());
-            BigDecimal lng = BigDecimal.valueOf(info.lng());
+            Double lat = info.lat();
+            Double lng = info.lng();
             place.setGeocodingResult(lat, lng);
             placeRepository.save(place);
         }
