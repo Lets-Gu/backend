@@ -40,12 +40,12 @@ public class ItemService {
         // 상품을 찾기
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(()-> new BusinessException(ExceptionType.ITEM_NOT_FOUND));
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()-> new BusinessException(ExceptionType.MEMBER_NOT_FOUND));
         // 구매하고자 하는 수량보다 재고가 적다 -> 에러 발생
         if(item.getStockCount()<count){
             throw new BusinessException(ExceptionType.STOCK_NOT_AVAILABLE);
         }
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(()-> new BusinessException(ExceptionType.MEMBER_NOT_FOUND));
         member.buyItemByPoint(item, count);
         item.buyItem(count);
     }

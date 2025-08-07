@@ -32,7 +32,7 @@ public interface MissionApi {
                     사용자는 이 목록에서 원하는 미션을 선택하여 참여할 수 있습니다.
                     """
     )
-    @ApiResponse(content = @Content(schema = @Schema(implementation = MissionResponse.class)))
+    @ApiResponse(content = @Content(schema = @Schema(implementation = MissionResponse.class, type="array")))
     @SwaggerApiResponses(
             success = @SwaggerApiSuccessResponse(
                     response = MissionResponse[].class,
@@ -56,7 +56,7 @@ public interface MissionApi {
                     다른 사용자들의 후기를 통해 미션에 대한 정보를 미리 파악할 수 있습니다.
                     """
     )
-    @ApiResponse(content = @Content(schema = @Schema(implementation = MissionReviewResponse.class)))
+    @ApiResponse(content = @Content(schema = @Schema(implementation = MissionReviewResponse.class, type="array")))
     @SwaggerApiResponses(
             success = @SwaggerApiSuccessResponse(
                     response = MissionReviewResponse[].class,

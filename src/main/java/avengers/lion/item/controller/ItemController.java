@@ -38,7 +38,7 @@ public class ItemController implements ItemApi {
     @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<ResponseBody<Void>> exchangeItem(@AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails,
                                                            @PathVariable Long itemId,
-                                                           ExchangeItemRequest exchangeItemRequest){
+                                                           @RequestBody ExchangeItemRequest exchangeItemRequest){
         itemService.exchangeItem(kakaoMemberDetails.getMemberId(), itemId, exchangeItemRequest);
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse());
     }

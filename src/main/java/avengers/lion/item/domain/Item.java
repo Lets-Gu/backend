@@ -1,6 +1,8 @@
 package avengers.lion.item.domain;
 
 import avengers.lion.global.base.BaseEntity;
+import avengers.lion.global.exception.BusinessException;
+import avengers.lion.global.exception.ExceptionType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +29,9 @@ public class Item extends BaseEntity {
     private ItemCategory itemCategory;
 
     public void buyItem(int count) {
+        if(this.stockCount < count) {
+            throw new BusinessException(ExceptionType. STOCK_NOT_AVAILABLE);
+        }
         this.stockCount -= count;
     }
 }
