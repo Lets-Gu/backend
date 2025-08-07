@@ -28,11 +28,9 @@ public class ReviewService {
     /*
     작성 가능한 리뷰 조회
      */
-    public List<UnWrittenReviewResponse> getUnWrittenReview(Long memberId){
+    public UnWrittenReviewResponse.UnWrittenReviewsResponse getUnWrittenReview(Long memberId){
         List<CompletedMission> unWrittenReviews = completedMissionRepository.getUnwrittenReviewsByMemberId(memberId);
-        return unWrittenReviews.stream()
-                .map(UnWrittenReviewResponse::from)
-                .toList();
+        return UnWrittenReviewResponse.of(unWrittenReviews);
     }
 
     /*
@@ -68,10 +66,8 @@ public class ReviewService {
     /*
     리뷰 전체조회
      */
-    public List<ReviewDto> getAllReviews(Long memberId){
+    public ReviewDto.ReviewsDto getAllReviews(Long memberId){
         List<Review> reviews= reviewRepository.findAllByMemberId(memberId,  ReviewStatus.ACTIVE);
-        return reviews.stream()
-                .map(ReviewDto::from)
-                .toList();
+        return ReviewDto.of(reviews);
     }
 }
