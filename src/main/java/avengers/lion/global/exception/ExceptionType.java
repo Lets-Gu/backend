@@ -18,6 +18,7 @@ public enum ExceptionType {
 
     // Member
     MEMBER_NOT_FOUND(NOT_FOUND, "U001", "존재하지 않는 사용자입니다."),
+    INSUFFICIENT_POINT(FORBIDDEN,"U002", "포인트가 부족합니다."),
 
 
     //Auth
@@ -36,7 +37,13 @@ public enum ExceptionType {
     
     // Review
     ACCESS_DENIED(FORBIDDEN, "R001", "본인의 완료된 미션에 대해서만 리뷰를 작성할 수 있습니다."),
-    REVIEW_ALREADY_EXISTS(CONFLICT, "R002", "이미 작성된 리뷰입니다.");
+    REVIEW_ALREADY_EXISTS(CONFLICT, "R002", "이미 작성된 리뷰입니다."),
+
+    // Item
+    ITEM_NOT_FOUND(NOT_FOUND,"I001","존재하지 않는 상품입니다."),
+    STOCK_NOT_AVAILABLE(BAD_REQUEST, "I002", "해당 상품은 현재 재고가 부족합니다.");
+
+
 
     private final HttpStatus status;
     private final String code;
