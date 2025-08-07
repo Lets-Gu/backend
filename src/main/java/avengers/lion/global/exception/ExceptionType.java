@@ -18,7 +18,8 @@ public enum ExceptionType {
 
     // Member
     MEMBER_NOT_FOUND(NOT_FOUND, "U001", "존재하지 않는 사용자입니다."),
-    INSUFFICIENT_POINT(FORBIDDEN,"U002", "아이템 교환에 필요한 포인트가 부족합니다."),
+    INSUFFICIENT_POINT(NOT_FOUND,"U002", "아이템 교환에 필요한 포인트가 부족합니다."),
+
 
 
     //Auth
