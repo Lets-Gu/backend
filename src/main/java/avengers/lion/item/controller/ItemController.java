@@ -3,6 +3,7 @@ package avengers.lion.item.controller;
 import avengers.lion.auth.domain.KakaoMemberDetails;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
+import avengers.lion.item.api.ItemApi;
 import avengers.lion.item.dto.ExchangeItemRequest;
 import avengers.lion.item.dto.ItemResponse;
 import avengers.lion.item.service.ItemService;
@@ -17,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/items")
 @RequiredArgsConstructor
-public class ItemController {
+public class ItemController implements ItemApi {
 
     private final ItemService itemService;
 

@@ -10,6 +10,9 @@ import avengers.lion.review.dto.ReviewDto;
 import avengers.lion.review.dto.UnWrittenReviewResponse;
 import avengers.lion.review.dto.WriteReviewRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +29,7 @@ public interface ReviewApi {
                     완료된 미션(CompletedMission) 중 리뷰 상태가 INACTIVE인 미션들만 반환됩니다.
                     """
     )
+    @ApiResponse(content = @Content(schema = @Schema(implementation = UnWrittenReviewResponse.UnWrittenReviewsResponse.class)))
     @SwaggerApiResponses(
             success = @SwaggerApiSuccessResponse(
                     response = UnWrittenReviewResponse.UnWrittenReviewsResponse.class,
@@ -80,6 +84,7 @@ public interface ReviewApi {
                     작성 날짜 순으로 정렬되어 반환됩니다.
                     """
     )
+    @ApiResponse(content = @Content(schema = @Schema(implementation = ReviewDto.ReviewsDto.class)))
     @SwaggerApiResponses(
             success = @SwaggerApiSuccessResponse(
                     response = ReviewDto.ReviewsDto.class,
