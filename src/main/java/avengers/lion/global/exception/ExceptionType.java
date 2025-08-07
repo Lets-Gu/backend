@@ -18,7 +18,7 @@ public enum ExceptionType {
 
     // Member
     MEMBER_NOT_FOUND(NOT_FOUND, "U001", "존재하지 않는 사용자입니다."),
-    INSUFFICIENT_POINT(FORBIDDEN,"U002", "포인트가 부족합니다."),
+    INSUFFICIENT_POINT(FORBIDDEN,"U002", "아이템 교환에 필요한 포인트가 부족합니다."),
 
 
     //Auth
@@ -41,7 +41,7 @@ public enum ExceptionType {
 
     // Item
     ITEM_NOT_FOUND(NOT_FOUND,"I001","존재하지 않는 상품입니다."),
-    STOCK_NOT_AVAILABLE(BAD_REQUEST, "I002", "해당 상품은 현재 재고가 부족합니다.");
+    STOCK_NOT_AVAILABLE(BAD_REQUEST, "I002", "교환하려는 수량보다 아이템의 재고가 부족합니다.");
 
 
 
