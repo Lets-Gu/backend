@@ -12,7 +12,15 @@ import org.springframework.web.method.HandlerMethod;
 @Component
 @RequiredArgsConstructor
 @Profile("!test && !prod")
+/*
+API가 실패했을 때 Swagger 문서에 표시할 에러 응답 예시 자동 생성
+ */
 public class SwaggerApiSuccessResponseHandler {
+    /*
+    컨트롤러 메서드에 @SwaggerApiResponses 애너테이션이 있는지 확인
+    operation : 하나의 API 엔드포인트를 가리키는 객체
+    handlerMethod : 컨트롤러 메서드 정보를 담은 객체
+     */
     public void handle(Operation operation, HandlerMethod handlerMethod) {
         // 스프링 빈 컨트롤러 메서드에 적용된 SwaggerApiResponses 애너테이션을 불러옴
         SwaggerApiResponses apiResponses = handlerMethod.getMethodAnnotation(SwaggerApiResponses.class);
@@ -26,9 +34,8 @@ public class SwaggerApiSuccessResponseHandler {
             return;
         }
 
+        // Swagger가 자동 생성한 기본 응답 제거 -> 커스텀 응답 형태로 완전히 대체
         ApiResponses responses = operation.getResponses();
-        
-        // 기본 응답 및 200 HTTP 응답 상태 코드 삭제
         String responseCode = String.valueOf(apiSuccessResponse.status().value());
         responses.remove("default");
         responses.remove(responseCode);
@@ -49,6 +56,9 @@ public class SwaggerApiSuccessResponseHandler {
         responses.addApiResponse(responseCode, apiResponse);
     }
 
+    /*
+    data 필드에 들어갈 스키마 결정
+     */
     private Schema<?> resolveDataSchema(SwaggerApiSuccessResponse apiSuccessResponse) {
         // SwaggerApiSuccessResponse의 responsePage 속성이 등록되었으면 GlobalPageResponse와 함께 응답을 출력하도록 스키마 구성
         if (apiSuccessResponse.responsePage() != Void.class) {

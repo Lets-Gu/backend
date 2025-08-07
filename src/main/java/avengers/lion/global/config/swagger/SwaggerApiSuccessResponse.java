@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * 이 애너테이션은 API 호출이 정상적으로 완료되었을 때의 응답 HTTP 상태 코드와 응답 본문에 대한
  * 스키마를 명시할 수 있습니다.
  *
- * @see kr.ac.kumoh.d138.JobForeigner.global.config.swagger.SwaggerApiResponses
+ * @see avengers.lion.global.config.swagger.SwaggerApiResponses
  * @see HttpStatus
  */
 @Target(ElementType.METHOD)

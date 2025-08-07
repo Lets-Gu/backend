@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 /**
  * 이 애너테이션은 API 엔드 포인트에서의 성공 및 오류 응답에 대한 설명을 정의합니다.
  *
- * @see kr.ac.kumoh.d138.JobForeigner.global.config.swagger.SwaggerApiSuccessResponse
- * @see kr.ac.kumoh.d138.JobForeigner.global.config.swagger.SwaggerApiFailedResponse
+ * @see avengers.lion.global.config.swagger.SwaggerApiSuccessResponse
+ * @see avengers.lion.global.config.swagger.SwaggerApiFailedResponse
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
