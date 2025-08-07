@@ -10,6 +10,9 @@ import avengers.lion.mission.dto.MissionResponse;
 import avengers.lion.mission.dto.MissionReviewResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +32,7 @@ public interface MissionApi {
                     사용자는 이 목록에서 원하는 미션을 선택하여 참여할 수 있습니다.
                     """
     )
+    @ApiResponse(content = @Content(schema = @Schema(implementation = MissionResponse.class)))
     @SwaggerApiResponses(
             success = @SwaggerApiSuccessResponse(
                     response = MissionResponse[].class,
@@ -52,6 +56,7 @@ public interface MissionApi {
                     다른 사용자들의 후기를 통해 미션에 대한 정보를 미리 파악할 수 있습니다.
                     """
     )
+    @ApiResponse(content = @Content(schema = @Schema(implementation = MissionReviewResponse.class)))
     @SwaggerApiResponses(
             success = @SwaggerApiSuccessResponse(
                     response = MissionReviewResponse[].class,
