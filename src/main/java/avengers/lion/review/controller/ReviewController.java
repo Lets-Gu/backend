@@ -3,6 +3,7 @@ package avengers.lion.review.controller;
 import avengers.lion.auth.domain.KakaoMemberDetails;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
+import avengers.lion.review.api.ReviewApi;
 import avengers.lion.review.dto.ReviewDto;
 import avengers.lion.review.dto.UnWrittenReviewResponse;
 import avengers.lion.review.dto.WriteReviewRequest;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/reviews")
-public class ReviewController {
+public class ReviewController implements ReviewApi {
 
     private final ReviewService reviewService;
 
