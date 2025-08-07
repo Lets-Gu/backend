@@ -17,7 +17,7 @@ public enum ExceptionType {
     INVALID_HTTP_METHOD(METHOD_NOT_ALLOWED, "C005","잘못된 HTTP 메서드로 요청했습니다."),
 
     // Member
-    MEMBER_NOT_FOUND(NOT_FOUND, "U001", "사용자를 찾을 수 없습니다."),
+    MEMBER_NOT_FOUND(NOT_FOUND, "U001", "존재하지 않는 사용자입니다."),
 
 
     //Auth
@@ -30,12 +30,12 @@ public enum ExceptionType {
     PLACE_NOT_FOUND(NOT_FOUND,"P003","장소를 찾을 수 없습니다."),
 
     // Mission
-    COMPLETED_MISSION_NOT_FOUND(NOT_FOUND, "M001","완료된 미션을 찾을 수 없습니다."),
+    COMPLETED_MISSION_NOT_FOUND(NOT_FOUND, "M001","존재하지 않는 완료된 미션입니다."),
     MISSION_NOT_FOUND(NOT_FOUND, "M002", "미션을 찾을 수 없습니다."),
     GPS_AUTH_FAILED(UNAUTHORIZED,"M003", "GPS 인증에 실패하였습니다."),
     
     // Review
-    ACCESS_DENIED(FORBIDDEN, "R001", "접근 권한이 없습니다."),
+    ACCESS_DENIED(FORBIDDEN, "R001", "본인의 완료된 미션에 대해서만 리뷰를 작성할 수 있습니다."),
     REVIEW_ALREADY_EXISTS(CONFLICT, "R002", "이미 작성된 리뷰입니다.");
 
     private final HttpStatus status;

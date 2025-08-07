@@ -15,8 +15,8 @@ import java.lang.annotation.Target;
  * @see avengers.lion.global.config.swagger.SwaggerApiResponses
  * @see avengers.lion.global.exception.ExceptionType
  */
-@Target(ElementType.METHOD)
-@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD) // 메서드에만 적용
+@Retention(RetentionPolicy.RUNTIME) // 런타임까지 정보 유지 -> 리플렉션으로 정보를 읽어올 수 있음
 public @interface SwaggerApiFailedResponse {
     /**
      * {@link ExceptionType}에 정의된 예외 타입을 지정합니다.

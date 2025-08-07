@@ -1,13 +1,13 @@
 package avengers.lion.global;
 
 import avengers.lion.auth.domain.KakaoUserInfo;
-import avengers.lion.auth.repository.MemberRepository;
 import avengers.lion.global.exception.BusinessException;
 import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.global.jwt.TokenDto;
 import avengers.lion.global.jwt.TokenProvider;
 import avengers.lion.global.response.SuccessResponseBody;
 import avengers.lion.member.Member;
+import avengers.lion.member.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

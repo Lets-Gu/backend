@@ -2,6 +2,7 @@ package avengers.lion.mission.controller;
 
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
+import avengers.lion.mission.api.MissionApi;
 import avengers.lion.mission.dto.GpsAuthenticationRequest;
 import avengers.lion.mission.dto.MissionResponse;
 import avengers.lion.mission.dto.MissionReviewResponse;
@@ -16,7 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/missions")
-public class MissionController {
+public class MissionController implements MissionApi {
 
     private final MissionService missionService;
 
