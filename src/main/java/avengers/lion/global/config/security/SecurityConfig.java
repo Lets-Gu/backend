@@ -41,7 +41,8 @@ public class SecurityConfig {
                 // URL 접근 권한 설정
                 .authorizeHttpRequests(auth -> auth
                         // 로그인, 콜백, 퍼블릭 API 허용
-                        .requestMatchers("/", "/oauth2/**", "/login/**", "/error", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/", "/oauth2/**", "/login/**", "/error", "/swagger-ui/**"
+                        ,"/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui.html", "v3/api-docs/swagger-config").permitAll()
                         .anyRequest().authenticated()
                 )
                 // OAuth2 로그인 설정
