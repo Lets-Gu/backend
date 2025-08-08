@@ -1,9 +1,8 @@
-package avengers.lion.member;
+package avengers.lion.member.domain;
 
 import avengers.lion.global.base.BaseEntity;
 import avengers.lion.global.exception.BusinessException;
 import avengers.lion.global.exception.ExceptionType;
-import avengers.lion.item.domain.Item;
 import avengers.lion.mission.domain.CompletedMission;
 import avengers.lion.review.domain.Review;
 import jakarta.persistence.*;

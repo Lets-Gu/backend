@@ -3,7 +3,7 @@ package avengers.lion.item.service;
 import avengers.lion.item.domain.*;
 import avengers.lion.item.repository.OrderItemRepository;
 import avengers.lion.item.repository.OrdersRepository;
-import avengers.lion.member.Member;
+import avengers.lion.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

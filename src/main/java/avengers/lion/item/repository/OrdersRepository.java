@@ -11,12 +11,13 @@ import java.util.List;
 
 public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
-    @Query("SELECT o FROM Orders o"+
+    @Query("SELECT DISTINCT o FROM Orders o"+
             " JOIN FETCH o.orderItems i" +
             " JOIN FETCH i.item it" +
             " WHERE o.member.id = :memberId" +
             " AND i.orderItemStatus = :orderItemStatus" +
-            " AND it.itemCategory IN :categories")
+            " AND it.itemCategory IN :categories"+
+            " ORDER BY o.createdAt DESC")
     List<Orders> findOrderItemByMemberIdAndItemStatus(
             @Param("memberId") Long memberId,
             @Param("orderItemStatus") OrderItemStatus orderItemStatus,

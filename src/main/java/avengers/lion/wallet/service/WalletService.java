@@ -1,8 +1,10 @@
 package avengers.lion.wallet.service;
 
+import avengers.lion.global.exception.BusinessException;
+import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.item.domain.Orders;
 import avengers.lion.item.service.OrderService;
-import avengers.lion.member.Member;
+import avengers.lion.member.domain.Member;
 import avengers.lion.wallet.domain.PointTransaction;
 import avengers.lion.wallet.dto.ConsumedItemResponse;
 import avengers.lion.wallet.dto.GiftCardResponse;
@@ -68,6 +70,8 @@ public class WalletService {
     리워드 거래 내역 추가
      */
     public void addPointTransaction(int price, Member member){
+        if(price<=0)
+            throw new BusinessException(ExceptionType.PRICE_IS_POSITIVE);
         PointTransaction pointTransaction = PointTransaction.builder()
                 .changeAmount(-price)
                 .member(member)

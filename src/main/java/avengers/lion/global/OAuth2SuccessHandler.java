@@ -6,7 +6,7 @@ import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.global.jwt.TokenDto;
 import avengers.lion.global.jwt.TokenProvider;
 import avengers.lion.global.response.SuccessResponseBody;
-import avengers.lion.member.Member;
+import avengers.lion.member.domain.Member;
 import avengers.lion.member.repository.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

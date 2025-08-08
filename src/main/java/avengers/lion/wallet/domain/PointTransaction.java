@@ -1,7 +1,7 @@
 package avengers.lion.wallet.domain;
 
 import avengers.lion.global.base.BaseEntity;
-import avengers.lion.member.Member;
+import avengers.lion.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;

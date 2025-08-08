@@ -1,6 +1,6 @@
 package avengers.lion.mission.domain;
 
-import avengers.lion.member.Member;
+import avengers.lion.member.domain.Member;
 import avengers.lion.review.domain.Review;
 import jakarta.persistence.*;
 import lombok.Getter;

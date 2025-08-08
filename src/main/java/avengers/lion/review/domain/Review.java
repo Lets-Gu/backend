@@ -1,7 +1,7 @@
 package avengers.lion.review.domain;
 
 import avengers.lion.global.base.BaseEntity;
-import avengers.lion.member.Member;
+import avengers.lion.member.domain.Member;
 import avengers.lion.mission.domain.CompletedMission;
 import jakarta.persistence.*;
 import lombok.Builder;

@@ -2,7 +2,7 @@ package avengers.lion.item.domain;
 
 
 import avengers.lion.global.base.BaseEntity;
-import avengers.lion.member.Member;
+import avengers.lion.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +27,7 @@ public class Orders extends BaseEntity {
     @Column(name = "order_status", nullable = false)
     private OrderStatus orderStatus;
 
-    @OneToMany(mappedBy = "orders")
+    @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderItem> orderItems;
 
     @Builder

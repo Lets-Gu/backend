@@ -3,11 +3,10 @@ package avengers.lion.item.service;
 import avengers.lion.global.exception.BusinessException;
 import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.item.domain.Item;
-import avengers.lion.item.domain.Orders;
 import avengers.lion.item.dto.ExchangeItemRequest;
 import avengers.lion.item.dto.ItemResponse;
 import avengers.lion.item.repository.ItemRepository;
-import avengers.lion.member.Member;
+import avengers.lion.member.domain.Member;
 import avengers.lion.member.repository.MemberRepository;
 import avengers.lion.wallet.service.WalletService;
 import jakarta.transaction.Transactional;
@@ -46,7 +45,7 @@ public class ItemService {
                 .orElseThrow(()-> new BusinessException(ExceptionType.ITEM_NOT_FOUND));
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(()-> new BusinessException(ExceptionType.MEMBER_NOT_FOUND));
-        int price = item.getPrice()*count;
+        int price = Math.multiplyExact(item.getPrice(), count);
         // 구매하고자 하는 수량보다 재고가 적다 -> 에러 발생
         if(item.getStockCount()<count){
             throw new BusinessException(ExceptionType.STOCK_NOT_AVAILABLE);

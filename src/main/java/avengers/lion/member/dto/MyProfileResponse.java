@@ -1,6 +1,6 @@
 package avengers.lion.member.dto;
 
-import avengers.lion.member.Member;
+import avengers.lion.member.domain.Member;
 
 public record MyProfileResponse(String nickname, String imageUrl, String email) {
 

@@ -1,4 +1,4 @@
-package avengers.lion.member;
+package avengers.lion.member.domain;
 
 import lombok.Getter;
 
