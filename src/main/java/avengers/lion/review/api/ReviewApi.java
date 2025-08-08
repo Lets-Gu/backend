@@ -1,6 +1,5 @@
 package avengers.lion.review.api;
 
-import avengers.lion.auth.domain.KakaoMemberDetails;
 import avengers.lion.global.config.swagger.SwaggerApiFailedResponse;
 import avengers.lion.global.config.swagger.SwaggerApiResponses;
 import avengers.lion.global.config.swagger.SwaggerApiSuccessResponse;
@@ -42,9 +41,7 @@ public interface ReviewApi {
                     )
             }
     )
-    ResponseEntity<ResponseBody<UnWrittenReviewResponse.UnWrittenReviewsResponse>> getUnWrittenReview(
-            @AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails
-    );
+    ResponseEntity<ResponseBody<UnWrittenReviewResponse.UnWrittenReviewsResponse>> getUnWrittenReview(@AuthenticationPrincipal Long memberId);
 
     @Operation(
             summary = "리뷰 작성",
@@ -73,7 +70,7 @@ public interface ReviewApi {
             }
     )
     ResponseEntity<ResponseBody<Void>> writeUnWrittenReview(
-            @AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails,
+            @AuthenticationPrincipal Long memberId,
             @Valid @RequestBody WriteReviewRequest writeReviewRequest
     );
 
@@ -97,7 +94,6 @@ public interface ReviewApi {
                     )
             }
     )
-    ResponseEntity<ResponseBody<ReviewDto.ReviewsDto>> getAllReviews(
-            @AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails
-    );
+
+    ResponseEntity<ResponseBody<ReviewDto.ReviewsDto>> getAllReviews(@AuthenticationPrincipal Long memberId);
 }

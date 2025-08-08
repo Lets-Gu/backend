@@ -9,9 +9,10 @@ import avengers.lion.item.repository.ItemRepository;
 import avengers.lion.member.domain.Member;
 import avengers.lion.member.repository.MemberRepository;
 import avengers.lion.wallet.service.WalletService;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

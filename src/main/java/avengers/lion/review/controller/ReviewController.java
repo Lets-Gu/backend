@@ -1,6 +1,6 @@
 package avengers.lion.review.controller;
 
-import avengers.lion.auth.domain.KakaoMemberDetails;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
 import avengers.lion.review.api.ReviewApi;
@@ -11,7 +11,7 @@ import avengers.lion.review.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,16 +25,18 @@ public class ReviewController implements ReviewApi {
     작성 가능한 리뷰 조회하기
      */
     @GetMapping("/not-written")
-    public ResponseEntity<ResponseBody<UnWrittenReviewResponse.UnWrittenReviewsResponse>> getUnWrittenReview(@AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails){
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getUnWrittenReview(kakaoMemberDetails.getMemberId())));
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<ResponseBody<UnWrittenReviewResponse.UnWrittenReviewsResponse>> getUnWrittenReview(@AuthenticationPrincipal Long memberId){
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getUnWrittenReview(memberId)));
     }
 
     /*
     작성 가능한 리뷰 리뷰 작성하기
      */
     @PostMapping
-    public ResponseEntity<ResponseBody<Void>> writeUnWrittenReview(@AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails, @Valid @RequestBody WriteReviewRequest writeReviewRequest){
-        reviewService.writeUnWrittenReview(kakaoMemberDetails.getMemberId(), writeReviewRequest);
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<ResponseBody<Void>> writeUnWrittenReview(@AuthenticationPrincipal Long memberId, @Valid @RequestBody WriteReviewRequest writeReviewRequest){
+        reviewService.writeUnWrittenReview(memberId, writeReviewRequest);
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse());
     }
 
@@ -42,7 +44,8 @@ public class ReviewController implements ReviewApi {
     내가 작성한 리뷰
      */
     @GetMapping
-    public ResponseEntity<ResponseBody<ReviewDto.ReviewsDto>> getAllReviews(@AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails){
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getAllReviews(kakaoMemberDetails.getMemberId())));
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<ResponseBody<ReviewDto.ReviewsDto>> getAllReviews(@AuthenticationPrincipal Long memberId){
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getAllReviews(memberId)));
     }
 }

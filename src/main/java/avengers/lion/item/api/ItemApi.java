@@ -1,6 +1,5 @@
 package avengers.lion.item.api;
 
-import avengers.lion.auth.domain.KakaoMemberDetails;
 import avengers.lion.global.config.swagger.SwaggerApiFailedResponse;
 import avengers.lion.global.config.swagger.SwaggerApiResponses;
 import avengers.lion.global.config.swagger.SwaggerApiSuccessResponse;
@@ -89,7 +88,7 @@ public interface ItemApi {
     )
     @PreAuthorize("hasRole('ROLE_USER')")
     ResponseEntity<ResponseBody<Void>> exchangeItem(
-            @AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails,
+            @AuthenticationPrincipal Long memberId,
             @Parameter(description = "교환할 아이템 ID", example = "1")
             @PathVariable Long itemId,
             @Valid @RequestBody ExchangeItemRequest exchangeItemRequest

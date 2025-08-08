@@ -1,6 +1,6 @@
 package avengers.lion.wallet.controller;
 
-import avengers.lion.auth.domain.KakaoMemberDetails;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
 import avengers.lion.wallet.dto.ConsumedItemResponse;
@@ -11,7 +11,6 @@ import avengers.lion.wallet.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,8 +28,8 @@ public class WalletController {
      */
     @GetMapping("/gift-cards")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<ResponseBody<List<GiftCardResponse>>> getMyGiftCards(@AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails){
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getMyGiftCards(kakaoMemberDetails.getMemberId())));
+    public ResponseEntity<ResponseBody<List<GiftCardResponse>>> getMyGiftCards(@AuthenticationPrincipal Long memberId){
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getMyGiftCards(memberId)));
     }
 
     /*
@@ -38,8 +37,8 @@ public class WalletController {
      */
     @GetMapping("/partner-cards")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<ResponseBody<List<ParentItemResponse>>> getMyPartnerCards(@AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails){
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getMyPartnerCards(kakaoMemberDetails.getMemberId())));
+    public ResponseEntity<ResponseBody<List<ParentItemResponse>>> getMyPartnerCards(@AuthenticationPrincipal Long memberId){
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getMyPartnerCards(memberId)));
     }
 
     /*
@@ -47,8 +46,8 @@ public class WalletController {
      */
     @GetMapping("/used-items")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<ResponseBody<List<ConsumedItemResponse>>> getMyUsedItems(@AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails){
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getMyUsedItems(kakaoMemberDetails.getMemberId())));
+    public ResponseEntity<ResponseBody<List<ConsumedItemResponse>>> getMyUsedItems(@AuthenticationPrincipal Long memberId){
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getMyUsedItems(memberId)));
     }
 
 
@@ -57,7 +56,7 @@ public class WalletController {
      */
     @GetMapping("/reward-history")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<ResponseBody<List<RewardHistoryResponse>>> getRewardHistory(@AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails){
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getRewardHistory(kakaoMemberDetails.getMemberId())));
+    public ResponseEntity<ResponseBody<List<RewardHistoryResponse>>> getRewardHistory(@AuthenticationPrincipal Long memberId){
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getRewardHistory(memberId)));
     }
 }

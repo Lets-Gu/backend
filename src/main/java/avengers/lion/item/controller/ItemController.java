@@ -1,6 +1,5 @@
 package avengers.lion.item.controller;
 
-import avengers.lion.auth.domain.KakaoMemberDetails;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
 import avengers.lion.item.api.ItemApi;
@@ -36,10 +35,9 @@ public class ItemController implements ItemApi {
      */
     @PostMapping("/{itemId}")
     @PreAuthorize("hasRole('ROLE_USER')")
-    public ResponseEntity<ResponseBody<Void>> exchangeItem(@AuthenticationPrincipal KakaoMemberDetails kakaoMemberDetails,
-                                                           @PathVariable Long itemId,
+    public ResponseEntity<ResponseBody<Void>> exchangeItem(@AuthenticationPrincipal Long memberId, @PathVariable Long itemId,
                                                            @RequestBody ExchangeItemRequest exchangeItemRequest){
-        itemService.exchangeItem(kakaoMemberDetails.getMemberId(), itemId, exchangeItemRequest);
+        itemService.exchangeItem(memberId, itemId, exchangeItemRequest);
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse());
     }
 }
