@@ -35,7 +35,7 @@ public class AuthController implements AuthApi {
         // 비즈니스 로직은 서비스에서 처리
         LoginWithTokenResponse result = authService.loginWithToken(request);
         // 토큰을 표준 Authorization 헤더에 설정
-        response.setHeader("Access-Token", result.accessToken());
+        response.setHeader("Authorization", "Bearer " + result.accessToken());
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(result.loginResponse()));
     }
 }

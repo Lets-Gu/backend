@@ -11,6 +11,7 @@ import avengers.lion.wallet.dto.GiftCardResponse;
 import avengers.lion.wallet.dto.ParentItemResponse;
 import avengers.lion.wallet.dto.RewardHistoryResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,7 +33,7 @@ public interface WalletApi {
                     각 상품권의 이름, 가격, 구매일 등의 정보를 확인할 수 있습니다.
                     """
     )
-    @ApiResponse(content = @Content(schema = @Schema(implementation = GiftCardResponse.class)))
+    @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = GiftCardResponse.class))))
     @SwaggerApiResponses(
             success = @SwaggerApiSuccessResponse(
                     response = GiftCardResponse[].class,
@@ -62,7 +63,7 @@ public interface WalletApi {
                     아직 사용하지 않은 활성 상태의 제휴 쿠폰들만 반환됩니다.
                     """
     )
-    @ApiResponse(content = @Content(schema = @Schema(implementation = ParentItemResponse.class)))
+    @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = ParentItemResponse.class))))
     @SwaggerApiResponses(
             success = @SwaggerApiSuccessResponse(
                     response = ParentItemResponse[].class,
@@ -92,7 +93,7 @@ public interface WalletApi {
                     언제, 어떤 아이템을 사용했는지 기록을 통해 확인 가능합니다.
                     """
     )
-    @ApiResponse(content = @Content(schema = @Schema(implementation = ConsumedItemResponse.class)))
+    @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsumedItemResponse.class))))
     @SwaggerApiResponses(
             success = @SwaggerApiSuccessResponse(
                     response = ConsumedItemResponse[].class,
@@ -111,7 +112,6 @@ public interface WalletApi {
     )
     @PreAuthorize("hasAuthority('ROLE_USER')")
     ResponseEntity<ResponseBody<List<ConsumedItemResponse>>> getMyUsedItems(
-            @AuthenticationPrincipal Long memberId
     );
 
     @Operation(
@@ -123,7 +123,7 @@ public interface WalletApi {
                     포인트 변동에 대한 상세 내역을 시간순으로 조회할 수 있습니다.
                     """
     )
-    @ApiResponse(content = @Content(schema = @Schema(implementation = RewardHistoryResponse.class)))
+    @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = RewardHistoryResponse.class))))
     @SwaggerApiResponses(
             success = @SwaggerApiSuccessResponse(
                     response = RewardHistoryResponse[].class,
@@ -142,6 +142,5 @@ public interface WalletApi {
     )
     @PreAuthorize("hasAuthority('ROLE_USER')")
     ResponseEntity<ResponseBody<List<RewardHistoryResponse>>> getRewardHistory(
-            @AuthenticationPrincipal Long memberId
     );
 }

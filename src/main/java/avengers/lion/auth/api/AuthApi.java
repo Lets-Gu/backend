@@ -49,15 +49,22 @@ public interface AuthApi {
     @Operation(
             summary = "로그인",
             description = """
-            이메일과 비밀번호로 인증을 수행하고, 성공 시 Access-Token을 HTTP 헤더에 설정하여 반환합니다.
+            이메일과 비밀번호로 인증을 수행하고, 성공 시 Authorization 헤더에 Bearer 토큰을 설정하여 반환합니다.
             로그인 성공 시 사용자 정보(LoginResponse)와 발급된 토큰을 함께 제공합니다.
             """
     )
-    @ApiResponse(content = @Content(schema = @Schema(implementation = LoginResponse.class)))
+    @ApiResponse(content = @Content(schema = @Schema(implementation = LoginResponse.class)),
+                 headers ={
+                    @io.swagger.v3.oas.annotations.headers.Header(
+                            name = "Authorization",
+                            description = "로그인 성공 시 발급되는 JWT 액세스 토큰 (Bearer {token} 형식)",
+                            schema = @Schema(type = "string", example = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
+                    )
+                 })
     @SwaggerApiResponses(
             success = @SwaggerApiSuccessResponse(
                     response = LoginResponse.class,
-                    description = "로그인에 성공했습니다. 응답 본문에 사용자 정보를, `Access-Token` 헤더에 JWT를 포함합니다."
+                    description = "로그인에 성공했습니다. 응답 본문에 사용자 정보를, `Authorization` 헤더에 Bearer JWT를 포함합니다."
             ),
             errors = {
                     @SwaggerApiFailedResponse(
