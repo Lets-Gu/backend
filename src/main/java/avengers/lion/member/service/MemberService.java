@@ -2,7 +2,7 @@ package avengers.lion.member.service;
 
 import avengers.lion.global.exception.BusinessException;
 import avengers.lion.global.exception.ExceptionType;
-import avengers.lion.member.Member;
+import avengers.lion.member.domain.Member;
 import avengers.lion.member.dto.MyProfileResponse;
 import avengers.lion.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

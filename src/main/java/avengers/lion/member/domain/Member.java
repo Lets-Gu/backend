@@ -1,9 +1,8 @@
-package avengers.lion.member;
+package avengers.lion.member.domain;
 
 import avengers.lion.global.base.BaseEntity;
 import avengers.lion.global.exception.BusinessException;
 import avengers.lion.global.exception.ExceptionType;
-import avengers.lion.item.domain.Item;
 import avengers.lion.mission.domain.CompletedMission;
 import avengers.lion.review.domain.Review;
 import jakarta.persistence.*;
@@ -54,9 +53,9 @@ public class Member extends BaseEntity {
         this.point = 0;
     }
 
-    public void buyItemByPoint(Item item, int count){
-        if(this.point<item.getPrice()*count)
+    public void buyItemByPoint(int price){
+        if(this.point<price)
             throw new BusinessException(ExceptionType.INSUFFICIENT_POINT);
-        this.point-=item.getPrice()*count;
+        this.point-=price;
     }
 }

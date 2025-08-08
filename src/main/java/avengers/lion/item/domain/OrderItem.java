@@ -1,13 +1,15 @@
 package avengers.lion.item.domain;
 
+import avengers.lion.global.base.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
 @Entity
-public class OrderItem {
+public class OrderItem extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_item_id")
@@ -23,4 +25,15 @@ public class OrderItem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id", nullable = false)
     private Item item;
+
+    @Enumerated(EnumType.STRING)
+    private OrderItemStatus orderItemStatus;
+
+    @Builder
+    public OrderItem(int count, Orders orders, Item item, OrderItemStatus orderItemStatus){
+        this.count = count;
+        this.orders = orders;
+        this.item = item;
+        this.orderItemStatus = orderItemStatus;
+    }
 }

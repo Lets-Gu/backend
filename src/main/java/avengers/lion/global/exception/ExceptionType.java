@@ -42,7 +42,10 @@ public enum ExceptionType {
 
     // Item
     ITEM_NOT_FOUND(NOT_FOUND,"I001","존재하지 않는 상품입니다."),
-    STOCK_NOT_AVAILABLE(BAD_REQUEST, "I002", "교환하려는 수량보다 아이템의 재고가 부족합니다.");
+    STOCK_NOT_AVAILABLE(BAD_REQUEST, "I002", "교환하려는 수량보다 아이템의 재고가 부족합니다."),
+
+    // Wallet
+    PRICE_IS_POSITIVE(BAD_REQUEST, "W001", "가격은 음수여야 합니다.");
 
 
 

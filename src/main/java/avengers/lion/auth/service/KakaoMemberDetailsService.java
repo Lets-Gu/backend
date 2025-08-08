@@ -3,8 +3,8 @@ package avengers.lion.auth.service;
 
 import avengers.lion.auth.domain.KakaoMemberDetails;
 import avengers.lion.auth.domain.KakaoUserInfo;
-import avengers.lion.member.Member;
-import avengers.lion.member.MemberRole;
+import avengers.lion.member.domain.Member;
+import avengers.lion.member.domain.MemberRole;
 import avengers.lion.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
