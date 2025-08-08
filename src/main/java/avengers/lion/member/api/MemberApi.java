@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import avengers.lion.global.config.swagger.SwaggerApiFailedResponse;
 import avengers.lion.global.config.swagger.SwaggerApiResponses;
@@ -25,7 +26,7 @@ public interface MemberApi {
             description = """
             로그인된 사용자의 프로필 정보를 조회합니다.<br>
             닉네임, 이메일, 프로필 이미지 URL 등 개인 정보를 반환합니다.
-            """
+            """, security = { @SecurityRequirement(name = "JWT") }
     )
     @ApiResponse(content = @Content(schema = @Schema(implementation = MyProfileResponse.class)))
     @SwaggerApiResponses(

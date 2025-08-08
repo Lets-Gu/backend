@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +32,8 @@ public interface WalletApi {
                     사용자가 포인트로 교환한 상품권 목록을 조회합니다.<br>
                     아직 사용하지 않은 활성 상태의 상품권들만 반환됩니다.<br>
                     각 상품권의 이름, 가격, 구매일 등의 정보를 확인할 수 있습니다.
-                    """
+                    """,
+            security = { @SecurityRequirement(name = "JWT") }
     )
     @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = GiftCardResponse.class))))
     @SwaggerApiResponses(
@@ -91,7 +93,8 @@ public interface WalletApi {
                     사용자가 이미 사용한 상품권과 제휴 쿠폰의 내역을 조회합니다.<br>
                     사용 완료된 상품권, 제휴 쿠폰들의 사용 이력을 확인할 수 있습니다.<br>
                     언제, 어떤 아이템을 사용했는지 기록을 통해 확인 가능합니다.
-                    """
+                    """,
+            security = { @SecurityRequirement(name = "JWT") }
     )
     @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConsumedItemResponse.class))))
     @SwaggerApiResponses(
@@ -122,7 +125,8 @@ public interface WalletApi {
                     포인트 획득, 사용, 차감 등의 모든 거래 기록을 확인할 수 있습니다.<br>
                     미션 완료로 인한 포인트 획득, 아이템 교환으로 인한 포인트 차감 등<br>
                     포인트 변동에 대한 상세 내역을 시간순으로 조회할 수 있습니다.
-                    """
+                    """,
+            security = { @SecurityRequirement(name = "JWT") }
     )
     @ApiResponse(content = @Content(array = @ArraySchema(schema = @Schema(implementation = RewardHistoryResponse.class))))
     @SwaggerApiResponses(
