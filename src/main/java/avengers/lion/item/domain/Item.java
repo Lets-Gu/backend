@@ -26,6 +26,7 @@ public class Item extends BaseEntity {
     private int stockCount;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "item_category", nullable = false)
     private ItemCategory itemCategory;
 
     public void buyItem(int count) {
