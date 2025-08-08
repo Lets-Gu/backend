@@ -3,7 +3,6 @@ package avengers.lion.member.api;
 import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.member.dto.MyProfileResponse;
-import avengers.lion.wallet.dto.ConsumedItemResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
