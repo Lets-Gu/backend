@@ -25,7 +25,7 @@ public class MissionController implements MissionApi {
     미션하러가기    전체조회
      */
     @GetMapping
-    @PreAuthorize( "hasRole('ROLE_USER')")
+    @PreAuthorize( "hasAuthority('ROLE_USER')")
     public ResponseEntity<ResponseBody<List<MissionResponse>>> getAllMissions(){
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(missionService.getAllMissions()));
     }
@@ -34,7 +34,7 @@ public class MissionController implements MissionApi {
     미션에 대한 리뷰 전체조회
      */
     @GetMapping("/{missionId}/reviews")
-    @PreAuthorize( "hasRole('ROLE_USER')")
+    @PreAuthorize( "hasAuthority('ROLE_USER')")
     public ResponseEntity<ResponseBody<List<MissionReviewResponse>>> getMissionReviews(@PathVariable Long missionId){
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(missionService.getMissionReviews(missionId)));
     }
@@ -43,7 +43,7 @@ public class MissionController implements MissionApi {
      미션 인증하기  -> gps 인증
      */
     @PostMapping("/{missionId}/gps")
-    @PreAuthorize( "hasRole('ROLE_USER')")
+    @PreAuthorize( "hasAuthority('ROLE_USER')")
     public ResponseEntity<ResponseBody<Void>> gpsAuthentication(@PathVariable Long missionId, @RequestBody GpsAuthenticationRequest gpsAuthenticationRequest){
         missionService.gpsAuthentication(missionId, gpsAuthenticationRequest);
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse());

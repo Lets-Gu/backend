@@ -1,6 +1,6 @@
 package avengers.lion.auth.controller;
 
-import avengers.lion.auth.dto.RegisterResponse;
+import avengers.lion.auth.api.AuthApi;
 import avengers.lion.auth.dto.LoginRequest;
 import avengers.lion.auth.dto.LoginResponse;
 import avengers.lion.auth.dto.LoginWithTokenResponse;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthController implements AuthApi {
 
     private final AuthService authService;
 

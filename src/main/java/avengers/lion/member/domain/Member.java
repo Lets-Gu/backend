@@ -5,6 +5,7 @@ import avengers.lion.global.exception.BusinessException;
 import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.mission.domain.CompletedMission;
 import avengers.lion.review.domain.Review;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class Member extends BaseEntity {
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
 

@@ -46,7 +46,7 @@ public interface ItemApi {
                     )
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     ResponseEntity<ResponseBody<List<ItemResponse>>> getAllItem();
 
     @Operation(
@@ -86,7 +86,7 @@ public interface ItemApi {
 
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     ResponseEntity<ResponseBody<Void>> exchangeItem(
             @AuthenticationPrincipal Long memberId,
             @Parameter(description = "교환할 아이템 ID", example = "1")

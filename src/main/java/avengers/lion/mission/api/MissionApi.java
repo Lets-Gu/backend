@@ -45,7 +45,7 @@ public interface MissionApi {
                     )
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     ResponseEntity<ResponseBody<List<MissionResponse>>> getAllMissions();
 
     @Operation(
@@ -73,7 +73,7 @@ public interface MissionApi {
                     )
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     ResponseEntity<ResponseBody<List<MissionReviewResponse>>> getMissionReviews(
             @Parameter(description = "미션 ID", example = "1")
             @PathVariable Long missionId
@@ -107,7 +107,7 @@ public interface MissionApi {
                     ),
             }
     )
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     ResponseEntity<ResponseBody<Void>> gpsAuthentication(
             @Parameter(description = "미션 ID", example = "1")
             @PathVariable Long missionId,

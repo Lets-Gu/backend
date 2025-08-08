@@ -34,15 +34,11 @@ public class JwtFilter extends OncePerRequestFilter {
             accessToken = authHeader.substring(BEARER_PREFIX.length());
         }
         
-        log.debug("Request URI: {}", request.getRequestURI());
-        log.debug("Authorization Header: {}", authHeader);
-        log.debug("Extracted Token: {}", accessToken);
 
         if(accessToken != null && tokenProvider.validateToken(accessToken)){
-            log.debug("Token is valid, setting authentication");
             SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(accessToken));
         } else {
-            log.debug("Token validation failed - accessToken: {}", accessToken);
+
         }
 
         filterChain.doFilter(request, response);

@@ -50,19 +50,24 @@ public class AuthService {
 
     public LoginResponse login(LoginRequest request) {
         // 인증
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.email(), request.password())
-        );
+        try{
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.email(), request.password())
+            );
 
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        Member member = userDetails.getMember();
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            Member member = userDetails.getMember();
 
-        return new LoginResponse(
-                member.getId(),
-                member.getEmail(),
-                member.getNickname(),
-                member.getProfileImageUrl()
-        );
+            return new LoginResponse(
+                    member.getId(),
+                    member.getEmail(),
+                    member.getNickname(),
+                    member.getProfileImageUrl()
+            );
+        } catch(BusinessException ex){
+            throw new BusinessException(ExceptionType.INVALID_PASSWORD);
+        }
+
     }
 
     public String generateAccessToken(Member member) {

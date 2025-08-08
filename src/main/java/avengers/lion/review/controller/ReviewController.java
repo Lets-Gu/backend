@@ -25,7 +25,7 @@ public class ReviewController implements ReviewApi {
     작성 가능한 리뷰 조회하기
      */
     @GetMapping("/not-written")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<ResponseBody<UnWrittenReviewResponse.UnWrittenReviewsResponse>> getUnWrittenReview(@AuthenticationPrincipal Long memberId){
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getUnWrittenReview(memberId)));
     }
@@ -34,7 +34,7 @@ public class ReviewController implements ReviewApi {
     작성 가능한 리뷰 리뷰 작성하기
      */
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<ResponseBody<Void>> writeUnWrittenReview(@AuthenticationPrincipal Long memberId, @Valid @RequestBody WriteReviewRequest writeReviewRequest){
         reviewService.writeUnWrittenReview(memberId, writeReviewRequest);
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse());
@@ -44,7 +44,7 @@ public class ReviewController implements ReviewApi {
     내가 작성한 리뷰
      */
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<ResponseBody<ReviewDto.ReviewsDto>> getAllReviews(@AuthenticationPrincipal Long memberId){
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getAllReviews(memberId)));
     }
