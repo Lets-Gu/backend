@@ -28,6 +28,9 @@ public class Member extends BaseEntity {
     @Column(name = "nickname", nullable = false)
     private String nickname;
 
+    @Column(name = "password", nullable = false)
+    private String password;
+
     @Column(name = "profile_image_url")
     private String profileImageUrl;
 
@@ -45,9 +48,10 @@ public class Member extends BaseEntity {
     private List<CompletedMission> completedMissions;
 
     @Builder
-    public Member(String email, String nickname, MemberRole role, String profileImageUrl) {
+    public Member(String email, String nickname, String password, MemberRole role, String profileImageUrl) {
         this.email = email;
         this.nickname = nickname;
+        this.password = password;
         this.profileImageUrl = profileImageUrl;
         this.role = role;
         this.point = 0;
