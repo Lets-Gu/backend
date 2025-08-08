@@ -112,6 +112,7 @@ public interface WalletApi {
     )
     @PreAuthorize("hasAuthority('ROLE_USER')")
     ResponseEntity<ResponseBody<List<ConsumedItemResponse>>> getMyUsedItems(
+            @AuthenticationPrincipal Long memberId
     );
 
     @Operation(
@@ -142,5 +143,6 @@ public interface WalletApi {
     )
     @PreAuthorize("hasAuthority('ROLE_USER')")
     ResponseEntity<ResponseBody<List<RewardHistoryResponse>>> getRewardHistory(
+            @AuthenticationPrincipal Long memberId
     );
 }
