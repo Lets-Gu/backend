@@ -36,27 +36,4 @@ public class OrderItem extends BaseEntity {
         this.item = item;
         this.orderItemStatus = orderItemStatus;
     }
-    
-    // 비즈니스 로직 메소드들
-    public void useItem() {
-        if (this.orderItemStatus != OrderItemStatus.UNUSED) {
-            throw new IllegalStateException("이미 사용된 아이템입니다.");
-        }
-        this.orderItemStatus = OrderItemStatus.CONSUMED;
-    }
-    
-    public void expireItem() {
-        if (this.orderItemStatus == OrderItemStatus.CONSUMED) {
-            throw new IllegalStateException("이미 사용된 아이템은 만료처리할 수 없습니다.");
-        }
-        this.orderItemStatus = OrderItemStatus.EXPIRED;
-    }
-    
-    public boolean isUsable() {
-        return this.orderItemStatus == OrderItemStatus.UNUSED;
-    }
-    
-    public int getItemTotalPrice() {
-        return this.item.getPrice() * this.count;
-    }
 }
