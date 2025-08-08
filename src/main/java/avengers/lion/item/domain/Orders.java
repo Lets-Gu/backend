@@ -2,6 +2,8 @@ package avengers.lion.item.domain;
 
 
 import avengers.lion.global.base.BaseEntity;
+import avengers.lion.global.exception.BusinessException;
+import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -35,5 +37,4 @@ public class Orders extends BaseEntity {
         this.member = member;
         this.orderStatus = orderStatus;
     }
-
 }

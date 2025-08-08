@@ -7,10 +7,12 @@ import lombok.Getter;
 
 public final class SuccessResponseBody<T> extends ResponseBody<T> {  // 더 이상 다른 클래스에 의해 상속될 수 없다는 뜻, 불필요한 상속으로 인한 복잡성을 줄이고, 클래스의 무결성을 유지할 수 있다.
     private final T data;  // 성공 응답이 생성된 후에는 그 응답의 데이터가 변경되지 않아야 하는 경우가 많다.
+    
     public SuccessResponseBody(){
-        data=null;
+        this.data = null;
     }
+    
     public SuccessResponseBody(T result){
-        this.data=result;
+        this.data = result;
     }
 }

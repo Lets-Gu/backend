@@ -1,7 +1,8 @@
 package avengers.lion.global.jwt;
 
-import avengers.lion.auth.domain.KakaoMemberDetails;
-import avengers.lion.auth.repository.RefreshTokenRepository;
+import avengers.lion.auth.domain.CustomUserDetails;
+import avengers.lion.member.domain.Member;
+import avengers.lion.member.domain.MemberRole;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -27,14 +28,11 @@ public class TokenProvider {
 
     private static final String AUTH_KEY = "AUTHORITY";
     private static final String AUTH_MEMBER_ID = "MEMBER_ID";
-    private final RefreshTokenRepository refreshTokenRepository;
 
     @Value("${jwt.secret-key}")
     private String secretKey;
     @Value("${jwt.access-token-validity-in-seconds}")
     private long accessTokenValiditySeconds;
-    @Value("${jwt.refresh-token-validity-in-seconds}")
-    private long refreshTokenValiditySeconds;
 
     private Key secretkey;
 
@@ -45,37 +43,28 @@ public class TokenProvider {
     }
 
     /*
-    Access, Refresh token 생성
+    Access token 생성
      */
-    public TokenDto createToken(Long memberId, String role){
+    public String createAccessToken(Long memberId, String role){
         long now = (new Date()).getTime();
-
         Date accessValidity = new Date(now + this.accessTokenValiditySeconds * 1000);
-        Date refreshValidity = new Date(now + this.refreshTokenValiditySeconds * 1000);
 
-        // 액세스 토큰 생성
-        String accessToken = Jwts.builder()
+        return Jwts.builder()
                 .addClaims(Map.of(AUTH_MEMBER_ID, memberId))
                 .addClaims(Map.of(AUTH_KEY, role))
                 .signWith(secretkey, SignatureAlgorithm.HS256)
                 .setExpiration(accessValidity)
                 .compact();
-
-        // 리프레시 토큰 생성
-        String refreshToken = Jwts.builder()
-                .addClaims(Map.of(AUTH_MEMBER_ID, memberId))
-                .addClaims(Map.of(AUTH_KEY, role))
-                .signWith(secretkey, SignatureAlgorithm.HS256)
-                .setExpiration(refreshValidity)
-                .compact();
-        refreshTokenRepository.saveRefreshToken(memberId, refreshToken);
-        return new TokenDto(accessToken, refreshToken);
     }
 
+
     /*
-    토큰이 유효한 지 검사
+    토큰이 유효한지 검사 (만료 포함)
      */
     public boolean validateToken(String token) {
+        if (token == null || token.trim().isEmpty()) {
+            return false;
+        }
         try {
             Jwts.parserBuilder()
                     .setSigningKey(secretkey)
@@ -84,24 +73,11 @@ public class TokenProvider {
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             return false;
+        } catch (ExpiredJwtException e) {
+            return false;
         } catch (UnsupportedJwtException e) {
             return false;
         } catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
-
-    /*
-    토큰이 만료되었는지 검사
-     */
-    public boolean validateExpire(String token) {
-        try {
-            Jwts.parserBuilder()
-                    .setSigningKey(secretkey)
-                    .build()
-                    .parseClaimsJws(token);
-            return true;
-        } catch (ExpiredJwtException e) {
             return false;
         }
     }
@@ -120,10 +96,27 @@ public class TokenProvider {
         GrantedAuthority authority = new SimpleGrantedAuthority(claims.get(AUTH_KEY).toString());
         List<GrantedAuthority> simpleGrantedAuthorities = Collections.singletonList(authority);
         // 사용자를 나타내는 principal 객체 생성
-        KakaoMemberDetails principal = new KakaoMemberDetails(
-                null,
-                Long.valueOf(claims.get(AUTH_MEMBER_ID).toString()),
-                simpleGrantedAuthorities, Map.of());
+        Long memberId = Long.valueOf(claims.get(AUTH_MEMBER_ID).toString());
+        MemberRole memberRole = MemberRole.valueOf(claims.get(AUTH_KEY).toString());
+        
+        // Member 객체를 생성 (인증용 최소 정보만 포함)
+        Member member = Member.builder()
+                .email("user@example.com") // 실제로는 토큰에서 추출하거나 별도 조회 필요
+                .nickname("User")
+                .password("")
+                .role(memberRole)
+                .build();
+        
+        // Reflection을 사용해 ID 설정 (임시 방법)
+        try {
+            java.lang.reflect.Field idField = Member.class.getDeclaredField("id");
+            idField.setAccessible(true);
+            idField.set(member, memberId);
+        } catch (Exception e) {
+            // Reflection 실패시 기본값 사용
+        }
+        
+        CustomUserDetails principal = new CustomUserDetails(member);
         /*
         principal : 인증된 사용자 자체
         credentials : 사용자 인증을 증명하는 비밀값, jwt에서는 토큰

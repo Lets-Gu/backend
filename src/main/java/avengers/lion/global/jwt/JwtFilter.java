@@ -17,7 +17,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private static final String ACCESS_HEADER = "Authorization";
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer ";
 
     private final TokenProvider tokenProvider;
 
@@ -26,24 +27,32 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException{
 
-        String accessToken = getTokenFromHeader(request, ACCESS_HEADER);
+        String accessToken = null;
+        String authHeader = getTokenFromHeader(request, AUTHORIZATION_HEADER);
+        
+        if (authHeader != null && authHeader.startsWith(BEARER_PREFIX)) {
+            accessToken = authHeader.substring(BEARER_PREFIX.length());
+        }
+        
+        log.debug("Request URI: {}", request.getRequestURI());
+        log.debug("Authorization Header: {}", authHeader);
+        log.debug("Extracted Token: {}", accessToken);
 
-        if(tokenProvider.validateToken(accessToken) && tokenProvider.validateExpire(accessToken)){
+        if(accessToken != null && tokenProvider.validateToken(accessToken)){
+            log.debug("Token is valid, setting authentication");
             SecurityContextHolder.getContext().setAuthentication(tokenProvider.getAuthentication(accessToken));
+        } else {
+            log.debug("Token validation failed - accessToken: {}", accessToken);
         }
 
         filterChain.doFilter(request, response);
     }
 
     /*
-    Authorization 헤더에서 토큰 추출
+    요청 헤더에서 값 추출
      */
     public String getTokenFromHeader(HttpServletRequest request, String headerName){
-        String header = request.getHeader(headerName);
-        if(header == null || !header.startsWith("Bearer ")){
-            return null;
-        }
-        return header.substring(7);
+        return request.getHeader(headerName);
     }
 
 }
