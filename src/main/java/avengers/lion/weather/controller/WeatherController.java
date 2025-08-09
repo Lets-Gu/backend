@@ -7,6 +7,7 @@ import avengers.lion.weather.dto.WeatherBasic;
 import avengers.lion.weather.service.WeatherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ public class WeatherController implements WeatherApi {
     private final WeatherService weatherService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<ResponseBody<WeatherBasic>> getWeather(){
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(weatherService.oneCall()));
     }
