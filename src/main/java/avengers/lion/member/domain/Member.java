@@ -30,7 +30,7 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @JsonIgnore
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false, length = 255)
     private String password;
 
     @Column(name = "profile_image_url")
