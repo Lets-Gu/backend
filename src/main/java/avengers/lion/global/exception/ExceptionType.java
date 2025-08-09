@@ -26,10 +26,8 @@ public enum ExceptionType {
     //Auth
     EMAIL_ALREADY_EXISTS(CONFLICT, "A001", "이미 등록된 이메일입니다."),
     INVALID_LOGIN_CREDENTIALS(UNAUTHORIZED, "A002", "이메일 또는 비밀번호가 올바르지 않습니다."),
-    EXPIRED_REFRESH_TOKEN(UNAUTHORIZED,"A003","리프레시 토큰이 만료되었습니다."),
-    INVALID_REFRESH_TOKEN(UNAUTHORIZED, "A004","리프레시 토큰이 유효하지 않습니다"),
-    UNAUTHENTICATED_USER(UNAUTHORIZED, "A005", "인증되지 않은 사용자입니다."),
-    UNSUPPORTED_PRINCIPAL_TYPE(INTERNAL_SERVER_ERROR, "A006", "지원하지 않는 Principal 타입입니다."),
+    UNAUTHENTICATED_USER(UNAUTHORIZED, "A003", "인증되지 않은 사용자입니다."),
+    UNSUPPORTED_PRINCIPAL_TYPE(INTERNAL_SERVER_ERROR, "A004", "지원하지 않는 Principal 타입입니다."),
 
     // place
     PLACE_FORMAT_ERROR(INTERNAL_SERVER_ERROR,"P001","장소 변환 에러"),
