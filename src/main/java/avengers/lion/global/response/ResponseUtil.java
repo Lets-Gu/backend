@@ -2,6 +2,7 @@ package avengers.lion.global.response;
 
 
 import avengers.lion.global.exception.ExceptionType;
+import org.springframework.http.ResponseEntity;
 
 public class ResponseUtil {
 
@@ -26,4 +27,5 @@ public class ResponseUtil {
                 customMessage
         );
     }
+
 }
