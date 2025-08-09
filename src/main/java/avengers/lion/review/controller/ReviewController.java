@@ -1,11 +1,12 @@
 package avengers.lion.review.controller;
 
+
+import avengers.lion.review.api.ReviewApi;
+import avengers.lion.review.dto.ReviewResponse;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
-import avengers.lion.review.api.ReviewApi;
-import avengers.lion.review.dto.ReviewDto;
-import avengers.lion.review.dto.UnWrittenReviewResponse;
+
 import avengers.lion.review.dto.WriteReviewRequest;
 import avengers.lion.review.service.ReviewService;
 import jakarta.validation.Valid;
@@ -17,17 +18,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/reviews")
-public class ReviewController implements ReviewApi {
+public class  ReviewController implements ReviewApi {
 
     private final ReviewService reviewService;
 
-    /*
-    작성 가능한 리뷰 조회하기
-     */
-    @GetMapping("/not-written")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<ResponseBody<UnWrittenReviewResponse.UnWrittenReviewsResponse>> getUnWrittenReview(@AuthenticationPrincipal Long memberId){
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getUnWrittenReview(memberId)));
+
+    @GetMapping
+    public ResponseEntity<ResponseBody<ReviewResponse>> getReviewInitialPage(@AuthenticationPrincipal Long memberId){
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getReviewInitialPage(memberId)));
     }
 
     /*
@@ -40,12 +38,4 @@ public class ReviewController implements ReviewApi {
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse());
     }
 
-    /*
-    내가 작성한 리뷰
-     */
-    @GetMapping
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<ResponseBody<ReviewDto.ReviewsDto>> getAllReviews(@AuthenticationPrincipal Long memberId){
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getAllReviews(memberId)));
-    }
 }

@@ -6,9 +6,10 @@ import avengers.lion.mission.domain.CompletedMission;
 import avengers.lion.mission.domain.ReviewStatus;
 import avengers.lion.mission.repository.CompletedMissionRepository;
 import avengers.lion.review.domain.Review;
-import avengers.lion.review.dto.ReviewDto;
+import avengers.lion.review.dto.ReviewResponse;
 import avengers.lion.review.dto.UnWrittenReviewResponse;
 import avengers.lion.review.dto.WriteReviewRequest;
+import avengers.lion.review.dto.WrittenReviewResponse;
 import avengers.lion.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +27,21 @@ public class ReviewService {
     private final CompletedMissionRepository completedMissionRepository;
 
     /*
+    리뷰 초기 페이지
+     */
+    public ReviewResponse getReviewInitialPage(Long memberId){
+        Long unWrittenCount = completedMissionRepository.countByMemberIdAndReviewStatus(memberId, ReviewStatus.INACTIVE);
+        Long writtenCount = reviewRepository.countByMemberId(memberId);
+        List<UnWrittenReviewResponse> unWrittenReviewResponse = getUnWrittenReview(memberId);
+        List<WrittenReviewResponse> writtenReviewResponse = getAllReviews(memberId);
+        return new ReviewResponse(unWrittenCount, writtenCount, unWrittenReviewResponse, writtenReviewResponse);
+    }
+
+
+    /*
     작성 가능한 리뷰 조회
      */
-    public UnWrittenReviewResponse.UnWrittenReviewsResponse getUnWrittenReview(Long memberId){
+    public List<UnWrittenReviewResponse> getUnWrittenReview(Long memberId){
         List<CompletedMission> unWrittenReviews = completedMissionRepository.getUnwrittenReviewsByMemberId(memberId);
         return UnWrittenReviewResponse.of(unWrittenReviews);
     }
@@ -66,8 +79,8 @@ public class ReviewService {
     /*
     리뷰 전체조회
      */
-    public ReviewDto.ReviewsDto getAllReviews(Long memberId){
+    public List<WrittenReviewResponse> getAllReviews(Long memberId){
         List<Review> reviews= reviewRepository.findAllByMemberId(memberId,  ReviewStatus.ACTIVE);
-        return ReviewDto.of(reviews);
+        return WrittenReviewResponse.of(reviews);
     }
 }

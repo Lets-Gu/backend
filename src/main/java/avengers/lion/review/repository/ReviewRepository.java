@@ -27,5 +27,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "JOIN FETCH cm.mission mission " +
             "WHERE cm.mission.id = :missionId")
     List<Review> findAllReviewByMissionId(@Param("missionId") Long missionId);
+
+
+    Long countByMemberId(Long memberId);
 }
 

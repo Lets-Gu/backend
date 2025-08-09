@@ -19,7 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import jakarta.validation.Valid;
 import jakarta.servlet.http.HttpServletResponse;
 
-@Tag(name = "인증 API", description = "회원가입 및 로그인 관련 API")
+@Tag(name = "로그인,회원가입 API", description = "회원가입 및 로그인 관련 API")
 @Validated
 public interface AuthApi {
 
@@ -50,17 +50,10 @@ public interface AuthApi {
             summary = "로그인",
             description = """
             이메일과 비밀번호로 인증을 수행하고, 성공 시 Authorization 헤더에 Bearer 토큰을 설정하여 반환합니다.
-            로그인 성공 시 사용자 정보(LoginResponse)와 발급된 토큰을 함께 제공합니다.
+            로그인 성공 시 사용자 정보를 body에,  발급된 토큰을 헤더에 제공합니다.
             """
     )
-    @ApiResponse(content = @Content(schema = @Schema(implementation = LoginResponse.class)),
-                 headers ={
-                    @io.swagger.v3.oas.annotations.headers.Header(
-                            name = "Authorization",
-                            description = "로그인 성공 시 발급되는 JWT 액세스 토큰 (Bearer {token} 형식)",
-                            schema = @Schema(type = "string", example = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...")
-                    )
-                 })
+    @ApiResponse(content = @Content(schema = @Schema(implementation = LoginResponse.class)))
     @SwaggerApiResponses(
             success = @SwaggerApiSuccessResponse(
                     response = LoginResponse.class,
