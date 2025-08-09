@@ -52,7 +52,10 @@ public enum ExceptionType {
     INVALID_ORDER_STATUS(BAD_REQUEST, "O002", "취소할 수 없는 주문 상태입니다."),
 
     // Wallet
-    PRICE_IS_POSITIVE(BAD_REQUEST, "W001", "가격은 음수여야 합니다.");
+    PRICE_IS_POSITIVE(BAD_REQUEST, "W001", "가격은 음수여야 합니다."),
+
+    // Weather
+    WEATHER_API_ERROR(INTERNAL_SERVER_ERROR,"WE001","OpenWeather API 호출 에러");
 
 
 
