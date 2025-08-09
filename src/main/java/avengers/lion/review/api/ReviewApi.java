@@ -68,7 +68,7 @@ public interface ReviewApi {
                     ),
                     @SwaggerApiFailedResponse(
                             value = ExceptionType.REVIEW_ALREADY_EXISTS,
-                            description = "이미 작성된 리뷰입니다"
+                            description = "이미 작성된 리뷰입니다."
                     ),
             }
     )

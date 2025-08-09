@@ -141,7 +141,7 @@ public interface WalletApi {
                     ),
                     @SwaggerApiFailedResponse(
                             value = ExceptionType.ACCESS_DENIED,
-                            description = "USER 권한이 필요합니다."
+                            description = "본인의 완료된 미션에 대해서만 리뷰를 작성할 수 있습니다."
                     )
             }
     )

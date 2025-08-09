@@ -37,7 +37,7 @@ public interface AuthApi {
             errors = {
                     @SwaggerApiFailedResponse(
                             value = ExceptionType.EMAIL_ALREADY_EXISTS,
-                            description = "이미 사용 중인 이메일입니다."
+                            description = "이미 등록된 이메일입니다."
                     )
             }
     )
@@ -73,7 +73,7 @@ public interface AuthApi {
                     ),
                     @SwaggerApiFailedResponse(
                             value = ExceptionType.INVALID_PASSWORD,
-                            description = "비밀번호가 올바르지 않습니다."
+                            description = "비밀번호가 일치하지 않습니다."
                     )
             }
     )

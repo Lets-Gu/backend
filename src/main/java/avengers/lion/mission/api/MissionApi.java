@@ -41,7 +41,7 @@ public interface MissionApi {
             errors = {
                     @SwaggerApiFailedResponse(
                             value = ExceptionType.ACCESS_DENIED,
-                            description = "USER 권한이 필요합니다."
+                            description = "본인의 완료된 미션에 대해서만 리뷰를 작성할 수 있습니다."
                     )
             }
     )
@@ -69,7 +69,7 @@ public interface MissionApi {
                     ),
                     @SwaggerApiFailedResponse(
                             value = ExceptionType.ACCESS_DENIED,
-                            description = "USER 권한이 필요합니다."
+                            description = "본인의 완료된 미션에 대해서만 리뷰를 작성할 수 있습니다."
                     )
             }
     )
@@ -99,11 +99,11 @@ public interface MissionApi {
                     ),
                     @SwaggerApiFailedResponse(
                             value = ExceptionType.GPS_AUTH_FAILED,
-                            description = "미션 지점으로부터 100미터를 초과한 거리에 있어 GPS 인증에 실패했습니다."
+                            description = "GPS 인증에 실패하였습니다."
                     ),
                     @SwaggerApiFailedResponse(
                             value = ExceptionType.ACCESS_DENIED,
-                            description = "USER 권한이 필요합니다."
+                            description = "본인의 완료된 미션에 대해서만 리뷰를 작성할 수 있습니다."
                     ),
             }
     )
