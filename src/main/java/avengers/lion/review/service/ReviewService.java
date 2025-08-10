@@ -13,6 +13,7 @@ import avengers.lion.review.dto.WrittenReviewResponse;
 import avengers.lion.review.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,7 +81,20 @@ public class ReviewService {
     리뷰 전체조회
      */
     public List<WrittenReviewResponse> getAllReviews(Long memberId){
-        List<Review> reviews= reviewRepository.findAllByMemberId(memberId,  ReviewStatus.ACTIVE);
+        Sort defaultSort = Sort.by(Sort.Direction.DESC, "createdAt");
+        List<Review> reviews = reviewRepository.findAllByMemberId(memberId, defaultSort);
+        return WrittenReviewResponse.of(reviews);
+    }
+
+    /*
+    작성한 리뷰 상세조회
+     */
+    public List<WrittenReviewResponse> getWrittenReviewDetails(Long memberId, String sortType){
+        Sort sort = "DESC".equals(sortType)
+            ? Sort.by(Sort.Direction.DESC, "createdAt")
+            : Sort.by(Sort.Direction.ASC, "createdAt");
+        
+        List<Review> reviews = reviewRepository.findAllByMemberId(memberId, sort);
         return WrittenReviewResponse.of(reviews);
     }
 }

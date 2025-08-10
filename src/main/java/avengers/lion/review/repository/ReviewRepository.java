@@ -2,6 +2,7 @@ package avengers.lion.review.repository;
 
 import avengers.lion.mission.domain.ReviewStatus;
 import avengers.lion.review.domain.Review;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,9 +14,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT r FROM Review r"+
            " JOIN FETCH r.completedMission cm " +
            " JOIN FETCH cm.mission m " +
-           " WHERE cm.reviewStatus = :reviewStatus" +
-           " AND r.member.id = :memberId")
-    List<Review> findAllByMemberId(@Param("memberId") Long memberId, @Param("reviewStatus") ReviewStatus reviewStatus);
+           " WHERE r.member.id = :memberId")
+    List<Review> findAllByMemberId(@Param("memberId") Long memberId, Sort sort);
 
 
     /*
