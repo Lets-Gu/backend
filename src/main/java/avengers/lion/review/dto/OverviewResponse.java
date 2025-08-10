@@ -1,0 +1,37 @@
+package avengers.lion.review.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Schema(name = "OverviewResponse", description = "프리뷰: 작성 가능한리뷰, 작성한 리뷰 개수 + 각 탭 프리뷰 데이")
+public record OverviewResponse(
+        @Schema(description = "작성 가능한 리뷰 총 개수", example = "8")
+        Long unWrittenReviewCount,
+
+        @Schema(description = "작성한 리뷰 총 개수", example = "2")
+        Long writtenReviewCount,
+
+        @Schema(description = "작성 가능한 리뷰 프리뷰 목록(초기 진입에서 previewLimit개)")
+        List<UnWrittenReviewResponse> unwritten,
+
+        @Schema(description = "작성 가능한 리뷰 프리뷰의 다음 페이지 메타정보")
+        PageMeta unwrittenPage,
+
+        @Schema(description = "작성한 리뷰 프리뷰 목록(초기 진입에서 previewLimit개)")
+        List<WrittenReviewResponse> written,
+
+        @Schema(description = "작성한 리뷰 프리뷰의 다음 페이지 메타")
+        PageMeta writtenPage
+) {
+    @Schema(name = "OverviewResponse.PageMeta", description = "다음 페이지 조회를 위한 커서 메타")
+    public record PageMeta(
+            @Schema(description = "다음 페이지 존재 여부", example = "true")
+            Boolean hasNext,
+            @Schema(description = "다음 페이지 시작 기준 시간 (LocalDateTime ISO-8601)", example = "2025-08-09T12:22:10")
+            LocalDateTime nextAt,
+            @Schema(description = "다음 페이지 시작 기준 ID", example = "5")
+            Long nextId
+    ) { }
+}

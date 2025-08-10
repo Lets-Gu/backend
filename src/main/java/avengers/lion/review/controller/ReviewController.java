@@ -1,59 +1,80 @@
 package avengers.lion.review.controller;
 
 
-import avengers.lion.review.api.ReviewApi;
-import avengers.lion.review.dto.ReviewResponse;
-import avengers.lion.review.dto.WrittenReviewResponse;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
-
-import avengers.lion.review.dto.WriteReviewRequest;
+import avengers.lion.review.api.ReviewApi;
+import avengers.lion.review.domain.SortType;
+import avengers.lion.review.dto.*;
 import avengers.lion.review.service.ReviewService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
+import java.time.LocalDateTime;
+
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/reviews")
-public class ReviewController implements ReviewApi {
+public class ReviewController implements ReviewApi{
 
     private final ReviewService reviewService;
 
-
-    /*
-    리뷰페이지 데이터 ㅈ회
-     */
-    @GetMapping
-    public ResponseEntity<ResponseBody<ReviewResponse>> getReviewInitialPage(@AuthenticationPrincipal Long memberId){
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getReviewInitialPage(memberId)));
+    /** 오버뷰: 카운트 + 프리뷰(각 previewLimit개) + 각 next 커서 */
+    @GetMapping("/overview")
+    public ResponseEntity<ResponseBody<OverviewResponse>> getOverview(
+            @AuthenticationPrincipal Long memberId,
+            @RequestParam(defaultValue = "6") @Min(1) @Max(50) int previewLimit) {
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getOverview(memberId, previewLimit)));
     }
 
-    /*
-    작성 가능한 리뷰 리뷰 작성하기
-     */
+    /** 작성 가능한 리뷰 → 리뷰 작성 */
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<ResponseBody<Void>> writeUnWrittenReview(@AuthenticationPrincipal Long memberId, @Valid @RequestBody WriteReviewRequest writeReviewRequest){
+    public ResponseEntity<ResponseBody<Void>> writeUnWrittenReview(
+            @AuthenticationPrincipal Long memberId,
+            @Valid @RequestBody WriteReviewRequest writeReviewRequest) {
         reviewService.writeUnWrittenReview(memberId, writeReviewRequest);
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse());
     }
 
-    /*
-    작성한 리뷰 상세조회
-     */
-    @GetMapping("/written")
-    public ResponseEntity<ResponseBody<List<WrittenReviewResponse>>> getWrittenReviewDetails(
+    /** 작성 가능한 리뷰: 무한 스크롤 (ASC/DESC) */
+    @GetMapping("/unwritten/page")
+    public ResponseEntity<ResponseBody<PageResult<UnWrittenReviewResponse>>> getUnwrittenPage(
             @AuthenticationPrincipal Long memberId,
-            @RequestParam(value = "sort", defaultValue = "DESC") String sortType){
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getWrittenReviewDetails(memberId, sortType)));
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "DESC") SortType sort,
+            @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit
+    ) {
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getUnwrittenPage(memberId, cursorId, limit, sort)));
     }
 
+    /** 작성한 리뷰 전체조회: 최신순만 (커서 쌍) */
+    @GetMapping("/written/page")
+    public ResponseEntity<ResponseBody<PageResult<WrittenReviewResponse>>> getWrittenPage(
+            @AuthenticationPrincipal Long memberId,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit
+    ) {
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getWrittenPage(memberId, cursorId, limit)));
+    }
 
+    /** 작성한 리뷰 상세조회: 최신/오래된 (커서 쌍) */
+    @GetMapping("/written/detail/page")
+    public ResponseEntity<ResponseBody<PageResult<WrittenReviewResponse>>> getWrittenDetailPage(
+            @AuthenticationPrincipal Long memberId,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "DESC") SortType sort,
+            @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit
+    ) {
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getWrittenDetailPage(memberId,  cursorId, limit, sort)));
+    }
 }
