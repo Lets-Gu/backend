@@ -12,6 +12,8 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewQue
 
     @Query("""
         SELECT r from Review r
+        JOIN r.completedMission cm
+        JOIN cm.mission m
         WHERE r.id = :missionId
 """)
     List<Review> findAllReviewByMissionId(@Param("missionId") Long missionId);

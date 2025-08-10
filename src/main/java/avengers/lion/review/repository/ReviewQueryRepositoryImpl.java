@@ -1,5 +1,7 @@
 package avengers.lion.review.repository;
 
+import avengers.lion.mission.domain.QCompletedMission;
+import avengers.lion.mission.domain.QMission;
 import avengers.lion.review.domain.QReview;
 import avengers.lion.review.domain.Review;
 import avengers.lion.review.domain.SortType;
@@ -27,7 +29,11 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository{
             where.and(sortType.equals(SortType.ASC) ? r.id.gt(cursorId) : r.id.lt(cursorId));
         }
         OrderSpecifier<?> orderSpecifier = sortType.equals(SortType.ASC) ? r.id.asc() : r.id.desc();
+        QCompletedMission cm = QCompletedMission.completedMission;
+        QMission m = QMission.mission;
         return jpa.selectFrom(r)
+                .join(r.completedMission, cm).fetchJoin()
+                .join(cm.mission, m).fetchJoin()
                 .where(where)
                 .orderBy(orderSpecifier)
                 .limit(limit)

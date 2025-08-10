@@ -104,7 +104,7 @@ public interface ReviewApi {
                     작성 가능한 리뷰(INACTIVE)를 무한 스크롤로 조회합니다.\n
                     • 다음 페이지는 직전 응답의 nextId를 cursorId로 그대로 전달\n
                     • 정렬 sort: DESC(최신순, 기본)\n
-                    • limit: 1~100 (기본 4) -> limit 기본값이 4이므로 값을 넣지 않고 전달해도 됩니다.\n
+                    • limit: 1~100 (기본 6) -> limit 기본값이 4이므로 값을 넣지 않고 전달해도 됩니다.\n
                     응답의 hasNext=false면 더 불러올 데이터가 없습니다.
                     """,
             security = { @SecurityRequirement(name = "JWT") }
@@ -112,7 +112,7 @@ public interface ReviewApi {
     @Parameter(name = "cursorId", description = "다음 페이지 시작 커서(직전 응답 nextId)", schema = @Schema(type = "integer", format = "int64"))
     @Parameter(name = "sort", description = "정렬 방향 기본값 DESC",
             schema = @Schema(implementation = SortType.class, defaultValue = "DESC", allowableValues = {"ASC","DESC"}))
-    @Parameter(name = "limit", description = "페이지 크기 (1~100, 기본 5)",
+    @Parameter(name = "limit", description = "페이지 크기 (1~100, 기본 6)",
             schema = @Schema(type = "integer", minimum = "1", maximum = "100", defaultValue = "5"))
     @ApiResponse(
             responseCode = "200",
@@ -148,7 +148,7 @@ public interface ReviewApi {
             security = { @SecurityRequirement(name = "JWT") }
     )
     @Parameter(name = "cursorId", description = "다음 페이지 시작 커서(직전 응답 nextId)", schema = @Schema(type = "integer", format = "int64"))
-    @Parameter(name = "limit", description = "페이지 크기 (1~100, 기본 5)", schema = @Schema(type = "integer", minimum = "1", maximum = "100", defaultValue = "5"))
+    @Parameter(name = "limit", description = "페이지 크기 (1~100, 기본 6)", schema = @Schema(type = "integer", minimum = "1", maximum = "100", defaultValue = "5"))
     @ApiResponse(
             responseCode = "200",
             description = "성공",
@@ -186,7 +186,7 @@ public interface ReviewApi {
     @Parameter(name = "cursorId", description = "다음 페이지 시작 커서(직전 응답 nextId). 첫 페이지는 생략", schema = @Schema(type = "integer", format = "int64"))
     @Parameter(name = "sort", description = "정렬 방향 (DESC=최신순 / ASC=오래된순). 기본값 DESC",
             schema = @Schema(implementation = SortType.class, defaultValue = "DESC", allowableValues = {"ASC","DESC"}))
-    @Parameter(name = "limit", description = "페이지 크기 (1~100, 기본 5)", schema = @Schema(type = "integer", minimum = "1", maximum = "100", defaultValue = "5"))
+    @Parameter(name = "limit", description = "페이지 크기 (1~100, 기본 6)", schema = @Schema(type = "integer", minimum = "1", maximum = "100", defaultValue = "5"))
     @ApiResponse(
             responseCode = "200",
             description = "성공",
