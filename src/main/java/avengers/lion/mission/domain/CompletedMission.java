@@ -1,5 +1,6 @@
 package avengers.lion.mission.domain;
 
+import avengers.lion.global.base.BaseEntity;
 import avengers.lion.member.domain.Member;
 import avengers.lion.review.domain.Review;
 import jakarta.persistence.*;
@@ -15,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class CompletedMission {
+public class CompletedMission extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "completed_mission_id", nullable = false)
