@@ -29,6 +29,9 @@ public class Item extends BaseEntity {
     @Column(name = "item_category", nullable = false)
     private ItemCategory itemCategory;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     public void buyItem(int count) {
         if(this.stockCount < count) {
             throw new BusinessException(ExceptionType. STOCK_NOT_AVAILABLE);
