@@ -22,4 +22,13 @@ public class MemberService {
                 .orElseThrow(()-> new BusinessException(ExceptionType.MEMBER_NOT_FOUND));
         return MyProfileResponse.of(member);
     }
+
+    /*
+    내 포인트 조회
+     */
+    public Long getMyPoint(Long memberId){
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()-> new BusinessException(ExceptionType.MEMBER_NOT_FOUND));
+        return member.getPoint();
+    }
 }

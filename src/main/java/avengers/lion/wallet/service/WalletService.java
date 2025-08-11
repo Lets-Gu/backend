@@ -5,11 +5,9 @@ import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.item.domain.Orders;
 import avengers.lion.item.service.OrderService;
 import avengers.lion.member.domain.Member;
+import avengers.lion.member.service.MemberService;
 import avengers.lion.wallet.domain.PointTransaction;
-import avengers.lion.wallet.dto.ConsumedItemResponse;
-import avengers.lion.wallet.dto.GiftCardResponse;
-import avengers.lion.wallet.dto.ParentItemResponse;
-import avengers.lion.wallet.dto.RewardHistoryResponse;
+import avengers.lion.wallet.dto.*;
 import avengers.lion.wallet.repository.PointTransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +21,14 @@ public class WalletService {
 
     private final PointTransactionRepository pointTransactionRepository;
     private final OrderService orderService;
+    private final MemberService memberService;
+
+    /*
+    내 포인트 조회
+     */
+    public MyPointResponse getMyPoint(Long memberId){
+        return new MyPointResponse(memberService.getMyPoint(memberId));
+    }
 
     /*
     내 상품권 조회

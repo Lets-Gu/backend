@@ -1,13 +1,10 @@
 package avengers.lion.wallet.controller;
 
 import avengers.lion.wallet.api.WalletApi;
+import avengers.lion.wallet.dto.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
-import avengers.lion.wallet.dto.ConsumedItemResponse;
-import avengers.lion.wallet.dto.GiftCardResponse;
-import avengers.lion.wallet.dto.ParentItemResponse;
-import avengers.lion.wallet.dto.RewardHistoryResponse;
 import avengers.lion.wallet.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +21,17 @@ import java.util.List;
 public class WalletController implements WalletApi {
 
     private final WalletService walletService;
+
+
+    /*
+    내 포인트 조회
+     */
+    @GetMapping("/my-point")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<ResponseBody<MyPointResponse>> getMyPoint(@AuthenticationPrincipal Long memberId) {
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getMyPoint(memberId)));
+    }
+
     /*
     내가 구매한 상품권 조회
      */
