@@ -38,7 +38,7 @@ public interface MissionApi {
             summary = "미션 전체 조회",
             description = """
                     활성 상태의 미션을 모두 조회합니다.<br/>
-                    프런트는 각 미션 카드에 `isCompleted` 여부(사용자가 해당 미션을 완료했는지)를 표시할 수 있습니다.
+                    `isCompleted`를 통해 사용자가 해당 미션을 완료했는지를 표시할 수 있습니다.
                     """,
             security = { @SecurityRequirement(name = "JWT") }
     )
@@ -107,7 +107,6 @@ public interface MissionApi {
             summary = "미션 리뷰 스크롤(무한 페이징)",
             description = """
                     특정 미션의 리뷰를 커서 기반으로 무한 스크롤 조회합니다.<br/>
-                    • 첫 페이지는 `lastReviewId` 없이 호출하세요.<br/>
                     • 다음 페이지부터는 직전 응답의 `nextId`를 `lastReviewId`로 그대로 전달합니다.<br/>
                     • 정렬: `sortType` = DESC(최신순, 기본) / ASC(오래된순)<br/>
                     • 페이지 크기: `limit` (기본 3)<br/>
