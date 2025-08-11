@@ -51,6 +51,9 @@ public class Mission extends BaseEntity {
     @Column(name = "longitude", columnDefinition = "DECIMAL(11,8)")
     private Double longitude;
 
+    @OneToMany(mappedBy = "mission")
+    private List<CompletedMission> completedMissions = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "mission_batch_id", nullable = false)
     private MissionBatches missionBatches;

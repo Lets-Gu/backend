@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public record MissionReviewResponse(Long reviewId, String memberName, String reviewContent, String reviewImageUrl, LocalDateTime reviewDate) {
 
-    public static MissionReviewResponse from(Review review){
+    public static MissionReviewResponse of(Review review){
         return new MissionReviewResponse(
                 review.getId(),
                 review.getMember().getNickname(),
