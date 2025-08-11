@@ -6,10 +6,7 @@ import avengers.lion.global.config.swagger.SwaggerApiSuccessResponse;
 import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.review.dto.UnWrittenReviewResponse;
-import avengers.lion.wallet.dto.ConsumedItemResponse;
-import avengers.lion.wallet.dto.GiftCardResponse;
-import avengers.lion.wallet.dto.ParentItemResponse;
-import avengers.lion.wallet.dto.RewardHistoryResponse;
+import avengers.lion.wallet.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,6 +22,32 @@ import java.util.List;
 
 @Tag(name = "지갑 API", description = "사용자 지갑 및 포인트 관련 API")
 public interface WalletApi {
+
+    @Operation(
+            summary = "내 포인트 조회",
+            description = """
+                    현재 사용자의 보유 포인트를 조회합니다.<br>
+                    JWT 인증을 통해 식별된 사용자 기준의 포인트 잔액을 반환합니다.
+                    """,
+            security = { @SecurityRequirement(name = "JWT") }
+    )
+    @ApiResponse(content = @Content(schema = @Schema(implementation = MyPointResponse.class)))
+    @SwaggerApiResponses(
+            success = @SwaggerApiSuccessResponse(
+                    response = MyPointResponse.class,
+                    description = "내 포인트 조회가 성공적으로 완료되었습니다."
+            ),
+            errors = {
+                    @SwaggerApiFailedResponse(
+                            value = ExceptionType.ACCESS_DENIED,
+                            description = "USER 권한이 필요합니다."
+                    ),
+            }
+    )
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    ResponseEntity<ResponseBody<MyPointResponse>> getMyPoint(
+            @AuthenticationPrincipal Long memberId
+    );
 
     @Operation(
             summary = "내 상품권 조회",
