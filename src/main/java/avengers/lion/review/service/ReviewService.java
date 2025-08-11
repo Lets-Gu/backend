@@ -1,5 +1,6 @@
 package avengers.lion.review.service;
 
+import avengers.lion.global.base.PageResult;
 import avengers.lion.global.exception.BusinessException;
 import avengers.lion.global.exception.ExceptionType;
 
