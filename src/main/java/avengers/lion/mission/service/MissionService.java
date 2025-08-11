@@ -1,5 +1,6 @@
 package avengers.lion.mission.service;
 
+import avengers.lion.global.base.PageMeta;
 import avengers.lion.global.exception.BusinessException;
 import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.mission.domain.Mission;
@@ -61,7 +62,7 @@ public class MissionService {
                 .toList();
         LocalDateTime nextAt = null; Long nextId = null;
         if (!reviews.isEmpty()) { Review last = reviews.getLast(); nextId = last.getId(); }
-        return new MissionPreReviewResponse(count, data, new MissionPreReviewResponse.PageMeta(hasNext, nextId));
+        return new MissionPreReviewResponse(count, data, new PageMeta(hasNext, null, nextId));
     }
 
 

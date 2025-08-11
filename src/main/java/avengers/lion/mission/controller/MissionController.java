@@ -10,6 +10,8 @@ import avengers.lion.mission.dto.MissionReviewResponse;
 import avengers.lion.mission.service.MissionService;
 import avengers.lion.review.domain.SortType;
 import avengers.lion.global.base.PageResult;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -50,7 +52,7 @@ public class MissionController implements MissionApi {
     public ResponseEntity<ResponseBody<PageResult<MissionReviewResponse>>> getMissionReviewsScroll(
             @PathVariable Long missionId,
             @RequestParam(required = false) Long lastReviewId,
-            @RequestParam(required = false, defaultValue = "3") int limit,
+            @RequestParam(required = false, defaultValue = "3") @Min(1) @Max(50) int limit,
             @RequestParam(required = false, defaultValue = "DESC") SortType sortType){
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(missionService.getMissionReviews(missionId, lastReviewId, limit, sortType)));
     }
