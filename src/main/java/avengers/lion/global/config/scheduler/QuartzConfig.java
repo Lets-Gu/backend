@@ -39,7 +39,7 @@ public class QuartzConfig {
                                 .withIntervalInHours(24*14)  // 14일 마다
                                 .repeatForever()   // 무한 반복
                 )
-                .startAt(startTime)  // 앱 실행 시 즉시 시작
+                .startNow()  // 앱 실행 시 즉시 시작
                 .build();
     }
 
@@ -66,7 +66,7 @@ public class QuartzConfig {
                                 .withIntervalInHours(24*20)
                                 .repeatForever()
                 )
-                .startNow()
+                .startAt(startTime)
                 .build();
     }
 
