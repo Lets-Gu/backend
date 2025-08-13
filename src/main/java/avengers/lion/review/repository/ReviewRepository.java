@@ -24,5 +24,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewQue
         JOIN cm.mission m
         WHERE m.id = :missionId
 """)
-    Long countReviewByMissionId(Long missionId);
+    Long countReviewByMissionId(@Param("missionId") Long missionId);
 }

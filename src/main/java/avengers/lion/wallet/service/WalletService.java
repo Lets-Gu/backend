@@ -87,7 +87,7 @@ public class WalletService {
     /*
     리워드 거래 내역 추가 (아이템 구매용)
      */
-    public void addPointTransaction(int price, Member member){
+    public void addPointTransaction(long price, Member member){
         if(price<=0)
             throw new BusinessException(ExceptionType.PRICE_IS_POSITIVE);
         
@@ -95,8 +95,8 @@ public class WalletService {
         int balanceAfter = Math.toIntExact(member.getPoint() - price);
         
         PointTransaction pointTransaction = PointTransaction.builder()
-                .changeAmount(-price)
-                .balanceAfter(balanceAfter)
+                .changeAmount(Math.toIntExact(-price))
+                .balanceAfter(Math.toIntExact(balanceAfter))
                 .pointType(PointType.ITEM_EXCHANGE)
                 .member(member)
                 .build();

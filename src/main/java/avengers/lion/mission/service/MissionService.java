@@ -32,7 +32,7 @@ public class MissionService {
     private final ReviewRepository reviewRepository;
 
     /*
-    미션 전체조회 프리뷰 -> 처음에 3개
+    미션 전체조회 프리뷰 -> 사용자별 완료 상태 포함
      */
     public List<MissionResponse> getAllMissions(Long memberId){
         List<Mission> activeMissions = missionRepository.findAllByMissionStatusWithCompletedMissions(MissionStatus.ACTIVE);
@@ -53,7 +53,7 @@ public class MissionService {
     }
 
     public MissionPreReviewResponse getMissionPreReviews(Long missionId, SortType sortType){
-        List<Review> reviews = reviewRepository.findAllReviewByMissionId(missionId, null, 3, sortType);
+        List<Review> reviews = reviewRepository.findAllReviewByMissionId(missionId, null, 4, sortType);
         Long count = reviewRepository.countReviewByMissionId(missionId);
         boolean hasNext = reviews.size() > 3;
         if (hasNext) reviews = reviews.subList(0, 3);
@@ -72,7 +72,7 @@ public class MissionService {
     미션 리뷰조회 스크롤
      */
     public PageResult<MissionReviewResponse> getMissionReviews(Long missionId, Long lastReviewId, int limit, SortType sortType){
-        List<Review> reviews = reviewRepository.findAllReviewByMissionId(missionId, lastReviewId, limit, sortType);
+        List<Review> reviews = reviewRepository.findAllReviewByMissionId(missionId, lastReviewId, limit+1, sortType);
         boolean hasNext = reviews.size() > limit;
         if (hasNext) reviews = reviews.subList(0, limit);
 
