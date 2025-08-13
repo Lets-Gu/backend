@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
 
     @Query("""
-        SELECT sum(oi.count) FROM OrderItem oi
+        SELECT COALESCE(sum(oi.count)) FROM OrderItem oi
         JOIN oi.item i
         JOIN oi.orders o
         JOIN o.member m
