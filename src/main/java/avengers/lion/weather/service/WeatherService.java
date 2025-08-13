@@ -79,7 +79,7 @@ public class WeatherService {
                 daily.getFirst().temp().max(),
                 daily.getFirst().temp().min());
 
-        // 48시간
+        // 6시간
         List<WeatherBasic.Hour> hourList = hourly.stream()
                 .limit(6)
                 .map(hour -> {

@@ -20,6 +20,9 @@ public class PointTransaction extends BaseEntity {
     @Column(name = "change_amount", nullable = false)
     private int changeAmount;
 
+    @Column(name = "balance_after", nullable = false)
+    private int balanceAfter;
+
     @Column(name = "point_type", nullable = false)
     private PointType pointType;
 
@@ -28,9 +31,10 @@ public class PointTransaction extends BaseEntity {
     private Member member;
 
     @Builder
-    public PointTransaction(int changeAmount, Member member) {
+    public PointTransaction(int changeAmount, int balanceAfter, PointType pointType, Member member) {
         this.changeAmount = changeAmount;
-        this.pointType = PointType.ITEM_EXCHANGE;
+        this.balanceAfter = balanceAfter;
+        this.pointType = pointType != null ? pointType : PointType.ITEM_EXCHANGE;
         this.member = member;
     }
 }

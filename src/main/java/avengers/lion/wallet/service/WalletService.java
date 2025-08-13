@@ -7,6 +7,7 @@ import avengers.lion.item.service.OrderService;
 import avengers.lion.member.domain.Member;
 import avengers.lion.member.service.MemberService;
 import avengers.lion.wallet.domain.PointTransaction;
+import avengers.lion.wallet.domain.PointType;
 import avengers.lion.wallet.dto.*;
 import avengers.lion.wallet.repository.PointTransactionRepository;
 import lombok.RequiredArgsConstructor;
@@ -84,13 +85,35 @@ public class WalletService {
     }
 
     /*
-    리워드 거래 내역 추가
+    리워드 거래 내역 추가 (아이템 구매용)
      */
     public void addPointTransaction(int price, Member member){
         if(price<=0)
             throw new BusinessException(ExceptionType.PRICE_IS_POSITIVE);
+        
+        // 거래 후 잔액 계산 (가격만큼 차감)
+        int balanceAfter = Math.toIntExact(member.getPoint() - price);
+        
         PointTransaction pointTransaction = PointTransaction.builder()
                 .changeAmount(-price)
+                .balanceAfter(balanceAfter)
+                .pointType(PointType.ITEM_EXCHANGE)
+                .member(member)
+                .build();
+        pointTransactionRepository.save(pointTransaction);
+    }
+
+    /*
+    포인트 거래 내역 추가 (범용)
+     */
+    public void addPointTransaction(int changeAmount, PointType pointType, Member member){
+        // 거래 후 잔액 계산 (changeAmount가 양수면 획득, 음수면 소모)
+        int balanceAfter = Math.toIntExact(member.getPoint() + changeAmount);
+        
+        PointTransaction pointTransaction = PointTransaction.builder()
+                .changeAmount(changeAmount)
+                .balanceAfter(balanceAfter)
+                .pointType(pointType)
                 .member(member)
                 .build();
         pointTransactionRepository.save(pointTransaction);

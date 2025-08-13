@@ -51,7 +51,7 @@ public class ItemService {
         if(item.getStockCount()<count){
             throw new BusinessException(ExceptionType.STOCK_NOT_AVAILABLE);
         }
-        member.buyItemByPoint(price);
+        member.buyItemByPoint((long) price);
         walletService.addPointTransaction(price, member);
         item.buyItem(count);
         

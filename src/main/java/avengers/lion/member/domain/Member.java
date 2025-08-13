@@ -59,7 +59,7 @@ public class Member extends BaseEntity {
         this.point = 0L;
     }
 
-    public void buyItemByPoint(int price){
+    public void buyItemByPoint(Long price){
         if(this.point<price)
             throw new BusinessException(ExceptionType.INSUFFICIENT_POINT);
         this.point-=price;
