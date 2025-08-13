@@ -32,40 +32,17 @@ public class WalletController implements WalletApi {
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getMyPoint(memberId)));
     }
 
-    /*
-    내가 구매한 상품권 조회
-     */
-    @GetMapping("/gift-cards")
+    @GetMapping("/my-wallet")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<ResponseBody<List<GiftCardResponse>>> getMyGiftCards(@AuthenticationPrincipal Long memberId){
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getMyGiftCards(memberId)));
+    public ResponseEntity<ResponseBody<MyWalletResponse>> getMyWallet(@AuthenticationPrincipal Long memberId){
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getMyWallet(memberId)));
     }
-
-    /*
-    내 제휴 쿠폰 조회
-     */
-    @GetMapping("/partner-cards")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<ResponseBody<List<ParentItemResponse>>> getMyPartnerCards(@AuthenticationPrincipal Long memberId){
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getMyPartnerCards(memberId)));
-    }
-
-    /*
-    사용한 상품권/제휴쿠폰 조회
-     */
-    @GetMapping("/used-items")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<ResponseBody<List<ConsumedItemResponse>>> getMyUsedItems(@AuthenticationPrincipal Long memberId){
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getMyUsedItems(memberId)));
-    }
-
-
     /*
     리워드 내역 조회
      */
     @GetMapping("/reward-history")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<ResponseBody<List<RewardHistoryResponse>>> getRewardHistory(@AuthenticationPrincipal Long memberId){
+    public ResponseEntity<ResponseBody<List<RewardHistoryResponse >>> getRewardHistory(@AuthenticationPrincipal Long memberId){
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getRewardHistory(memberId)));
     }
 }

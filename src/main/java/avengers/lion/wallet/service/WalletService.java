@@ -23,11 +23,22 @@ public class WalletService {
     private final OrderService orderService;
     private final MemberService memberService;
 
+
     /*
     내 포인트 조회
      */
     public MyPointResponse getMyPoint(Long memberId){
         return new MyPointResponse(memberService.getMyPoint(memberId));
+    }
+
+    public MyWalletResponse getMyWallet(Long memberId){
+        Long giftCardCount = orderService.myGiftCardCount(memberId);
+        Long partnerCardCount = orderService.myPartnerCardCount(memberId);
+        Long consumedItemCount = orderService.myConsumedItemCount(memberId);
+        List<GiftCardResponse> giftCards = getMyGiftCards(memberId);
+        List<ParentItemResponse> partnerCards = getMyPartnerCards(memberId);
+        List<ConsumedItemResponse> usedItems = getMyUsedItems(memberId);
+        return new MyWalletResponse(giftCardCount, partnerCardCount, consumedItemCount, giftCards, partnerCards, usedItems);
     }
 
     /*

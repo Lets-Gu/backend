@@ -22,4 +22,16 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
             @Param("memberId") Long memberId,
             @Param("orderItemStatus") OrderItemStatus orderItemStatus,
             @Param("categories") List<ItemCategory> categories);
+
+    @Query("SELECT COUNT(oi) FROM OrderItem oi" +
+            " JOIN oi.item i" +
+            " WHERE oi.orders.member.id = :memberId" +
+            " AND oi.orderItemStatus = :orderItemStatus" +
+            " AND i.itemCategory IN :categories")
+    Long countOrderItemsByMemberIdAndItemStatus(
+            @Param("memberId") Long memberId,
+            @Param("orderItemStatus") OrderItemStatus orderItemStatus,
+            @Param("categories") List<ItemCategory> categories);
+
+
 }

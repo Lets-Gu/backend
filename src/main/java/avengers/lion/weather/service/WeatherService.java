@@ -81,6 +81,7 @@ public class WeatherService {
 
         // 48시간
         List<WeatherBasic.Hour> hourList = hourly.stream()
+                .limit(6)
                 .map(hour -> {
                     ZonedDateTime kstTime = Instant.ofEpochSecond(hour.dt())
                             .atZone(ZoneId.of("Asia/Seoul"));
