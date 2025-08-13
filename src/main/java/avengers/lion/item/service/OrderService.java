@@ -71,6 +71,25 @@ public class OrderService {
         Orders orders = createOrder(member);
         // 주문 아이템 생성
         createOrderItem(orders, item, count);
+    }
+    /*
+    내 상품권 개수
+     */
+    public Long myGiftCardCount(Long memberId){
+        return ordersRepository.countOrderItemsByMemberIdAndItemStatus(memberId, OrderItemStatus.UNUSED, List.of(ItemCategory.GIFT_CARD));
+    }
 
+    /*
+    내 제휴쿠폰 개수
+     */
+    public Long myPartnerCardCount(Long memberId){
+        return ordersRepository.countOrderItemsByMemberIdAndItemStatus(memberId, OrderItemStatus.UNUSED, List.of(ItemCategory.PARTNER_ITEM));
+    }
+
+    /*
+    사용한 상품권/제휴쿠폰 개수
+     */
+    public Long myConsumedItemCount(Long memberId){
+        return ordersRepository.countOrderItemsByMemberIdAndItemStatus(memberId, OrderItemStatus.CONSUMED, List.of(ItemCategory.PARTNER_ITEM, ItemCategory.GIFT_CARD));
     }
 }

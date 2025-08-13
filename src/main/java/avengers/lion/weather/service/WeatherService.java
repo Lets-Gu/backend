@@ -79,8 +79,9 @@ public class WeatherService {
                 daily.getFirst().temp().max(),
                 daily.getFirst().temp().min());
 
-        // 48시간
+        // 6시간
         List<WeatherBasic.Hour> hourList = hourly.stream()
+                .limit(6)
                 .map(hour -> {
                     ZonedDateTime kstTime = Instant.ofEpochSecond(hour.dt())
                             .atZone(ZoneId.of("Asia/Seoul"));
@@ -92,21 +93,7 @@ public class WeatherService {
                 .toList();
 
         // 오늘 제외
-        List<WeatherBasic.Day> dayList = daily.stream()
-                .skip(1)
-                .limit(5)
-                .map(day -> {
-                    ZonedDateTime kstTime = Instant.ofEpochSecond(day.dt()).atZone(ZoneId.of("Asia/Seoul"));
-                    String dayOfWeek = kstTime.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN)+"요일";
-                    return new WeatherBasic.Day(dayOfWeek,
-                            day.temp().max(),
-                            day.temp().min(),
-                            day.pop(),
-                            day.weather().getFirst().icon()
-                    );
-                })
-                .toList();
-        WeatherBasic view = new WeatherBasic(now, hourList, dayList);
+        WeatherBasic view = new WeatherBasic(now, hourList);
         redis.opsForValue().set(key, view, ttlUntilNextHour());
         return view;
     }

@@ -1,5 +1,6 @@
 package avengers.lion.review.repository;
 
+import avengers.lion.member.domain.QMember;
 import avengers.lion.mission.domain.QCompletedMission;
 import avengers.lion.mission.domain.QMission;
 import avengers.lion.review.domain.QReview;
@@ -11,7 +12,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -19,6 +19,30 @@ import java.util.List;
 public class ReviewQueryRepositoryImpl implements ReviewQueryRepository{
 
     private final JPAQueryFactory jpa;
+
+    @Override
+    public List<Review> findAllReviewByMissionId(Long missionId, Long cursorId, int limit, SortType sortType) {
+        QMission m= QMission.mission;
+        QCompletedMission cm = QCompletedMission.completedMission;
+        QReview r = QReview.review;
+        QMember member = QMember.member;
+        BooleanBuilder where = new BooleanBuilder()
+
+                .and(r.completedMission.mission.id.eq(missionId));
+        if (cursorId != null) {
+            where.and(sortType.equals(SortType.ASC) ? r.id.gt(cursorId) : r.id.lt(cursorId));
+        }
+        OrderSpecifier<?> orderSpecifier = sortType.equals(SortType.ASC) ? m.id.asc() : m.id.desc();
+
+        return jpa.selectFrom(r)
+                .join(r.completedMission,cm).fetchJoin()
+                .join(cm.mission,m).fetchJoin()
+                .join(r.member, member).fetchJoin()
+                .where(where)
+                .orderBy(orderSpecifier)
+                .limit(limit)
+                .fetch();
+    }
 
     @Override
     public List<Review> findWrittenPage(Long memberId, Long cursorId, int limit, SortType sortType) {
@@ -39,4 +63,5 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository{
                 .limit(limit)
                 .fetch();
     }
+
 }

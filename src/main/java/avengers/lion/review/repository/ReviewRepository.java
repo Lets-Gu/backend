@@ -14,7 +14,15 @@ public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewQue
         SELECT r from Review r
         JOIN r.completedMission cm
         JOIN cm.mission m
-        WHERE r.id = :missionId
+        WHERE m.id = :missionId
 """)
     List<Review> findAllReviewByMissionId(@Param("missionId") Long missionId);
+
+    @Query("""
+        SELECT count(r) FROM Review r
+        JOIN r.completedMission cm
+        JOIN cm.mission m
+        WHERE m.id = :missionId
+""")
+    Long countReviewByMissionId(@Param("missionId") Long missionId);
 }

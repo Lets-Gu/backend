@@ -1,5 +1,7 @@
 package avengers.lion.review.service;
 
+import avengers.lion.global.base.PageMeta;
+import avengers.lion.global.base.PageResult;
 import avengers.lion.global.exception.BusinessException;
 import avengers.lion.global.exception.ExceptionType;
 
@@ -53,8 +55,8 @@ public class ReviewService {
 
         return new OverviewResponse(
                 unwrittenCount, writtenCount,
-                unwritten, new OverviewResponse.PageMeta(uwHasNext, uwNextAt, uwNextId),
-                written,   new OverviewResponse.PageMeta(wrHasNext, wrNextAt, wrNextId)
+                unwritten, new PageMeta(uwHasNext, uwNextAt, uwNextId),
+                written,   new PageMeta(wrHasNext, wrNextAt, wrNextId)
         );
     }
 

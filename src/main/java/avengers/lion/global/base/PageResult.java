@@ -1,4 +1,4 @@
-package avengers.lion.review.dto;
+package avengers.lion.global.base;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

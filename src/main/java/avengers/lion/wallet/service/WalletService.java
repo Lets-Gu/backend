@@ -5,11 +5,10 @@ import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.item.domain.Orders;
 import avengers.lion.item.service.OrderService;
 import avengers.lion.member.domain.Member;
+import avengers.lion.member.service.MemberService;
 import avengers.lion.wallet.domain.PointTransaction;
-import avengers.lion.wallet.dto.ConsumedItemResponse;
-import avengers.lion.wallet.dto.GiftCardResponse;
-import avengers.lion.wallet.dto.ParentItemResponse;
-import avengers.lion.wallet.dto.RewardHistoryResponse;
+import avengers.lion.wallet.domain.PointType;
+import avengers.lion.wallet.dto.*;
 import avengers.lion.wallet.repository.PointTransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +22,25 @@ public class WalletService {
 
     private final PointTransactionRepository pointTransactionRepository;
     private final OrderService orderService;
+    private final MemberService memberService;
+
+
+    /*
+    내 포인트 조회
+     */
+    public MyPointResponse getMyPoint(Long memberId){
+        return new MyPointResponse(memberService.getMyPoint(memberId));
+    }
+
+    public MyWalletResponse getMyWallet(Long memberId){
+        Long giftCardCount = orderService.myGiftCardCount(memberId);
+        Long partnerCardCount = orderService.myPartnerCardCount(memberId);
+        Long consumedItemCount = orderService.myConsumedItemCount(memberId);
+        List<GiftCardResponse> giftCards = getMyGiftCards(memberId);
+        List<ParentItemResponse> partnerCards = getMyPartnerCards(memberId);
+        List<ConsumedItemResponse> usedItems = getMyUsedItems(memberId);
+        return new MyWalletResponse(giftCardCount, partnerCardCount, consumedItemCount, giftCards, partnerCards, usedItems);
+    }
 
     /*
     내 상품권 조회
@@ -67,13 +85,35 @@ public class WalletService {
     }
 
     /*
-    리워드 거래 내역 추가
+    리워드 거래 내역 추가 (아이템 구매용)
      */
-    public void addPointTransaction(int price, Member member){
+    public void addPointTransaction(long price, Member member){
         if(price<=0)
             throw new BusinessException(ExceptionType.PRICE_IS_POSITIVE);
+        
+        // 거래 후 잔액 계산 (가격만큼 차감)
+        int balanceAfter = Math.toIntExact(member.getPoint() - price);
+        
         PointTransaction pointTransaction = PointTransaction.builder()
-                .changeAmount(-price)
+                .changeAmount(Math.toIntExact(-price))
+                .balanceAfter(Math.toIntExact(balanceAfter))
+                .pointType(PointType.ITEM_EXCHANGE)
+                .member(member)
+                .build();
+        pointTransactionRepository.save(pointTransaction);
+    }
+
+    /*
+    포인트 거래 내역 추가 (범용)
+     */
+    public void addPointTransaction(int changeAmount, PointType pointType, Member member){
+        // 거래 후 잔액 계산 (changeAmount가 양수면 획득, 음수면 소모)
+        int balanceAfter = Math.toIntExact(member.getPoint() + changeAmount);
+        
+        PointTransaction pointTransaction = PointTransaction.builder()
+                .changeAmount(changeAmount)
+                .balanceAfter(balanceAfter)
+                .pointType(pointType)
                 .member(member)
                 .build();
         pointTransactionRepository.save(pointTransaction);

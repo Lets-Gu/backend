@@ -41,7 +41,7 @@ public class Member extends BaseEntity {
     private MemberRole role;
 
     @Column(name = "point", nullable = false)
-    private int point;
+    private Long point;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
@@ -56,10 +56,10 @@ public class Member extends BaseEntity {
         this.password = password;
         this.profileImageUrl = profileImageUrl;
         this.role = role;
-        this.point = 0;
+        this.point = 0L;
     }
 
-    public void buyItemByPoint(int price){
+    public void buyItemByPoint(Long price){
         if(this.point<price)
             throw new BusinessException(ExceptionType.INSUFFICIENT_POINT);
         this.point-=price;

@@ -12,6 +12,8 @@ import java.util.List;
 @Repository
 public interface MissionRepository extends JpaRepository<Mission, Long> {
 
-    @Query("SELECT m FROM Mission m WHERE m.status = :missionStatus")
-    List<Mission> findAllByMissionStatus(@Param("missionStatus") MissionStatus missionStatus);
+    @Query("SELECT DISTINCT m FROM Mission m LEFT JOIN FETCH m.completedMissions cm " +
+            "LEFT JOIN FETCH cm.member " +
+            "WHERE m.status = :missionStatus")
+    List<Mission> findAllByMissionStatusWithCompletedMissions(@Param("missionStatus") MissionStatus missionStatus);
 }

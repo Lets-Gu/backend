@@ -1,21 +1,26 @@
 package avengers.lion.mission.service;
 
+import avengers.lion.global.base.PageMeta;
 import avengers.lion.global.exception.BusinessException;
 import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.mission.domain.Mission;
 import avengers.lion.mission.domain.MissionStatus;
 import avengers.lion.mission.dto.GpsAuthenticationRequest;
+import avengers.lion.mission.dto.MissionPreReviewResponse;
 import avengers.lion.mission.dto.MissionResponse;
 import avengers.lion.mission.dto.MissionReviewResponse;
-import avengers.lion.mission.repository.CompletedMissionRepository;
 import avengers.lion.mission.repository.MissionRepository;
 import avengers.lion.review.domain.Review;
+import avengers.lion.review.domain.SortType;
+import avengers.lion.global.base.PageResult;
 import avengers.lion.review.repository.ReviewRepository;
-import com.cloudinary.Cloudinary;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,24 +32,58 @@ public class MissionService {
     private final ReviewRepository reviewRepository;
 
     /*
-    미션 전체조회
+    미션 전체조회 프리뷰 -> 사용자별 완료 상태 포함
      */
-    public List<MissionResponse> getAllMissions(){
-        List<Mission> activeMissions = missionRepository.findAllByMissionStatus(MissionStatus.ACTIVE);
+    public List<MissionResponse> getAllMissions(Long memberId){
+        List<Mission> activeMissions = missionRepository.findAllByMissionStatusWithCompletedMissions(MissionStatus.ACTIVE);
+
+        // 완료된 미션 ID 집합을 미리 추출하여 O(1) 조회 최적화
+        Set<Long> completedMissionIds = activeMissions.stream()
+                .flatMap(mission -> mission.getCompletedMissions().stream())
+                .filter(completed -> completed.getMember().getId().equals(memberId))
+                .map(completed -> completed.getMission().getId())
+                .collect(Collectors.toSet());
 
         return activeMissions.stream()
-                .map(MissionResponse::from)
+                .map(mission -> {
+                    Boolean isCompleted = completedMissionIds.contains(mission.getId());
+                    return MissionResponse.of(mission, isCompleted);
+                })
                 .toList();
     }
 
-    /*
-    미션 리뷰조회
-     */
-    public List<MissionReviewResponse> getMissionReviews(Long missionId){
-        List<Review> reviews = reviewRepository.findAllReviewByMissionId(missionId);
-        return reviews.stream()
-                .map(MissionReviewResponse::from)
+    public MissionPreReviewResponse getMissionPreReviews(Long missionId, SortType sortType){
+        List<Review> reviews = reviewRepository.findAllReviewByMissionId(missionId, null, 4, sortType);
+        Long count = reviewRepository.countReviewByMissionId(missionId);
+        boolean hasNext = reviews.size() > 3;
+        if (hasNext) reviews = reviews.subList(0, 3);
+        List<MissionReviewResponse> data = reviews.stream()
+                .map(MissionReviewResponse::of)
                 .toList();
+        LocalDateTime nextAt = null; Long nextId = null;
+        if (!reviews.isEmpty()) { Review last = reviews.getLast(); nextId = last.getId(); }
+        return new MissionPreReviewResponse(count, data, new PageMeta(hasNext, null, nextId));
+    }
+
+
+
+
+    /*
+    미션 리뷰조회 스크롤
+     */
+    public PageResult<MissionReviewResponse> getMissionReviews(Long missionId, Long lastReviewId, int limit, SortType sortType){
+        List<Review> reviews = reviewRepository.findAllReviewByMissionId(missionId, lastReviewId, limit+1, sortType);
+        boolean hasNext = reviews.size() > limit;
+        if (hasNext) reviews = reviews.subList(0, limit);
+
+        List<MissionReviewResponse> data = reviews.stream()
+                .map(MissionReviewResponse::of)
+                .toList();
+
+        LocalDateTime nextAt = null; Long nextId = null;
+        if (!reviews.isEmpty()) { Review last = reviews.getLast(); nextAt = last.getCreatedAt(); nextId = last.getId(); }
+
+        return new PageResult<>(data, hasNext, nextAt, nextId);
     }
 
     /*

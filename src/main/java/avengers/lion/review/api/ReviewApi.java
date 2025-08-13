@@ -1,5 +1,6 @@
 package avengers.lion.review.api;
 
+import avengers.lion.global.base.PageResult;
 import avengers.lion.global.config.swagger.SwaggerApiFailedResponse;
 import avengers.lion.global.config.swagger.SwaggerApiResponses;
 import avengers.lion.global.config.swagger.SwaggerApiSuccessResponse;
