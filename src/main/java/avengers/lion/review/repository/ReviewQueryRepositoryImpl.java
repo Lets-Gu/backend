@@ -30,7 +30,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository{
 
                 .and(r.completedMission.mission.id.eq(missionId));
         if (cursorId != null) {
-            where.and(sortType.equals(SortType.ASC) ? m.id.gt(cursorId) : m.id.lt(cursorId));
+            where.and(sortType.equals(SortType.ASC) ? r.id.gt(cursorId) : r.id.lt(cursorId));
         }
         OrderSpecifier<?> orderSpecifier = sortType.equals(SortType.ASC) ? m.id.asc() : m.id.desc();
 
