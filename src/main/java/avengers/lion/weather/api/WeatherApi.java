@@ -23,8 +23,8 @@ public interface WeatherApi {
             Redis 캐시(KST 매 정시)에 저장된 날씨 데이터를 반환합니다.
             응답 구조:
             - data.current: 현재 기온/아이콘/오늘 최고·최저
-            - data.hourly48: 48시간 (KST '오전/오후 h시' 포맷), 시간별 기온/아이콘
-            - data.next5Days: 오늘 제외 5일, 요일, 일최고/일최저/강수확률/아이콘
+            - data.hourly6: 6시간 (KST '오전/오후 h시' 포맷), 시간별 기온/아이콘
+          
             
             아이콘 사용 방법:
             - 각 기온 데이터에는 `icon` 코드가 포함됩니다.

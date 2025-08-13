@@ -19,7 +19,7 @@ public record WeatherBasic(
         @ArraySchema(
                 schema = @Schema(implementation = Hour.class),
                 arraySchema = @Schema(
-                        description = "48시간 시계열 (KST '오전/오후 h시' 포맷)",
+                        description = "6시간 시계열 (KST '오전/오후 h시' 포맷)",
                         example = """
                         [
                           { "time": "오후 3시", "temp": 25.6, "icon": "04d" },
@@ -29,25 +29,7 @@ public record WeatherBasic(
                         """
                 )
         )
-        List<Hour> hourly48,
-
-        @ArraySchema(
-                schema = @Schema(implementation = Day.class),
-                arraySchema = @Schema(
-                        description = "오늘 제외 5일 요약",
-                        example = """
-                        [
-                          { "dayOfWeek": "일", "tempMax": 31.53, "tempMin": 20.42, "rainProbability": 0.0, "icon": "04d" },
-                          { "dayOfWeek": "월", "tempMax": 29.57, "tempMin": 20.49, "rainProbability": 0.0, "icon": "04d" },
-                          { "dayOfWeek": "화", "tempMax": 24.43, "tempMin": 22.5, "rainProbability": 1.0, "icon": "10d" },
-                          { "dayOfWeek": "수", "tempMax": 23.74, "tempMin": 22.79, "rainProbability": 1.0, "icon": "10d" },
-                          { "dayOfWeek": "목", "tempMax": 29.86, "tempMin": 23.14, "rainProbability": 0.36, "icon": "10d" }
-                        ]
-                        """
-                )
-        )
-        List<Day> next5Days
-
+        List<Hour> hourly6
 ) {
 
     @Schema(description = "현재 날씨")
@@ -77,18 +59,4 @@ public record WeatherBasic(
                 @Schema(example = "22.6") Double min
         ) {}
     }
-
-    @Schema(description = "일자별 요약")
-    public record Day(
-            @Schema(description = "요일 (짧은 형식)", example = "일")
-            String dayOfWeek,
-            @Schema(description = "일 최고 기온(°C)", example = "31.53")
-            Double tempMax,
-            @Schema(description = "일 최저 기온(°C)", example = "20.42")
-            Double tempMin,
-            @Schema(description = "강수 확률(0.0~1.0)", example = "0.0")
-            Double rainProbability,
-            @Schema(description = "OpenWeather 아이콘 코드", example = "04d")
-            String icon
-    ) {}
 }
