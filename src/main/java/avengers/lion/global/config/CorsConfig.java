@@ -10,9 +10,10 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(final CorsRegistry registry){
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
-                .exposedHeaders("Authorization")
+                .allowedOrigins("http://localhost:5173","http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                .allowedHeaders("*")
+                .exposedHeaders("Authorization", "Cache-Control", "Content-Type")
                 .allowCredentials(true);
         WebMvcConfigurer.super.addCorsMappings(registry);
     }

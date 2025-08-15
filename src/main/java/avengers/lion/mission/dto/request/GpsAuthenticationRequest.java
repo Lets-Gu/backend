@@ -1,4 +1,4 @@
-package avengers.lion.mission.dto;
+package avengers.lion.mission.dto.request;
 
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;

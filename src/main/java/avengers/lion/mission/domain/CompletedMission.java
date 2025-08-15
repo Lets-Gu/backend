@@ -4,6 +4,7 @@ import avengers.lion.global.base.BaseEntity;
 import avengers.lion.member.domain.Member;
 import avengers.lion.review.domain.Review;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -42,6 +43,15 @@ public class CompletedMission extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    @Builder
+    public CompletedMission(Mission mission, Member member, String imageUrl) {
+        this.mission = mission;
+        this.member = member;
+        this.imageUrl = imageUrl;
+        this.completedAt = LocalDateTime.now();
+        this.reviewStatus = ReviewStatus.INACTIVE;  // 기본값으로 PENDING 설정
+    }
 
     public void updateReviewStatus(ReviewStatus reviewStatus) {
         this.reviewStatus = reviewStatus;

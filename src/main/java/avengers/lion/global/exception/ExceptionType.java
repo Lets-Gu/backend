@@ -55,9 +55,10 @@ public enum ExceptionType {
     PRICE_IS_POSITIVE(BAD_REQUEST, "W001", "가격은 음수여야 합니다."),
 
     // Weather
-    WEATHER_API_ERROR(INTERNAL_SERVER_ERROR,"WE001","OpenWeather API 호출 에러");
+    WEATHER_API_ERROR(INTERNAL_SERVER_ERROR,"WE001","OpenWeather API 호출 에러"),
 
-
+    // FAST API
+    FAST_API_DENIED(UNAUTHORIZED,"FA001","Fast api 서명 오류");
 
     private final HttpStatus status;
     private final String code;

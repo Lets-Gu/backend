@@ -3,10 +3,9 @@ package avengers.lion.mission.controller;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
 import avengers.lion.mission.api.MissionApi;
-import avengers.lion.mission.dto.GpsAuthenticationRequest;
-import avengers.lion.mission.dto.MissionPreReviewResponse;
-import avengers.lion.mission.dto.MissionResponse;
-import avengers.lion.mission.dto.MissionReviewResponse;
+import avengers.lion.mission.dto.response.MissionPreReviewResponse;
+import avengers.lion.mission.dto.response.MissionResponse;
+import avengers.lion.mission.dto.response.MissionReviewResponse;
 import avengers.lion.mission.service.MissionService;
 import avengers.lion.review.domain.SortType;
 import avengers.lion.global.base.PageResult;
@@ -56,16 +55,4 @@ public class MissionController implements MissionApi {
             @RequestParam(required = false, defaultValue = "DESC") SortType sortType){
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(missionService.getMissionReviews(missionId, lastReviewId, limit, sortType)));
     }
-
-    /*
-     미션 인증하기  -> gps 인증
-     */
-    @PostMapping("/{missionId}/gps")
-    @PreAuthorize( "hasAuthority('ROLE_USER')")
-    public ResponseEntity<ResponseBody<Void>> gpsAuthentication(@PathVariable Long missionId, @RequestBody GpsAuthenticationRequest gpsAuthenticationRequest){
-        missionService.gpsAuthentication(missionId, gpsAuthenticationRequest);
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse());
-    }
-    //TODO: 사진 인증  SSE 구현
-
 }

@@ -1,4 +1,4 @@
-package avengers.lion.mission.dto;
+package avengers.lion.mission.dto.response;
 
 
 import avengers.lion.global.base.PageMeta;
