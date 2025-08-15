@@ -68,7 +68,7 @@ public class MissionVerifyService {
             );
             
             //  FastAPI에 비동기 분석 요청
-            callFastApiAsync(jobId, request.imageUrl());
+            callFastApiAsync(jobId, request.uploadImageUrl());
 
             return new VerifyImageResponse(jobId);
             
@@ -94,12 +94,7 @@ public class MissionVerifyService {
             Map<String, Object> requestBody = Map.of(
                 "job_id", jobId,
                 "image_url", imageUrl,
-                "callback_url", "http://localhost:8080/api/v1/missions/" + jobId + "/callback",
-                "optimization_params", Map.of(
-                    "max_width", 800,
-                    "max_height", 600,
-                    "quality", "auto:low"
-                )
+                "callback_url", "http://localhost:8080/api/v1/missions/" + jobId + "/callback"
             );
 
             webClient.post()
@@ -109,8 +104,15 @@ public class MissionVerifyService {
                 .bodyToMono(String.class)
                 .subscribe(
                     result -> log.info("FastAPI call succeeded for jobId: {}", jobId),
-                    error -> log.error("FastAPI call failed for jobId: {}", jobId, error)
-                );
+                    error -> {
+                        log.error("FastAPI call failed for jobId: {}", jobId, error);
+                        try {
+                            cleanupService.cleanupFailedVerification(jobId);
+                        } catch (Exception e) {
+                            log.error("Failed to cleanup failed verification: {}", jobId, e);
+                        }
+                    }
+            );
                 
         } catch (Exception e) {
             log.error("Failed to call FastAPI for jobId: {}", jobId, e);

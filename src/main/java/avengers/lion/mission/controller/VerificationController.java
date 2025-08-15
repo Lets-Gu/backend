@@ -81,8 +81,12 @@ public class VerificationController implements VerificationApi {
     @PostMapping("/{jobId}/callback")
     public ResponseEntity<ResponseBody<Void>> handleFastApiCallback(
             @PathVariable String jobId,
-            @RequestBody FastApiCallbackRequest request) {
+            @Valid @RequestBody FastApiCallbackRequest request,
+            @RequestHeader("X-Callback-Signature") String signature) {
 
+        // HMAC 서명 검증
+        callbackService.verifySignatureOrThrow(jobId, request, signature);
+        // 콜백 처리
         callbackService.processCallback(jobId, request);
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse());
     }
