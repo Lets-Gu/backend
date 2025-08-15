@@ -2,6 +2,7 @@ package avengers.lion.mission.controller;
 
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
+import avengers.lion.mission.api.VerificationApi;
 import avengers.lion.mission.dto.request.FastApiCallbackRequest;
 import avengers.lion.mission.dto.request.GpsAuthenticationRequest;
 import avengers.lion.mission.dto.response.UploadUrlResponse;
@@ -22,7 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 @RestController
 @RequestMapping("/api/v1/missions")
 @RequiredArgsConstructor
-public class VerificationController {
+public class VerificationController implements VerificationApi {
 
     private final MissionVerifyService missionVerifyService;
     private final VerificationEventService verificationEventService;
