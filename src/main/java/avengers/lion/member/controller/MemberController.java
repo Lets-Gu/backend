@@ -2,6 +2,7 @@ package avengers.lion.member.controller;
 
 import avengers.lion.member.api.MemberApi;
 import avengers.lion.member.dto.UpdateNicknameRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
@@ -26,6 +27,7 @@ public class MemberController implements MemberApi {
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(memberService.getMyProfile(memberId)));
     }
     @PutMapping("/my-profile")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<ResponseBody<Void>> updateMyProfile(@AuthenticationPrincipal Long memberId, @RequestBody UpdateNicknameRequest updateNicknameRequest) {
         memberService.updateNickname(memberId, updateNicknameRequest);
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse());

@@ -37,7 +37,7 @@ public class MemberService {
     @Transactional
     public void updateNickname(Long memberId, UpdateNicknameRequest request){
         String nickname = request.nickname();
-        if(memberRepository.existsByNickname(nickname))
+        if(memberRepository.existsByNicknameAndIdNot(nickname, memberId))
             throw new BusinessException(ExceptionType.NICKNAME_ALREADY_EXISTS);
         Member member = memberRepository.findById(memberId)
                         .orElseThrow(()-> new BusinessException(ExceptionType.MEMBER_NOT_FOUND));
