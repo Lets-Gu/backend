@@ -58,7 +58,7 @@ public interface VerificationApi {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     ResponseEntity<ResponseBody<Void>> gpsAuthentication(
             @PathVariable Long missionId,
-            @RequestBody GpsAuthenticationRequest gpsAuthenticationRequest
+            @Valid @RequestBody GpsAuthenticationRequest gpsAuthenticationRequest
     );
 
     // =========================================================
