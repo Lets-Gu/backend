@@ -5,10 +5,10 @@ import avengers.lion.global.config.swagger.SwaggerApiResponses;
 import avengers.lion.global.config.swagger.SwaggerApiSuccessResponse;
 import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.global.response.ResponseBody;
-import avengers.lion.mission.dto.GpsAuthenticationRequest;
-import avengers.lion.mission.dto.MissionPreReviewResponse;
-import avengers.lion.mission.dto.MissionResponse;
-import avengers.lion.mission.dto.MissionReviewResponse;
+import avengers.lion.mission.dto.request.GpsAuthenticationRequest;
+import avengers.lion.mission.dto.response.MissionPreReviewResponse;
+import avengers.lion.mission.dto.response.MissionResponse;
+import avengers.lion.mission.dto.response.MissionReviewResponse;
 import avengers.lion.review.domain.SortType;
 import avengers.lion.global.base.PageResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "미션 API", description = "미션 목록, 미션별 리뷰(프리뷰/스크롤), GPS 인증")
+@Tag(name = "미션 API", description = "미션 목록, 미션별 리뷰(프리뷰/스크롤)")
 @RequestMapping("/api/v1/missions")
 public interface MissionApi {
 
@@ -144,35 +144,4 @@ public interface MissionApi {
             @RequestParam(required = false, defaultValue = "DESC") SortType sortType
     );
 
-    // -----------------------------------------------
-    // 4) 미션 GPS 인증
-    // -----------------------------------------------
-    @Operation(
-            summary = "미션 GPS 인증",
-            description = """
-                    사용자의 현재 GPS 위치로 해당 미션의 인증을 수행합니다.<br/>
-                    서버는 사전 정의된 반경(예: 100m) 내에 있는지 검증합니다.
-                    """,
-            security = { @SecurityRequirement(name = "JWT") }
-    )
-    @Parameter(name = "missionId", description = "미션 ID", required = true, schema = @Schema(type = "integer", format = "int64"))
-    @RequestBody(
-            required = true,
-            content = @Content(schema = @Schema(implementation = GpsAuthenticationRequest.class))
-    )
-    @ApiResponse(responseCode = "200", description = "GPS 인증 성공")
-    @SwaggerApiResponses(
-            success = @SwaggerApiSuccessResponse(response = Void.class, description = "GPS 인증 성공"),
-            errors = {
-                    @SwaggerApiFailedResponse(value = ExceptionType.MISSION_NOT_FOUND, description = "해당 미션이 존재하지 않습니다."),
-                    @SwaggerApiFailedResponse(value = ExceptionType.GPS_AUTH_FAILED, description = "GPS 인증 실패(반경 벗어남)"),
-                    @SwaggerApiFailedResponse(value = ExceptionType.ACCESS_DENIED, description = "USER 권한이 필요합니다.")
-            }
-    )
-    @PostMapping("/{missionId}/gps")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    ResponseEntity<ResponseBody<Void>> gpsAuthentication(
-            @PathVariable Long missionId,
-            @RequestBody GpsAuthenticationRequest gpsAuthenticationRequest
-    );
 }
