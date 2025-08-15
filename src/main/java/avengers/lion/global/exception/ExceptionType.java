@@ -20,6 +20,7 @@ public enum ExceptionType {
     MEMBER_NOT_FOUND(NOT_FOUND, "U001", "존재하지 않는 사용자입니다."),
     INSUFFICIENT_POINT(NOT_FOUND,"U002", "아이템 교환에 필요한 포인트가 부족합니다."),
     INVALID_PASSWORD(UNAUTHORIZED,"M003","비밀번호가 일치하지 않습니다."),
+    NICKNAME_ALREADY_EXISTS(CONFLICT,"M004","이미 등록된 닉네임입니다."),
 
 
 

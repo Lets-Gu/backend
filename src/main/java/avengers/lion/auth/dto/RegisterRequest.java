@@ -17,9 +17,6 @@ public record RegisterRequest(
 
         @Schema(description = "비밀번호", example = "password1234")
         @NotBlank(message = "비밀번호는 필수입니다")
-        String password,
-
-        @Schema(description = "프로필 이미지 URL", example = "https://example.com/images/profile.png")
-        String profileImageUrl
+        String password
 ) {
 }
