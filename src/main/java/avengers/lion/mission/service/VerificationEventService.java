@@ -24,7 +24,7 @@ public class VerificationEventService {
     새로운 SSE 연결 객체를 만들고, 콜백 등록 후 맵에 넣는다.
      */
     public SseEmitter createEventStream(String jobId) {
-        SseEmitter emitter = new SseEmitter(30 * 60 * 1000L); // 30분 타임아웃
+        SseEmitter emitter = new SseEmitter(5 * 60 * 1000L); // 5분 타임아웃 (분석 완료 대기)
 
         // SSE가 정상적으로 complete 호출되어 끝났을 때 실행
         emitter.onCompletion(() -> {
