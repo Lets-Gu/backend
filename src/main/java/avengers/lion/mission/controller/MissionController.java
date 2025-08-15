@@ -3,7 +3,6 @@ package avengers.lion.mission.controller;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
 import avengers.lion.mission.api.MissionApi;
-import avengers.lion.mission.dto.request.GpsAuthenticationRequest;
 import avengers.lion.mission.dto.response.MissionPreReviewResponse;
 import avengers.lion.mission.dto.response.MissionResponse;
 import avengers.lion.mission.dto.response.MissionReviewResponse;
