@@ -26,7 +26,7 @@ public interface AuthApi {
     @Operation(
             summary = "회원가입",
             description = """
-            이메일, 닉네임, 비밀번호, 프로필 이미지 URL을 제공하여 새로운 사용자를 등록합니다.
+            이메일, 닉네임, 비밀번호를 제공하여 새로운 사용자를 등록합니다.
             이메일 중복 시 예외가 발생합니다.
             """
     )

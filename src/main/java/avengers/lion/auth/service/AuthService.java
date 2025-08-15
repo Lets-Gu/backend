@@ -20,6 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Random;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -29,6 +32,15 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final TokenProvider tokenProvider;
     private final AuthenticationManager authenticationManager;
+    private static final List<String> PROFILE_IMAGES = List.of(
+            "https://res.cloudinary.com/do5bj2fie/image/upload/v1755264379/6.%ED%86%A0%EB%81%BC_y5lqzd.png",
+            "https://res.cloudinary.com/do5bj2fie/image/upload/v1755264379/5.%EC%98%A4%EB%A6%AC_ybspmo.png",
+            "https://res.cloudinary.com/do5bj2fie/image/upload/v1755264378/4.%EA%B3%A0%EC%96%91%EC%9D%B4_xlhylh.png",
+            "https://res.cloudinary.com/do5bj2fie/image/upload/v1755264378/3.%EA%B3%A0%EC%8A%B4%EB%8F%84%EC%B9%98_l8mcp9.png",
+            "https://res.cloudinary.com/do5bj2fie/image/upload/v1755264378/1.%EA%B0%95%EC%95%84%EC%A7%80_jtg9re.png",
+            "https://res.cloudinary.com/do5bj2fie/image/upload/v1755264378/2.%EA%B1%B0%EB%B6%81%EC%9D%B4_szcdbc.png"
+    );
+
 
     public void signUp(RegisterRequest request) {
         // 이메일 중복 검사
@@ -42,10 +54,10 @@ public class AuthService {
                 .nickname(request.nickname())
                 .password(passwordEncoder.encode(request.password()))
                 .role(MemberRole.ROLE_USER)
-                .profileImageUrl(request.profileImageUrl())
+                .profileImageUrl(getRandomProfileImage())
                 .build();
 
-        Member savedMember = memberRepository.save(member);
+        memberRepository.save(member);
     }
 
     public LoginResponse login(LoginRequest request) {
@@ -86,5 +98,9 @@ public class AuthService {
         String accessToken = generateAccessToken(member);
 
         return new LoginWithTokenResponse(loginResponse, accessToken);
+    }
+    private String getRandomProfileImage(){
+        Random random = new Random();
+        return PROFILE_IMAGES.get(random.nextInt(PROFILE_IMAGES.size()));
     }
 }
