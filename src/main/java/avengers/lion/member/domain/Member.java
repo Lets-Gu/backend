@@ -64,4 +64,8 @@ public class Member extends BaseEntity {
             throw new BusinessException(ExceptionType.INSUFFICIENT_POINT);
         this.point-=price;
     }
+
+    public void updateNickname(String nickname){
+        this.nickname=nickname;
+    }
 }
