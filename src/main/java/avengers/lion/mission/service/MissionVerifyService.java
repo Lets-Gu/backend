@@ -86,6 +86,9 @@ public class MissionVerifyService {
         }
     }
     
+    @Value("${app.public-base-url:http://localhost:8080}")
+    private String publicBaseUrl;
+
     @Async
     public void callFastApiAsync(String jobId, String imageUrl) {
         try {
@@ -94,7 +97,7 @@ public class MissionVerifyService {
             Map<String, Object> requestBody = Map.of(
                 "job_id", jobId,
                 "image_url", imageUrl,
-                "callback_url", "http://localhost:8080/api/v1/missions/" + jobId + "/callback",
+                "callback_url", publicBaseUrl + "/api/v1/missions/" + jobId + "/callback",
                 "optimization_params", Map.of(
                     "max_width", 800,
                     "max_height", 600,
