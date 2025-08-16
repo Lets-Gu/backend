@@ -5,19 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 
 @Schema(description = "미션 인증 이미지 검증 요청 DTO")
 public record VerifyImageRequest(
-
-        @Schema(
-                description = """
-        업로드용 URL
-        - 프론트에서 **Cloudinary Direct Upload** 시 사용하는 API 엔드포인트
-        - POST 요청을 보내 원본 이미지를 업로드
-        - 예시: "https://api.cloudinary.com/v1_1/{cloud_name}/image/upload"
-        """,
-                example = "https://api.cloudinary.com/v1_1/do5bj2fie/image/upload"
-        )
-        @NotBlank(message = "업로드 URL은 필수입니다")
-        String uploadImageUrl,
-
         @Schema(
                 description = """
         조회용 URL
