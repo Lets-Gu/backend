@@ -2,6 +2,7 @@ package avengers.lion.mission.service;
 
 import avengers.lion.global.exception.BusinessException;
 import avengers.lion.global.exception.ExceptionType;
+import avengers.lion.mission.dto.VerificationEventType;
 import avengers.lion.mission.dto.request.FastApiCallbackRequest;
 import avengers.lion.mission.dto.VerificationEvent;
 import avengers.lion.mission.domain.CompletedMission;
@@ -93,9 +94,9 @@ public class CallbackService {
     public void processCallback(String jobId, FastApiCallbackRequest request) {
         try {
             switch (request.eventType()) {
-                case "progress" -> handleProgressCallback(jobId);
-                case "completed" -> handleCompletedCallback(jobId, request);
-                case "failed" -> handleFailedCallback(jobId, request);
+                case VerificationEventType.PROGRESS -> handleProgressCallback(jobId);
+                case VerificationEventType.COMPLETED -> handleCompletedCallback(jobId, request);
+                case VerificationEventType.FAILED -> handleFailedCallback(jobId, request);
                 default -> {
                     eventService.sendEvent(jobId, VerificationEvent.error(jobId));
                 }
@@ -124,7 +125,7 @@ public class CallbackService {
             return;
         }
 
-        boolean verified = request.verified() != null ? request.verified() : false;
+        boolean verified = request.eventType().equals(VerificationEventType.COMPLETED);
 
         if (verified) {
             // 인증 성공 시 DB에 저장 (이미지는 이미 Cloudinary에 업로드됨)
