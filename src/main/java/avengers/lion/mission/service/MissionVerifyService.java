@@ -21,8 +21,11 @@ public class MissionVerifyService {
     private final VerificationCleanupService cleanupService;
     private final WebClient webClient;
     
-    @Value("${app.fastapi-url:http://localhost:8080/mock-fastapi}")
+    @Value("${app.fast-api.url}")
     private String fastApiUrl;
+
+    @Value("${app.public-base-url}")
+    private String publicBaseUrl;
 
     /*
     1단계: 이미지 업로드용 Pre-signed URL 생성
@@ -86,8 +89,7 @@ public class MissionVerifyService {
         }
     }
     
-    @Value("${app.public-base-url:http://localhost:8080}")
-    private String publicBaseUrl;
+
 
     @Async
     public void callFastApiAsync(String jobId, String imageUrl) {
