@@ -24,7 +24,7 @@ public class MissionVerifyService {
     @Value("${app.fast-api.url}")
     private String fastApiUrl;
 
-    @Value("${app.public-base-url")
+    @Value("${app.public-base-url}")
     private String publicBaseUrl;
 
     /*

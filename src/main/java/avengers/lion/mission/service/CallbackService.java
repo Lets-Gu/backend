@@ -94,9 +94,9 @@ public class CallbackService {
     public void processCallback(String jobId, FastApiCallbackRequest request) {
         try {
             switch (request.eventType()) {
-                case VerificationEventType.PROGRESS -> handleProgressCallback(jobId);
-                case VerificationEventType.COMPLETED -> handleCompletedCallback(jobId, request);
-                case VerificationEventType.FAILED -> handleFailedCallback(jobId, request);
+                case PROGRESS -> handleProgressCallback(jobId);
+                case COMPLETED -> handleCompletedCallback(jobId, request);
+                case FAILED -> handleFailedCallback(jobId, request);
                 default -> {
                     eventService.sendEvent(jobId, VerificationEvent.error(jobId));
                 }
