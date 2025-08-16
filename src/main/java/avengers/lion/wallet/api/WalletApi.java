@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -117,5 +119,38 @@ public interface WalletApi {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     ResponseEntity<ResponseBody<List<RewardHistoryResponse>>> getRewardHistory(
             @AuthenticationPrincipal Long memberId
+    );
+
+    // ----------------------------------------------------------------
+    // 아이템 사용하기
+    // ----------------------------------------------------------------
+    @Operation(
+            summary = "아이템 사용하기",
+            description = """
+                    보유 중인 상품권/제휴쿠폰을 사용(소모)합니다.
+                    • 사용 시 상태가 UNUSED → CONSUMED로 변경
+                    """,
+            security = { @SecurityRequirement(name = "JWT") }
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "아이템 사용 성공"
+    )
+    @SwaggerApiResponses(
+            success = @SwaggerApiSuccessResponse(
+                    response = Void.class,
+                    description = "아이템 사용 성공"
+            ),
+            errors = {
+                    @SwaggerApiFailedResponse(value = ExceptionType.ACCESS_DENIED, description = "USER 권한이 필요합니다."),
+                    @SwaggerApiFailedResponse(value = ExceptionType.ITEM_NOT_FOUND, description = "존재하지 않는 상품이거나 본인 소유가 아닙니다."),
+                    @SwaggerApiFailedResponse(value = ExceptionType.ALREADY_USED_ITEM, description = "이미 사용한 아이템입니다.")
+            }
+    )
+    @PostMapping("/my-wallet/{itemId}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    ResponseEntity<ResponseBody<Void>> useItem(
+            @AuthenticationPrincipal Long memberId,
+            @PathVariable Long itemId
     );
 }

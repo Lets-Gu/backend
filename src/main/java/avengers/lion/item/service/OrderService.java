@@ -4,6 +4,8 @@ import avengers.lion.item.domain.*;
 import avengers.lion.item.repository.OrderItemRepository;
 import avengers.lion.item.repository.OrdersRepository;
 import avengers.lion.member.domain.Member;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,7 @@ public class OrderService {
 
     private final OrdersRepository ordersRepository;
     private final OrderItemRepository orderItemRepository;
+    private final JPAQueryFactory jpa;
 
     /*
     내가 구매한 상품권 조회
@@ -91,5 +94,15 @@ public class OrderService {
      */
     public Long myConsumedItemCount(Long memberId){
         return ordersRepository.countOrderItemsByMemberIdAndItemStatus(memberId, OrderItemStatus.CONSUMED, List.of(ItemCategory.PARTNER_ITEM, ItemCategory.GIFT_CARD));
+    }
+
+    public OrderItem getOrderItem(Long memberId, Long itemId){
+        QOrderItem qOrderItem = QOrderItem.orderItem;
+        BooleanBuilder where= new BooleanBuilder()
+                .and(qOrderItem.orders.member.id.eq(memberId))
+                .and(qOrderItem.item.id.eq(itemId));
+        return jpa.selectFrom(qOrderItem)
+                .where(where)
+                .fetchOne();
     }
 }

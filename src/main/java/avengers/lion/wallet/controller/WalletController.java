@@ -9,16 +9,14 @@ import avengers.lion.wallet.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/wallet")
 @RequiredArgsConstructor
-public class WalletController implements WalletApi {
+public class  WalletController implements WalletApi {
 
     private final WalletService walletService;
 
@@ -44,5 +42,14 @@ public class WalletController implements WalletApi {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<ResponseBody<List<RewardHistoryResponse >>> getRewardHistory(@AuthenticationPrincipal Long memberId){
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(walletService.getRewardHistory(memberId)));
+    }
+    /*
+    상품권 사용
+     */
+    @PostMapping("/my-wallet/{itemId}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<ResponseBody<Void>> useItem(@AuthenticationPrincipal Long memberId, @PathVariable Long itemId ) {
+        walletService.useItem(memberId, itemId);
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse());
     }
 }
