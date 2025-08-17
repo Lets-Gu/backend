@@ -107,26 +107,11 @@ public class WalletService {
     }
 
     /*
-    포인트 거래 내역 추가 (범용)
-     */
-    public void addPointTransaction(int changeAmount, PointType pointType, Member member){
-        // 거래 후 잔액 계산 (changeAmount가 양수면 획득, 음수면 소모)
-        int balanceAfter = Math.toIntExact(member.getPoint() + changeAmount);
-        
-        PointTransaction pointTransaction = PointTransaction.builder()
-                .changeAmount(changeAmount)
-                .balanceAfter(balanceAfter)
-                .pointType(pointType)
-                .member(member)
-                .build();
-        pointTransactionRepository.save(pointTransaction);
-    }
-    /*
     상품 사용 기능
      */
     @Transactional
-    public void useItem(Long memberId, Long itemId){
-        OrderItem orderItem = orderService.getOrderItem(memberId, itemId);
+    public void useItem(Long memberId, Long orderItemId){
+        OrderItem orderItem = orderService.getOrderItem(memberId, orderItemId);
         if (orderItem.getOrderItemStatus() == OrderItemStatus.CONSUMED) {
             throw new BusinessException(ExceptionType.ALREADY_USED_ITEM);
         }

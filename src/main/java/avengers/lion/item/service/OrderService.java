@@ -96,11 +96,11 @@ public class OrderService {
         return ordersRepository.countOrderItemsByMemberIdAndItemStatus(memberId, OrderItemStatus.CONSUMED, List.of(ItemCategory.PARTNER_ITEM, ItemCategory.GIFT_CARD));
     }
 
-    public OrderItem getOrderItem(Long memberId, Long itemId){
+    public OrderItem getOrderItem(Long memberId, Long orderItemId){
         QOrderItem qOrderItem = QOrderItem.orderItem;
         BooleanBuilder where= new BooleanBuilder()
                 .and(qOrderItem.orders.member.id.eq(memberId))
-                .and(qOrderItem.item.id.eq(itemId));
+                .and(qOrderItem.id.eq(orderItemId));
         return jpa.selectFrom(qOrderItem)
                 .where(where)
                 .fetchOne();

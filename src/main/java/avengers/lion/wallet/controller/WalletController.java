@@ -46,10 +46,10 @@ public class  WalletController implements WalletApi {
     /*
     상품권 사용
      */
-    @PostMapping("/my-wallet/{itemId}")
+    @PostMapping("/my-wallet/{orderItemId}")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<ResponseBody<Void>> useItem(@AuthenticationPrincipal Long memberId, @PathVariable Long itemId ) {
-        walletService.useItem(memberId, itemId);
+    public ResponseEntity<ResponseBody<Void>> useItem(@AuthenticationPrincipal Long memberId, @PathVariable Long orderItemId ) {
+        walletService.useItem(memberId, orderItemId);
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse());
     }
 }
