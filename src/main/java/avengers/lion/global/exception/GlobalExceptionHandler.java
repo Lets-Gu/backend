@@ -22,6 +22,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ResponseBody<Void>> handleBusinessException(BusinessException e) {
+        log.error("BusinessException : {}", e);
         ExceptionType exceptionType = e.getExceptionType();
         return ResponseEntity.status(exceptionType.getStatus())
                 .body(ResponseUtil.createFailureResponse(exceptionType));

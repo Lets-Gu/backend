@@ -4,7 +4,7 @@ import avengers.lion.mission.domain.Mission;
 import avengers.lion.place.domain.PlaceCategory;
 
 
-public record MissionResponse(Long missionId, String placeName,  String description, Double latitude, Double longitude, PlaceCategory placeCategory, Boolean isCompleted) {
+public record MissionResponse(Long missionId, String placeName,  String description, Double latitude, Double longitude, PlaceCategory placeCategory, String address, Boolean isCompleted) {
 
     public static MissionResponse of(Mission mission, Boolean isCompleted){
         return new MissionResponse(
@@ -14,6 +14,7 @@ public record MissionResponse(Long missionId, String placeName,  String descript
                 mission.getLatitude(),
                 mission.getLongitude(),
                 mission.getPlaceCategory(),
+                mission.getAddress(),
                 isCompleted
         );
     };
