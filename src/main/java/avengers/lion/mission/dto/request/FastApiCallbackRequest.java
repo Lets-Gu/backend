@@ -1,6 +1,7 @@
 package avengers.lion.mission.dto.request;
 
 import avengers.lion.mission.dto.VerificationEventType;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /*
