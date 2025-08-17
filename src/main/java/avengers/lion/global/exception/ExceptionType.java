@@ -16,6 +16,13 @@ public enum ExceptionType {
     INVALID_ENDPOINT(NOT_FOUND, "C004", "잘못된 API URI로 요청했습니다."),
     INVALID_HTTP_METHOD(METHOD_NOT_ALLOWED, "C005","잘못된 HTTP 메서드로 요청했습니다."),
 
+    // JWT 관련 에러 코드
+    INVALID_SIGNATURE(UNAUTHORIZED, "J001", "유효하지 않은 JWT 서명입니다."),
+    MALFORMED_TOKEN(UNAUTHORIZED, "J002", "손상되었거나 올바르지 않은 JWT 토큰입니다."),
+    EXPIRED_TOKEN(UNAUTHORIZED, "J003", "만료된 JWT 토큰입니다."),
+    UNSUPPORTED_TOKEN(UNAUTHORIZED, "J004", "지원하지 않는 JWT 토큰 형식입니다."),
+    INVALID_TOKEN(UNAUTHORIZED, "J005", "잘못된 JWT 토큰입니다."),
+
     // Member
     MEMBER_NOT_FOUND(NOT_FOUND, "U001", "존재하지 않는 사용자입니다."),
     INSUFFICIENT_POINT(NOT_FOUND,"U002", "아이템 교환에 필요한 포인트가 부족합니다."),
