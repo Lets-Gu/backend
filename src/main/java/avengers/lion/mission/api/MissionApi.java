@@ -18,6 +18,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -138,7 +140,7 @@ public interface MissionApi {
     ResponseEntity<ResponseBody<PageResult<MissionReviewResponse>>> getMissionReviewsScroll(
             @PathVariable Long missionId,
             @RequestParam(required = false) Long lastReviewId,
-            @RequestParam(required = false, defaultValue = "3") int limit,
+            @RequestParam(required = false, defaultValue = "3") @Min(1) @Max(50) int limit,
             @RequestParam(required = false, defaultValue = "DESC") SortType sortType
     );
 
