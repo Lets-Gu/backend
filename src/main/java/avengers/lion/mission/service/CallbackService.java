@@ -57,11 +57,11 @@ public class CallbackService {
             String requestJson = objectMapper.writeValueAsString(request);
             String payload = jobId + requestJson;
 
-            log.debug("Signature verification for jobId: {}", jobId);
-            log.debug("Request JSON: {}", requestJson);
-            log.debug("Payload: {}", payload);
-            log.debug("Received signature: {}", signature);
-            log.debug("Secret key: {}", secretKey);
+            log.warn("Signature verification for jobId: {}", jobId);
+            log.warn("Request JSON: {}", requestJson);
+            log.warn("Payload: {}", payload);
+            log.warn("Received signature: {}", signature);
+            log.warn("Secret key: {}", secretKey);
             
             // HMAC-SHA256 서명 생성
             Mac mac = Mac.getInstance("HmacSHA256");
@@ -71,7 +71,7 @@ public class CallbackService {
             byte[] rawHmac = mac.doFinal(payload.getBytes(StandardCharsets.UTF_8));
             String expectedSignature = HexFormat.of().formatHex(rawHmac);
 
-            log.debug("Expected signature: {}", expectedSignature);
+            log.warn("Expected signature: {}", expectedSignature);
             
             // 서명 비교 (타이밍 공격 방지)
             if (!constantTimeEquals(signature, expectedSignature)) {
