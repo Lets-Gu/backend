@@ -11,6 +11,8 @@ import avengers.lion.mission.repository.CompletedMissionRepository;
 import avengers.lion.mission.repository.MissionRepository;
 import avengers.lion.member.domain.Member;
 import avengers.lion.member.repository.MemberRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +41,8 @@ public class CallbackService {
     @Value("${app.callback.secret-key}")
     private String secretKey;
 
+    private final ObjectMapper objectMapper;
+
     /*
     HMAC 서명 검증
      */
@@ -50,7 +54,8 @@ public class CallbackService {
 
         try {
             // 페이로드 생성: jobId + requestBody (JSON)
-            String payload = jobId + request.toString();
+            String requestJson = objectMapper.writeValueAsString(request);
+            String payload = jobId + requestJson;
             
             // HMAC-SHA256 서명 생성
             Mac mac = Mac.getInstance("HmacSHA256");
@@ -71,6 +76,8 @@ public class CallbackService {
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             log.error("Failed to verify callback signature for jobId: {}", jobId, e);
             throw new BusinessException(ExceptionType.FAST_API_DENIED);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
