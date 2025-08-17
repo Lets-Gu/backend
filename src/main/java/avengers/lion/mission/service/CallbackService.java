@@ -63,6 +63,12 @@ public class CallbackService {
             log.warn("Received signature: {}", signature);
             log.warn("Secret key: {}", secretKey);
             
+            log.debug("Signature verification for jobId: {}", jobId);
+            log.debug("Request JSON: {}", requestJson);
+            log.debug("Payload: {}", payload);
+            log.debug("Received signature: {}", signature);
+            log.debug("Secret key: {}", secretKey);
+            
             // HMAC-SHA256 서명 생성
             Mac mac = Mac.getInstance("HmacSHA256");
             SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
@@ -72,6 +78,8 @@ public class CallbackService {
             String expectedSignature = HexFormat.of().formatHex(rawHmac);
 
             log.warn("Expected signature: {}", expectedSignature);
+            
+            log.debug("Expected signature: {}", expectedSignature);
             
             // 서명 비교 (타이밍 공격 방지)
             if (!constantTimeEquals(signature, expectedSignature)) {
@@ -112,9 +120,8 @@ public class CallbackService {
                 case PROGRESS -> handleProgressCallback(jobId);
                 case COMPLETED -> handleCompletedCallback(jobId, request);
                 case FAILED -> handleFailedCallback(jobId, request);
-                default -> {
-                    eventService.sendEvent(jobId, VerificationEvent.error(jobId));
-                }
+                default -> eventService.sendEvent(jobId, VerificationEvent.error(jobId));
+
             }
         } catch (Exception e) {
             eventService.sendEvent(jobId, VerificationEvent.error(jobId));
@@ -127,6 +134,7 @@ public class CallbackService {
     진행 중 콜백
      */
     private void handleProgressCallback(String jobId) {
+        log.info("진행중 콜백");
         eventService.sendEvent(jobId, VerificationEvent.progress(jobId));
     }
 
@@ -134,6 +142,7 @@ public class CallbackService {
     완료 콜백
      */
     private void handleCompletedCallback(String jobId, FastApiCallbackRequest request) {
+        log.info("완료 콜백");
         MetadataCacheService.VerificationMetadata metadata = metadataCacheService.getMetadata(jobId);
         if (metadata == null) {
             eventService.sendEvent(jobId, VerificationEvent.error(jobId));
@@ -160,6 +169,7 @@ public class CallbackService {
     }
 
     private void handleFailedCallback(String jobId, FastApiCallbackRequest request) {
+        log.info("실패 콜백");
         cleanupService.cleanupFailedVerification(jobId);
         eventService.sendEvent(jobId, VerificationEvent.failed(jobId));
     }
