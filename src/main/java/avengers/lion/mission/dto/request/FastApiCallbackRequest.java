@@ -12,5 +12,6 @@ public record FastApiCallbackRequest(
         @JsonProperty("job_id") String jobId,
         @JsonProperty("event_type") VerificationEventType eventType,  // "progress" | "completed" | "failed"
         @JsonProperty("verified") boolean verified
+
 ) {
 }

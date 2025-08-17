@@ -27,7 +27,7 @@ public class QuartzConfig {
     @Bean
     public Trigger jobTrigger(JobDetail missionGenerateJobDetail){
         Date startTime = Date.from(
-                LocalDateTime.now().plusDays(7)
+                LocalDateTime.now().plusDays(21)
                         .atZone(ZoneId.systemDefault())
                         .toInstant()
         );
@@ -54,7 +54,7 @@ public class QuartzConfig {
     @Bean
     public Trigger googleApiJobTrigger(JobDetail googleApiJobDetail){
         Date startTime = Date.from(
-                LocalDateTime.now().plusDays(7)
+                LocalDateTime.now().plusDays(21)
                         .atZone(ZoneId.systemDefault())
                         .toInstant()
         );
