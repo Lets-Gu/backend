@@ -1,6 +1,8 @@
 package avengers.lion.global.jwt;
 
 import avengers.lion.auth.domain.CustomUserDetails;
+import avengers.lion.global.exception.BusinessException;
+import avengers.lion.global.exception.ExceptionType;
 import avengers.lion.member.domain.Member;
 import avengers.lion.member.domain.MemberRole;
 import io.jsonwebtoken.*;
@@ -72,13 +74,13 @@ public class TokenProvider {
                     .parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            return false;
+            throw new BusinessException(ExceptionType.INVALID_SIGNATURE);
         } catch (ExpiredJwtException e) {
-            return false;
+            throw new BusinessException(ExceptionType.EXPIRED_TOKEN);
         } catch (UnsupportedJwtException e) {
-            return false;
+            throw new BusinessException(ExceptionType.UNSUPPORTED_TOKEN);
         } catch (IllegalArgumentException e) {
-            return false;
+            throw new BusinessException(ExceptionType.INVALID_TOKEN);
         }
     }
 
