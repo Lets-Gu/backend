@@ -47,6 +47,7 @@ public enum ExceptionType {
     // Item
     ITEM_NOT_FOUND(NOT_FOUND,"I001","존재하지 않는 상품입니다."),
     STOCK_NOT_AVAILABLE(BAD_REQUEST, "I002", "교환하려는 수량보다 아이템의 재고가 부족합니다."),
+    ALREADY_USED_ITEM(BAD_REQUEST, "I003", "이미 사용한 아이템입니다."),
 
     // Order
     ORDER_NOT_FOUND(NOT_FOUND, "O001", "존재하지 않는 주문입니다."),

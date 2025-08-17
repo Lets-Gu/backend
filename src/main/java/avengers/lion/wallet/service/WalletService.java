@@ -2,6 +2,8 @@ package avengers.lion.wallet.service;
 
 import avengers.lion.global.exception.BusinessException;
 import avengers.lion.global.exception.ExceptionType;
+import avengers.lion.item.domain.OrderItem;
+import avengers.lion.item.domain.OrderItemStatus;
 import avengers.lion.item.domain.Orders;
 import avengers.lion.item.service.OrderService;
 import avengers.lion.member.domain.Member;
@@ -12,6 +14,7 @@ import avengers.lion.wallet.dto.*;
 import avengers.lion.wallet.repository.PointTransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -104,18 +107,14 @@ public class WalletService {
     }
 
     /*
-    포인트 거래 내역 추가 (범용)
+    상품 사용 기능
      */
-    public void addPointTransaction(int changeAmount, PointType pointType, Member member){
-        // 거래 후 잔액 계산 (changeAmount가 양수면 획득, 음수면 소모)
-        int balanceAfter = Math.toIntExact(member.getPoint() + changeAmount);
-        
-        PointTransaction pointTransaction = PointTransaction.builder()
-                .changeAmount(changeAmount)
-                .balanceAfter(balanceAfter)
-                .pointType(pointType)
-                .member(member)
-                .build();
-        pointTransactionRepository.save(pointTransaction);
+    @Transactional
+    public void useItem(Long memberId, Long orderItemId){
+        OrderItem orderItem = orderService.getOrderItem(memberId, orderItemId);
+        if (orderItem.getOrderItemStatus() == OrderItemStatus.CONSUMED) {
+            throw new BusinessException(ExceptionType.ALREADY_USED_ITEM);
+        }
+        orderItem.useItem();
     }
 }

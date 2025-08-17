@@ -36,4 +36,8 @@ public class OrderItem extends BaseEntity {
         this.item = item;
         this.orderItemStatus = orderItemStatus;
     }
+
+    public void useItem() {
+        this.orderItemStatus = OrderItemStatus.CONSUMED;
+    }
 }
