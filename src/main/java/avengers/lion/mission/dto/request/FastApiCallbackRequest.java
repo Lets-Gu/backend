@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /*
 Fast Api로부터 받아오는 dto
  */
+@JsonPropertyOrder({ "job_id", "event_type", "verified" })
 public record FastApiCallbackRequest(
         @JsonProperty("job_id") String jobId,
         @JsonProperty("event_type") VerificationEventType eventType,  // "progress" | "completed" | "failed"
