@@ -16,16 +16,17 @@ import java.util.Optional;
 
 public interface MissionTemplateRepository extends JpaRepository<MissionTemplate, Long> {
 
-    @Query("""
-    SELECT mt FROM MissionTemplate mt
-    JOIN mt.place p
-    WHERE p.category = :category
-      AND (mt.lastSelectionAt IS NULL OR mt.lastSelectionAt < :cutOffDate)
-    ORDER BY function('RAND')
-""")
+      @Query(value = """
+        SELECT mt.*
+        FROM mission_template mt
+        JOIN place p ON p.place_id = mt.place_id
+        WHERE p.category = :category
+          AND (mt.last_selection_at IS NULL OR mt.last_selection_at < :cutOffDate)
+        ORDER BY RAND()
+        LIMIT 1
+    """, nativeQuery = true)
     Optional<MissionTemplate> findRandomByCategory(
             @Param("category") PlaceCategory category,
-            @Param("cutOffDate") LocalDateTime cutOffDate,
-            Pageable pageable
+            @Param("cutOffDate") LocalDateTime cutOffDate
     );
 }
