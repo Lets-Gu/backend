@@ -12,14 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
 import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
@@ -82,6 +80,7 @@ public class WeatherService {
         // 6시간
         List<WeatherBasic.Hour> hourList = hourly.stream()
                 .limit(6)
+                .skip(1)
                 .map(hour -> {
                     ZonedDateTime kstTime = Instant.ofEpochSecond(hour.dt())
                             .atZone(ZoneId.of("Asia/Seoul"));
