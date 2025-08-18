@@ -52,6 +52,7 @@ public class MissionScheduler implements Job {
                 throw new BusinessException(ExceptionType.PLACE_NOT_FOUND);
             }
             MissionTemplate missionTemplate = templates.get(0);
+
             // 마지막으로 조회된 날짜, 카운트 개수 설정
             missionTemplate.updateSelectionCount();
             missions.add(missionTemplate);

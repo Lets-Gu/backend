@@ -57,6 +57,12 @@ public class CallbackService {
             // 페이로드 생성: jobId + requestBody (JSON)
             String requestJson = objectMapper.writeValueAsString(request);
             String payload = jobId + requestJson;
+
+            log.warn("Signature verification for jobId: {}", jobId);
+            log.warn("Request JSON: {}", requestJson);
+            log.warn("Payload: {}", payload);
+            log.warn("Received signature: {}", signature);
+            log.warn("Secret key: {}", secretKey);
             
             log.debug("Signature verification for jobId: {}", jobId);
             log.debug("Request JSON: {}", requestJson);
@@ -71,6 +77,8 @@ public class CallbackService {
             
             byte[] rawHmac = mac.doFinal(payload.getBytes(StandardCharsets.UTF_8));
             String expectedSignature = HexFormat.of().formatHex(rawHmac);
+
+            log.warn("Expected signature: {}", expectedSignature);
             
             log.debug("Expected signature: {}", expectedSignature);
             
