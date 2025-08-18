@@ -4,8 +4,8 @@ import avengers.lion.auth.service.CustomUserDetailsService;
 import avengers.lion.global.jwt.JwtAccessDeniedHandler;
 import avengers.lion.global.jwt.JwtAuthenticationFailEntryPoint;
 import avengers.lion.global.jwt.JwtFilter;
+import avengers.lion.global.jwt.TokenExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +29,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtFilter jwtFilter;
+    private final TokenExceptionHandlerFilter tokenExceptionHandlerFilter;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationFailEntryPoint jwtAuthenticationFailEntryPoint;
 
@@ -53,6 +54,7 @@ public class SecurityConfig {
                         ,"/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs/swagger-config", "/docs", "/mock-fastapi/**", "/api/v1/ai/analyze/*/callback", "/api/v1/missions/*/callback", "/api/v1/missions/analyze/*/events").permitAll()
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(tokenExceptionHandlerFilter, JwtFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 // JWT 예외 처리 핸들러 설정
                 .exceptionHandling(ex -> ex
