@@ -1,13 +1,11 @@
 package avengers.lion.place.domain;
 
+import avengers.lion.mission.domain.MissionTemplate;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
 Google Geocoding API 호출용 장소명 보관
@@ -28,9 +26,6 @@ public class Place {
     @Enumerated(EnumType.STRING)
     private PlaceCategory category;
 
-    @Column(name = "last_search_date")
-    private LocalDateTime lastSearchDate;
-
     @Column(name = "season")
     @Enumerated(EnumType.STRING)
     private Season season;
@@ -43,16 +38,11 @@ public class Place {
     @Column(name = "longitude", columnDefinition = "DECIMAL(11,8)")
     private Double longitude;
 
-    @Column(name = "selection_count", nullable = false, columnDefinition = "INT DEFAULT 0")
-    private int selectionCount=0;
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MissionTemplate> missionTemplates = new ArrayList<>();
 
     public void setGeocodingResult(Double latitude, Double longitude){
         this.latitude = latitude;
         this.longitude = longitude;
-    }
-    
-    public void updateSelectionInfo() {
-        this.lastSearchDate = LocalDateTime.now();
-        this.selectionCount += 1;
     }
 }
