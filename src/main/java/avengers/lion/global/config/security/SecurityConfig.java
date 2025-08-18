@@ -54,8 +54,8 @@ public class SecurityConfig {
                         ,"/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs/swagger-config", "/docs", "/mock-fastapi/**", "/api/v1/ai/analyze/*/callback", "/api/v1/missions/*/callback", "/api/v1/missions/analyze/*/events").permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(tokenExceptionHandlerFilter, JwtFilter.class)
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(tokenExceptionHandlerFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtFilter, TokenExceptionHandlerFilter.class)
                 // JWT 예외 처리 핸들러 설정
                 .exceptionHandling(ex -> ex
                         .accessDeniedHandler(jwtAccessDeniedHandler)
