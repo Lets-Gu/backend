@@ -47,8 +47,12 @@ public class MissionScheduler implements Job {
         for(PlaceCategory category : PlaceCategory.values()){
             // 현재일 기준으로, 20일 전에 조회된 데이터는 제외
             LocalDateTime now = LocalDate.now().minusDays(20).atStartOfDay();
-            MissionTemplate missionTemplate = missionTemplateRepository.findRandomByCategory(category, now)
-                    .orElseThrow(()->new BusinessException(ExceptionType.PLACE_NOT_FOUND));
+            List<MissionTemplate> templates = missionTemplateRepository.findRandomByCategory(category, now);
+            if (templates.isEmpty()) {
+                throw new BusinessException(ExceptionType.PLACE_NOT_FOUND);
+            }
+            MissionTemplate missionTemplate = templates.get(0);
+
             // 마지막으로 조회된 날짜, 카운트 개수 설정
             missionTemplate.updateSelectionCount();
             missions.add(missionTemplate);
