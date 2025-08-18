@@ -51,6 +51,7 @@ public class CallbackService {
             log.warn("Missing callback signature for jobId: {}", jobId);
             throw new BusinessException(ExceptionType.FAST_API_DENIED);
         }
+        log.info("request={}",request);
 
         try {
             // 페이로드 생성: jobId + requestBody (JSON)
