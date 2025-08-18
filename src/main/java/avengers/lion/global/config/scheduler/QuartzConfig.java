@@ -66,7 +66,7 @@ public class QuartzConfig {
                                 .withIntervalInHours(24*20)
                                 .repeatForever()
                 )
-                .startAt(startTime)
+                .startNow()
                 .build();
     }
 
