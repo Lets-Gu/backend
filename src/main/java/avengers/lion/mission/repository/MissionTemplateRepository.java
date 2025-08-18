@@ -16,7 +16,7 @@ public interface MissionTemplateRepository extends JpaRepository<MissionTemplate
     SELECT mt.*
     FROM mission_template mt
     JOIN place p ON p.place_id = mt.place_id
-    WHERE p.category = category
+    WHERE p.category = :category
       AND (mt.last_selection_at IS NULL OR mt.last_selection_at < :cutOffDate)
     ORDER BY RAND()
     LIMIT 1

@@ -51,7 +51,8 @@ public class Mission extends BaseEntity {
     @JoinColumn(name = "mission_batch_id", nullable = false)
     private MissionBatches missionBatches;
 
-    @OneToOne(mappedBy = "mission")
+    @OneToOne
+    @JoinColumn(name = "template_id", nullable = false)
     private MissionTemplate sourceTemplate;
 
 

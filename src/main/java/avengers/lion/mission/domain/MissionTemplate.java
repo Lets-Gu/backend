@@ -29,10 +29,6 @@ public class MissionTemplate {
     @JoinColumn(name = "place_id", nullable = false)
     private Place place;
 
-    @OneToOne
-    @JoinColumn(name = "mission_id", nullable = true)
-    private Mission mission;
-
     public void updateSelectionCount() {
         this.selectionCount++;
         this.lastSelectionAt = LocalDateTime.now();
