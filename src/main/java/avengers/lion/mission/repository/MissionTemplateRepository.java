@@ -23,9 +23,8 @@ public interface MissionTemplateRepository extends JpaRepository<MissionTemplate
       AND (mt.lastSelectionAt IS NULL OR mt.lastSelectionAt < :cutOffDate)
     ORDER BY function('RAND')
 """)
-    Optional<MissionTemplate> findRandomByCategory(
+    List<MissionTemplate> findRandomByCategory(
             @Param("category") PlaceCategory category,
-            @Param("cutOffDate") LocalDateTime cutOffDate,
-            Pageable pageable
+            @Param("cutOffDate") LocalDateTime cutOffDate
     );
 }
