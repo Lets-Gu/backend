@@ -3,14 +3,10 @@ package avengers.lion.mission.domain;
 import avengers.lion.global.base.BaseEntity;
 import avengers.lion.place.domain.Place;
 import avengers.lion.place.domain.PlaceCategory;
-import avengers.lion.review.domain.Review;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMax;
-import jakarta.validation.constraints.DecimalMin;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,9 +24,6 @@ public class Mission extends BaseEntity {
 
     @Column(name = "place_name", nullable = false)
     private String placeName;
-
-    @Column(name = "title", nullable = false)
-    private String title;
 
     @Column(name = "description", nullable = false)
     private String description;
@@ -58,10 +51,14 @@ public class Mission extends BaseEntity {
     @JoinColumn(name = "mission_batch_id", nullable = false)
     private MissionBatches missionBatches;
 
-    public Mission(Long id, String placeName, String title, String address, String description, PlaceCategory placeCategory, MissionStatus status, Double latitude, Double longitude, MissionBatches missionBatches) {
+    @OneToOne
+    @JoinColumn(name = "template_id", nullable = false)
+    private MissionTemplate sourceTemplate;
+
+
+    public Mission(Long id, String placeName, String address, String description, PlaceCategory placeCategory, MissionStatus status, Double latitude, Double longitude, MissionBatches missionBatches, MissionTemplate sourceTemplate) {
         this.id = id;
         this.placeName = placeName;
-        this.title = title;
         this.address = address;
         this.description = description;
         this.placeCategory = placeCategory;
@@ -69,20 +66,22 @@ public class Mission extends BaseEntity {
         this.latitude = latitude;
         this.longitude = longitude;
         this.missionBatches = missionBatches;
+        this.sourceTemplate = sourceTemplate;
     }
 
-    public static Mission createFromPlace(Place place, String title, PlaceCategory placeCategory, String description, MissionBatches batch) {
+    public static Mission createFromTemplate(MissionTemplate template, MissionBatches batch) {
+        Place place = template.getPlace();
         return new Mission(
             null,
             place.getName(),
-            title,
             place.getAddress(),
-            description,
-            placeCategory,
+            template.getDescription(),
+            place.getCategory(),
             MissionStatus.ACTIVE,
             place.getLatitude(),
             place.getLongitude(),
-            batch
+            batch,
+            template
         );
     }
     public void finishMission() {

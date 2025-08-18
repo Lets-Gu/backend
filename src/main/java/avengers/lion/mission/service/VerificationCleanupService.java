@@ -2,10 +2,7 @@ package avengers.lion.mission.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
@@ -29,10 +26,8 @@ public class VerificationCleanupService {
             } catch (Exception e) {
                 log.error("Failed to delete Cloudinary image: {}", metadata.publicId(), e);
             }
-            
             // 2. 메타데이터 캐시 정리
             metadataCacheService.removeMetadata(jobId);
         }
     }
-
 }
