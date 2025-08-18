@@ -7,7 +7,7 @@ spring:
   # 공통 JPA 설정
   jpa:
     hibernate:
-      ddl-auto: ${DDL_AUTO:create}
+      ddl-auto: ${DDL_AUTO:update}
     show-sql: ${SHOW_SQL:true}
     properties:
       hibernate:
