@@ -60,4 +60,5 @@ management:
       application: your-app   # 시계열 라벨
   endpoint:
     health:
-      show-details: always
+      show-details: when_authorized
+      roles: ACTUATOR
