@@ -49,3 +49,16 @@ springdoc:
   api-docs:
     groups:
       enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    tags:
+      application: your-app   # 시계열 라벨
+  endpoint:
+    health:
+      show-details: when_authorized
+      roles: ACTUATOR

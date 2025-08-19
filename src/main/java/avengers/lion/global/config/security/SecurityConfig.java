@@ -27,7 +27,6 @@ import org.springframework.http.HttpMethod;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomUserDetailsService customUserDetailsService;
     private final JwtFilter jwtFilter;
     private final TokenExceptionHandlerFilter tokenExceptionHandlerFilter;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -38,7 +37,7 @@ public class SecurityConfig {
         http
                 // CSRF 비활성화
                 .csrf(csrf -> csrf.disable())
-                
+
                 // CORS 설정
                 .cors(Customizer.withDefaults())
                 // 세션 사용 x
@@ -51,7 +50,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // 인증 관련 API와 퍼블릭 API 허용
                         .requestMatchers("/", "/api/v1/auth/**", "/error", "/swagger-ui/**"
-                        ,"/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs/swagger-config", "/docs", "/mock-fastapi/**", "/api/v1/ai/analyze/*/callback", "/api/v1/missions/*/callback", "/api/v1/missions/analyze/*/events").permitAll()
+                                ,"/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs/swagger-config", "/docs", "/mock-fastapi/**", "/api/v1/ai/analyze/*/callback",
+                                "/api/v1/missions/*/callback", "/api/v1/missions/analyze/*/events","/actuator/**","/grafana/**","/prometheus/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(tokenExceptionHandlerFilter, UsernamePasswordAuthenticationFilter.class)
