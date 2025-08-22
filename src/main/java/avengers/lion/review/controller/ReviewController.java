@@ -50,7 +50,7 @@ public class ReviewController {
     @GetMapping("/unwritten/page")
     public ResponseEntity<ResponseBody<PageResult<UnWrittenReviewResponse>>> getUnwrittenPage(
             @AuthenticationPrincipal Long memberId,
-            @RequestParam(name = "cursorId", required = false) Long cursorId,
+            @RequestParam(name = "cursorId", required = false) String cursorId,
             @RequestParam(defaultValue = "DESC") SortType sort,
             @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit,
             HttpServletRequest req
