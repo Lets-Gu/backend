@@ -66,11 +66,13 @@ public class ReviewService {
 
 
     public PageResult<UnWrittenReviewResponse> getUnwrittenPage(Long memberId,
-                                                                Long cursorId,
+                                                                String cursorId,
                                                                 int limit,
                                                                 SortType sort) {
         
+
         List<CompletedMission> rows = completedMissionRepository.findUnwrittenPage(memberId, cursorId, limit+1, sort);
+
 
         boolean hasNext = rows.size() > limit;
         if (hasNext) rows = rows.subList(0, limit);
