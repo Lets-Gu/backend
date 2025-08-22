@@ -2,6 +2,7 @@ package avengers.lion.wallet.service;
 
 import avengers.lion.global.exception.BusinessException;
 import avengers.lion.global.exception.ExceptionType;
+import avengers.lion.item.domain.ItemCategory;
 import avengers.lion.item.domain.OrderItem;
 import avengers.lion.item.domain.OrderItemStatus;
 import avengers.lion.item.domain.Orders;
@@ -90,17 +91,17 @@ public class WalletService {
     /*
     리워드 거래 내역 추가 (아이템 구매용)
      */
-    public void addPointTransaction(long price, Member member){
+    public void addPointTransaction(long price, Member member, ItemCategory itemCategory){
         if(price<=0)
             throw new BusinessException(ExceptionType.PRICE_IS_POSITIVE);
         
         // 거래 후 잔액 계산 (가격만큼 차감)
         int balanceAfter = Math.toIntExact(member.getPoint() - price);
-        
+
         PointTransaction pointTransaction = PointTransaction.builder()
                 .changeAmount(Math.toIntExact(-price))
                 .balanceAfter(Math.toIntExact(balanceAfter))
-                .pointType(PointType.ITEM_EXCHANGE)
+                .pointType(itemCategory.equals(ItemCategory.GIFT_CARD) ? PointType.GIFT_CARD_EXCHANGE : PointType.PARTNER_ITEM_EXCHANGE)
                 .member(member)
                 .build();
         pointTransactionRepository.save(pointTransaction);
