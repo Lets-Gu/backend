@@ -169,43 +169,4 @@ public interface ReviewApi {
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue = "6") @Min(1) @Max(100) int limit
     );
-
-    // -------------------------------------------------------
-    // 5) 작성한 리뷰: 상세(ASC/DESC) 페이지
-    // -------------------------------------------------------
-    @Operation(
-            summary = "작성한 리뷰 상세 페이지(",
-            description = """
-                    내가 작성한 리뷰(ACTIVE)를 ASC/DESC로 무한 스크롤 조회합니다.
-                    • 첫 페이지는 cursorId 없이 호출
-                    • 다음 페이지부터는 직전 응답의 nextId를 cursorId로 그대로 전달
-                    • 정렬 sort: DESC(최신순, 기본) / ASC(오래된순)
-                    • limit: 1~100 (기본 6)
-                    """,
-            security = { @SecurityRequirement(name = "JWT") }
-    )
-    @Parameter(name = "cursorId", description = "다음 페이지 시작 커서(직전 응답 nextId). 첫 페이지는 생략", schema = @Schema(type = "integer", format = "int64"))
-    @Parameter(name = "sort", description = "정렬 방향 (DESC=최신순 / ASC=오래된순). 기본값 DESC",
-            schema = @Schema(implementation = SortType.class, defaultValue = "DESC", allowableValues = {"ASC","DESC"}))
-    @Parameter(name = "limit", description = "페이지 크기 (1~100, 기본 6)", schema = @Schema(type = "integer", minimum = "1", maximum = "100", defaultValue = "5"))
-    @ApiResponse(
-            responseCode = "200",
-            description = "성공",
-            content = @Content(schema = @Schema(implementation = PageResult.class))
-    )
-    @SwaggerApiResponses(
-            success = @SwaggerApiSuccessResponse(response = PageResult.class, description = "작성한 리뷰(정렬 지원) 페이지 조회 성공"),
-            errors = {
-                    @SwaggerApiFailedResponse(value = ExceptionType.ACCESS_DENIED, description = "USER 권한이 필요합니다."),
-                    @SwaggerApiFailedResponse(value = ExceptionType.MEMBER_NOT_FOUND, description = "존재하지 않는 사용자입니다.")
-            }
-    )
-    @GetMapping("/written/detail/page")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
-    ResponseEntity<ResponseBody<PageResult<WrittenReviewResponse>>> getWrittenDetailPage(
-            @AuthenticationPrincipal Long memberId,
-            @RequestParam(required = false) Long cursorId,
-            @RequestParam(defaultValue = "DESC") SortType sort,
-            @RequestParam(defaultValue = "6") @Min(1) @Max(100) int limit
-    );
 }

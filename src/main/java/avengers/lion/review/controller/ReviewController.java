@@ -64,15 +64,4 @@ public class ReviewController implements ReviewApi{
     ) {
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getWrittenPage(memberId, cursorId, limit)));
     }
-
-    /** 작성한 리뷰 상세조회: 최신/오래된 (커서 쌍) */
-    @GetMapping("/written/detail/page")
-    public ResponseEntity<ResponseBody<PageResult<WrittenReviewResponse>>> getWrittenDetailPage(
-            @AuthenticationPrincipal Long memberId,
-            @RequestParam(required = false) Long cursorId,
-            @RequestParam(defaultValue = "DESC") SortType sort,
-            @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit
-    ) {
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getWrittenDetailPage(memberId,  cursorId, limit, sort)));
-    }
 }
