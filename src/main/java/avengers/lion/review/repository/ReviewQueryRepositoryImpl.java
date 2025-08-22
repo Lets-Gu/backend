@@ -30,7 +30,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository{
 
                 .and(r.completedMission.mission.id.eq(missionId));
         if (cursorId != null) {
-            where.and(sortType.equals(SortType.ASC) ? r.id.gt(cursorId) : r.id.lt(cursorId));
+            where.and(sortType.equals(SortType.ASC) ? r.id.lt(cursorId) : r.id.gt(cursorId));
         }
         OrderSpecifier<?> orderSpecifier = sortType.equals(SortType.ASC) ? r.id.asc() : r.id.desc();
 
@@ -50,7 +50,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository{
         BooleanBuilder where = new BooleanBuilder()
                 .and(r.member.id.eq(memberId));
         if (cursorId != null) {
-            where.and(sortType.equals(SortType.ASC) ? r.id.gt(cursorId) : r.id.lt(cursorId));
+            where.and(sortType.equals(SortType.ASC) ? r.id.lt(cursorId) : r.id.gt(cursorId));
         }
         OrderSpecifier<?> orderSpecifier = sortType.equals(SortType.ASC) ? r.id.asc() : r.id.desc();
         QCompletedMission cm = QCompletedMission.completedMission;

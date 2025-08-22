@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
+
+
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class CompletedMissionQueryRepositoryImpl implements CompletedMissionQuer
                 .and(cm.reviewStatus.eq(ReviewStatus.INACTIVE));
         log.info("cursorId = {} ", cursorId);
         if (cursorId != null) {
+
             log.info("DEBUG: cursorId={}, sortType={}", cursorId, sortType);
             if (sortType.equals(SortType.ASC)) {
                 log.info("DEBUG: Using cm.id > {}", cursorId);
@@ -36,6 +39,7 @@ public class CompletedMissionQueryRepositoryImpl implements CompletedMissionQuer
                 log.info("DEBUG: Using cm.id < {}", cursorId);
                 where.and(cm.id.lt(cursorId));
             }
+
         }
         OrderSpecifier<?> orderSpecifier = sortType.equals(SortType.ASC) ? cm.id.asc() : cm.id.desc();
         return jpa.selectFrom(cm)
