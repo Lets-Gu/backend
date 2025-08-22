@@ -52,7 +52,7 @@ public class ItemService {
             throw new BusinessException(ExceptionType.STOCK_NOT_AVAILABLE);
         }
         member.buyItemByPoint((long) price);
-        walletService.addPointTransaction(price, member);
+        walletService.addPointTransaction(price, member, item.getItemCategory());
         item.buyItem(count);
         
         // 주문 생성 (통합 메소드 사용)
