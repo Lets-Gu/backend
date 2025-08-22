@@ -50,7 +50,7 @@ public class MissionController implements MissionApi {
     @PreAuthorize( "hasAuthority('ROLE_USER')")
     public ResponseEntity<ResponseBody<PageResult<MissionReviewResponse>>> getMissionReviewsScroll(
             @PathVariable Long missionId,
-            @RequestParam(required = false) Long lastReviewId,
+            @RequestParam("lastReviewId") Long lastReviewId,
             @RequestParam(required = false, defaultValue = "3") @Min(1) @Max(50) int limit,
             @RequestParam(required = false, defaultValue = "DESC") SortType sortType){
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(missionService.getMissionReviews(missionId, lastReviewId, limit, sortType)));
