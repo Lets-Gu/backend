@@ -12,12 +12,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Validated
 @RestController
 @RequiredArgsConstructor
@@ -52,6 +54,7 @@ public class ReviewController implements ReviewApi{
             @RequestParam(defaultValue = "DESC") SortType sort,
             @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit
     ) {
+        log.info("Controller: cursorId={}, sort={}, limit={}", cursorId, sort, limit);
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getUnwrittenPage(memberId, cursorId, limit, sort)));
     }
 
