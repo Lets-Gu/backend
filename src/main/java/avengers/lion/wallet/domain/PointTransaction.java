@@ -34,7 +34,7 @@ public class PointTransaction extends BaseEntity {
     public PointTransaction(int changeAmount, int balanceAfter, PointType pointType, Member member) {
         this.changeAmount = changeAmount;
         this.balanceAfter = balanceAfter;
-        this.pointType = pointType != null ? pointType : PointType.ITEM_EXCHANGE;
+        this.pointType = pointType;
         this.member = member;
     }
 }
