@@ -50,7 +50,7 @@ public class ReviewController implements ReviewApi{
     @GetMapping("/unwritten/page")
     public ResponseEntity<ResponseBody<PageResult<UnWrittenReviewResponse>>> getUnwrittenPage(
             @AuthenticationPrincipal Long memberId,
-            @RequestParam(required = false) Long cursorId,
+            @RequestParam(value = "cursorId", required = false) Long cursorId,
             @RequestParam(defaultValue = "DESC") SortType sort,
             @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit
     ) {
@@ -62,7 +62,7 @@ public class ReviewController implements ReviewApi{
     @GetMapping("/written/page")
     public ResponseEntity<ResponseBody<PageResult<WrittenReviewResponse>>> getWrittenPage(
             @AuthenticationPrincipal Long memberId,
-            @RequestParam(required = false) Long cursorId,
+            @RequestParam(value = "cursorId", required = false) Long cursorId,
             @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit
     ) {
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getWrittenPage(memberId, cursorId, limit)));
