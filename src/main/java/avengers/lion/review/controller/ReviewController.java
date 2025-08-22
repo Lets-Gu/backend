@@ -1,6 +1,6 @@
 package avengers.lion.review.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
+
 import avengers.lion.global.base.PageResult;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/reviews")
-public class ReviewController {
+
+public class ReviewController implements ReviewApi {
+
 
     private final ReviewService reviewService;
 
@@ -50,13 +52,11 @@ public class ReviewController {
     @GetMapping("/unwritten/page")
     public ResponseEntity<ResponseBody<PageResult<UnWrittenReviewResponse>>> getUnwrittenPage(
             @AuthenticationPrincipal Long memberId,
-            @RequestParam(name = "cursorId", required = false) String cursorId,
+            @RequestParam("cursorId") Long cursorId,
             @RequestParam(defaultValue = "DESC") SortType sort,
-            @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit,
-            HttpServletRequest req
+            @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit
     ) {
         log.info("Controller: cursorId={}, sort={}, limit={}", cursorId, sort, limit);
-        log.info("rawQuery={}", req.getQueryString());
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getUnwrittenPage(memberId, cursorId, limit, sort)));
     }
 
@@ -64,7 +64,7 @@ public class ReviewController {
     @GetMapping("/written/page")
     public ResponseEntity<ResponseBody<PageResult<WrittenReviewResponse>>> getWrittenPage(
             @AuthenticationPrincipal Long memberId,
-            @RequestParam(name = "cursorId", required = false) Long cursorId,
+            @RequestParam("cursorId") Long cursorId,
             @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit
     ) {
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getWrittenPage(memberId, cursorId, limit)));
