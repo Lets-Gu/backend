@@ -26,7 +26,7 @@ public class CompletedMissionQueryRepositoryImpl implements CompletedMissionQuer
                 .and(cm.reviewStatus.eq(ReviewStatus.INACTIVE));
 
         if (cursorId != null) {
-            where.and(sortType.equals(SortType.ASC) ? cm.id.lt(cursorId) : cm.id.gt(cursorId));
+            where.and(sortType.equals(SortType.ASC) ? cm.id.gt(cursorId) : cm.id.lt(cursorId));
         }
         OrderSpecifier<?> orderSpecifier = sortType.equals(SortType.ASC) ? cm.id.asc() : cm.id.desc();
         return jpa.selectFrom(cm)
