@@ -32,7 +32,7 @@ public class ReviewQueryRepositoryImpl implements ReviewQueryRepository{
         if (cursorId != null) {
             where.and(sortType.equals(SortType.ASC) ? r.id.gt(cursorId) : r.id.lt(cursorId));
         }
-        OrderSpecifier<?> orderSpecifier = sortType.equals(SortType.ASC) ? m.id.asc() : m.id.desc();
+        OrderSpecifier<?> orderSpecifier = sortType.equals(SortType.ASC) ? r.id.asc() : r.id.desc();
 
         return jpa.selectFrom(r)
                 .join(r.completedMission,cm).fetchJoin()
