@@ -66,7 +66,7 @@ public class ReviewService {
 
 
     public PageResult<UnWrittenReviewResponse> getUnwrittenPage(Long memberId,
-                                                                Long cursorId,
+                                                                String cursorId,
                                                                 int limit,
                                                                 SortType sort) {
         
