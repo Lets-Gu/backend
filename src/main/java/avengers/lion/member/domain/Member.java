@@ -65,6 +65,10 @@ public class Member extends BaseEntity {
         this.point-=price;
     }
 
+    public void addPointByReview(){
+        this.point+=100L;
+    }
+
     public void updateNickname(String nickname){
         this.nickname=nickname;
     }

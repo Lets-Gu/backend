@@ -108,6 +108,19 @@ public class WalletService {
     }
 
     /*
+    포인트 적립 거래 내역 추가 (리뷰 작성용)
+     */
+    public void addPointTransactionForReview(Member member) {
+        PointTransaction pointTransaction = PointTransaction.builder()
+                .changeAmount(100)  // 리뷰 적립 포인트
+                .balanceAfter(Math.toIntExact(member.getPoint()))
+                .pointType(PointType.MISSION_SUCCESS)
+                .member(member)
+                .build();
+        pointTransactionRepository.save(pointTransaction);
+    }
+
+    /*
     상품 사용 기능
      */
     @Transactional
