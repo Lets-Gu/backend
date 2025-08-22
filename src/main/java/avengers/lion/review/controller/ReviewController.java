@@ -1,6 +1,6 @@
 package avengers.lion.review.controller;
 
-
+import jakarta.servlet.http.HttpServletRequest;
 import avengers.lion.global.base.PageResult;
 import avengers.lion.global.response.ResponseBody;
 import avengers.lion.global.response.ResponseUtil;
@@ -52,7 +52,8 @@ public class ReviewController implements ReviewApi{
             @AuthenticationPrincipal Long memberId,
             @RequestParam(name = "cursorId", required = false) Long cursorId,
             @RequestParam(defaultValue = "DESC") SortType sort,
-            @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit
+            @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit,
+            HttpServletRequest req
     ) {
         log.info("Controller: cursorId={}, sort={}, limit={}", cursorId, sort, limit);
         log.info("rawQuery={}", req.getQueryString());
