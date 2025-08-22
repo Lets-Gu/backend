@@ -11,7 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class CompletedMissionQueryRepositoryImpl implements CompletedMissionQueryRepository {
@@ -27,12 +28,12 @@ public class CompletedMissionQueryRepositoryImpl implements CompletedMissionQuer
 
         if (cursorId != null) {
             where.and(sortType.equals(SortType.ASC) ? cm.id.gt(cursorId) : cm.id.lt(cursorId));
-            System.out.println("DEBUG: cursorId=" + cursorId + ", sortType=" + sortType);  
+            log.info("DEBUG: cursorId={}, sortType={}", cursorId, sortType);
             if (sortType.equals(SortType.ASC)) {   
-                System.out.println("DEBUG: Using cm.id > " + cursorId);
-                where.and(cm.id.gt(cursorId));     
+                log.info("DEBUG: Using cm.id > {}", cursorId);
+                where.and(cm.id.gt(cursorId));    
             } else { 
-                System.out.println("DEBUG: Using cm.id < " + cursorId); 
+                log.info("DEBUG: Using cm.id < {}", cursorId);
                 where.and(cm.id.lt(cursorId));
             } 
         }
