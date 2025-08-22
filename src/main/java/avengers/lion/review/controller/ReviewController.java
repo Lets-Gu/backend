@@ -12,17 +12,19 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/reviews")
-public class ReviewController implements ReviewApi{
+public class ReviewController implements ReviewApi {
 
     private final ReviewService reviewService;
 
@@ -48,10 +50,11 @@ public class ReviewController implements ReviewApi{
     @GetMapping("/unwritten/page")
     public ResponseEntity<ResponseBody<PageResult<UnWrittenReviewResponse>>> getUnwrittenPage(
             @AuthenticationPrincipal Long memberId,
-            @RequestParam(required = false) Long cursorId,
+            @RequestParam(value = "cursorId", required = false) Long cursorId,
             @RequestParam(defaultValue = "DESC") SortType sort,
             @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit
     ) {
+        log.info("Controller: cursorId={}, sort={}, limit={}", cursorId, sort, limit);
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getUnwrittenPage(memberId, cursorId, limit, sort)));
     }
 
