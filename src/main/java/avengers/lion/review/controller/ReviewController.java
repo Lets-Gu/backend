@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/reviews")
+
 public class ReviewController implements ReviewApi {
+
 
     private final ReviewService reviewService;
 
