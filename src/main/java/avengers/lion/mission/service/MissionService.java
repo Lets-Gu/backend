@@ -80,10 +80,10 @@ public class MissionService {
                 .map(MissionReviewResponse::of)
                 .toList();
 
-        LocalDateTime nextAt = null; Long nextId = null;
-        if (!reviews.isEmpty()) { Review last = reviews.getLast(); nextAt = last.getCreatedAt(); nextId = last.getId(); }
+        Long nextId = null;
+        if (!reviews.isEmpty()) { Review last = reviews.getLast(); nextId = last.getId(); }
 
-        return new PageResult<>(data, hasNext, nextAt, nextId);
+        return new PageResult<>(data, hasNext, null, nextId);
     }
 
     /*

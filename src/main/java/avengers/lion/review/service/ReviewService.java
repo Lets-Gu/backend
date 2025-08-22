@@ -78,10 +78,10 @@ public class ReviewService {
         if (hasNext) rows = rows.subList(0, limit);
 
         List<UnWrittenReviewResponse> data = UnWrittenReviewResponse.of(rows);
-        LocalDateTime nextAt = null; Long nextId = null;
-        if (!rows.isEmpty()) { CompletedMission last = rows.getLast(); nextAt = last.getCreatedAt(); nextId = last.getId(); }
+        Long nextId = null;
+        if (!rows.isEmpty()) { CompletedMission last = rows.getLast(); nextId = last.getId(); }
 
-        return new PageResult<>(data, hasNext, nextAt, nextId);
+        return new PageResult<>(data, hasNext, null, nextId);
     }
 
     /** 작성한 리뷰 전체조회 (최신순만) */
@@ -94,10 +94,10 @@ public class ReviewService {
         if (hasNext) rows = rows.subList(0, limit);
 
         List<WrittenReviewResponse> data = WrittenReviewResponse.of(rows);
-        LocalDateTime nextAt = null; Long nextId = null;
-        if (!rows.isEmpty()) { Review last = rows.getLast(); nextAt = last.getCreatedAt(); nextId = last.getId(); }
+        Long nextId = null;
+        if (!rows.isEmpty()) { Review last = rows.getLast(); nextId = last.getId(); }
 
-        return new PageResult<>(data, hasNext, nextAt, nextId);
+        return new PageResult<>(data, hasNext, null, nextId);
     }
 
     /** 작성한 리뷰 상세조회 (ASC/DESC) */
@@ -108,15 +108,14 @@ public class ReviewService {
         
         List<Review> rows = reviewRepository.findWrittenPage(memberId, cursorId, limit+1, sort);
 
-
         boolean hasNext = rows.size() > limit;
         if (hasNext) rows = rows.subList(0, limit);
 
         List<WrittenReviewResponse> data = WrittenReviewResponse.of(rows);
-        LocalDateTime nextAt = null; Long nextId = null;
-        if (!rows.isEmpty()) { Review last = rows.getLast(); nextAt = last.getCreatedAt(); nextId = last.getId(); }
+        Long nextId = null;
+        if (!rows.isEmpty()) { Review last = rows.getLast(); nextId = last.getId(); }
 
-        return new PageResult<>(data, hasNext, nextAt, nextId);
+        return new PageResult<>(data, hasNext, null, nextId);
     }
 
     /** 작성 가능한 리뷰 작성 */
