@@ -55,6 +55,7 @@ public class ReviewController implements ReviewApi{
             @RequestParam(defaultValue = "4") @Min(1) @Max(100) int limit
     ) {
         log.info("Controller: cursorId={}, sort={}, limit={}", cursorId, sort, limit);
+        log.info("rawQuery={}", req.getQueryString());
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getUnwrittenPage(memberId, cursorId, limit, sort)));
     }
 
