@@ -27,6 +27,14 @@ public class CompletedMissionQueryRepositoryImpl implements CompletedMissionQuer
 
         if (cursorId != null) {
             where.and(sortType.equals(SortType.ASC) ? cm.id.gt(cursorId) : cm.id.lt(cursorId));
+            System.out.println("DEBUG: cursorId=" + cursorId + ", sortType=" + sortType);  
+            if (sortType.equals(SortType.ASC)) {   
+                System.out.println("DEBUG: Using cm.id > " + cursorId);
+                where.and(cm.id.gt(cursorId));     
+            } else { 
+                System.out.println("DEBUG: Using cm.id < " + cursorId); 
+                where.and(cm.id.lt(cursorId));
+            } 
         }
         OrderSpecifier<?> orderSpecifier = sortType.equals(SortType.ASC) ? cm.id.asc() : cm.id.desc();
         return jpa.selectFrom(cm)
