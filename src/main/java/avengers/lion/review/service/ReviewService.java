@@ -5,6 +5,8 @@ import avengers.lion.global.base.PageResult;
 import avengers.lion.global.exception.BusinessException;
 import avengers.lion.global.exception.ExceptionType;
 
+import avengers.lion.member.domain.Member;
+import avengers.lion.member.repository.MemberRepository;
 import avengers.lion.mission.domain.CompletedMission;
 import avengers.lion.mission.domain.ReviewStatus;
 import avengers.lion.mission.repository.CompletedMissionRepository;
@@ -12,6 +14,7 @@ import avengers.lion.review.domain.Review;
 import avengers.lion.review.domain.SortType;
 import avengers.lion.review.dto.*;
 import avengers.lion.review.repository.ReviewRepository;
+import avengers.lion.wallet.service.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +28,8 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final CompletedMissionRepository completedMissionRepository;
+    private final MemberRepository memberRepository;
+    private final WalletService walletService;
 
     /** 오버뷰: 카운트 + 각 6개 프리뷰 + 각 next 커서 */
     public OverviewResponse getOverview(Long memberId, int previewLimit) {
@@ -124,15 +129,17 @@ public class ReviewService {
             throw new BusinessException(ExceptionType.ACCESS_DENIED);
         if (cm.getReviewStatus().equals(ReviewStatus.ACTIVE))   // ReviewStatus.ACTIVE 체크(프로젝트 enum에 맞게)
             throw new BusinessException(ExceptionType.REVIEW_ALREADY_EXISTS);
-
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ExceptionType.MEMBER_NOT_FOUND));
         Review review = Review.builder()
                 .content(req.content())
                 .imageUrl(cm.getImageUrl())
                 .member(cm.getMember())
                 .completedMission(cm)
                 .build();
-
+        member.addPointByReview();
+        walletService.addPointTransactionForReview(member);
         reviewRepository.save(review);
-        cm.updateReviewStatus(avengers.lion.mission.domain.ReviewStatus.ACTIVE);
+        cm.updateReviewStatus(ReviewStatus.ACTIVE);
     }
 }
