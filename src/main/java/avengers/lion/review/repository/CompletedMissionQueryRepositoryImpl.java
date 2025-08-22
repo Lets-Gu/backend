@@ -11,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class CompletedMissionQueryRepositoryImpl implements CompletedMissionQueryRepository {
@@ -24,9 +26,16 @@ public class CompletedMissionQueryRepositoryImpl implements CompletedMissionQuer
         BooleanBuilder where = new BooleanBuilder()
                 .and(cm.member.id.eq(memberId))
                 .and(cm.reviewStatus.eq(ReviewStatus.INACTIVE));
-
+        log.info("cursorId = {} ", cursorId);
         if (cursorId != null) {
-            where.and(sortType.equals(SortType.ASC) ? cm.id.gt(cursorId) : cm.id.lt(cursorId));
+            log.info("DEBUG: cursorId={}, sortType={}", cursorId, sortType);
+            if (sortType.equals(SortType.ASC)) {
+                log.info("DEBUG: Using cm.id > {}", cursorId);
+                where.and(cm.id.gt(cursorId));
+            } else {
+                log.info("DEBUG: Using cm.id < {}", cursorId);
+                where.and(cm.id.lt(cursorId));
+            }
         }
         OrderSpecifier<?> orderSpecifier = sortType.equals(SortType.ASC) ? cm.id.asc() : cm.id.desc();
         return jpa.selectFrom(cm)
