@@ -43,25 +43,24 @@ public class ReviewService {
         // 다음 페이지가 존재하면, size까지 끊기
         if (uwHasNext) uw = uw.subList(0, previewLimit);
         List<UnWrittenReviewResponse> unwritten = UnWrittenReviewResponse.of(uw);
-        LocalDateTime uwNextAt = null; Long uwNextId = null;
-        //비지 않았다 -> 다음 데이터가 있다
-        if (!uw.isEmpty()) { CompletedMission last = uw.getLast(); uwNextAt = last.getCreatedAt(); uwNextId = last.getId(); }
+        Long uwNextId = null;
+        if (!uw.isEmpty()) { CompletedMission last = uw.getLast(); uwNextId = last.getId(); }
 
         // 작성한 프리뷰 (전체조회는 최신순만)
         List<Review> wr = reviewRepository.findWrittenPage(memberId,  null, previewLimit+1, SortType.DESC);
         boolean wrHasNext = wr.size() > previewLimit;
         if (wrHasNext) wr = wr.subList(0, previewLimit);
         List<WrittenReviewResponse> written = WrittenReviewResponse.of(wr);
-        LocalDateTime wrNextAt = null; Long wrNextId = null;
-        if (!wr.isEmpty()) { Review last = wr.getLast(); wrNextAt = last.getCreatedAt(); wrNextId = last.getId(); }
+        Long wrNextId = null;
+        if (!wr.isEmpty()) { Review last = wr.getLast(); wrNextId = last.getId(); }
 
         Long unwrittenCount = completedMissionRepository.countByMemberIdAndReviewStatus(memberId, ReviewStatus.INACTIVE);
         Long writtenCount   = reviewRepository.countByMemberId(memberId);
 
         return new OverviewResponse(
                 unwrittenCount, writtenCount,
-                unwritten, new PageMeta(uwHasNext, uwNextAt, uwNextId),
-                written,   new PageMeta(wrHasNext, wrNextAt, wrNextId)
+                unwritten, new PageMeta(uwHasNext, null, uwNextId),
+                written,   new PageMeta(wrHasNext, null, wrNextId)
         );
     }
 
