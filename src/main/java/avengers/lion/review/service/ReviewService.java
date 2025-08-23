@@ -87,8 +87,9 @@ public class ReviewService {
     /** 작성한 리뷰 전체조회 (최신순만) */
     public PageResult<WrittenReviewResponse> getWrittenPage(Long memberId,
                                                             Long cursorId,
-                                                            int limit) {
-        List<Review> rows = reviewRepository.findWrittenPage(memberId, cursorId, limit+1, SortType.DESC);
+                                                            int limit,
+                                                            SortType sort) {
+        List<Review> rows = reviewRepository.findWrittenPage(memberId, cursorId, limit+1, sort);
 
         boolean hasNext = rows.size() > limit;
         if (hasNext) rows = rows.subList(0, limit);

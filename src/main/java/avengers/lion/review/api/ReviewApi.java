@@ -104,7 +104,7 @@ public interface ReviewApi {
             description = """
                     작성 가능한 리뷰(INACTIVE)를 무한 스크롤로 조회합니다.\n
                     • 다음 페이지는 직전 응답의 nextId를 cursorId로 그대로 전달\n
-                    • 정렬 sort: DESC(최신순, 기본)\n
+                    • 정렬 sort: DESC(최신순, 기본), ASC(오래된 순)\n
                     • limit: 1~100 (기본 6) -> limit 기본값이 4이므로 값을 넣지 않고 전달해도 됩니다.\n
                     응답의 hasNext=false면 더 불러올 데이터가 없습니다.
                     """,
@@ -144,6 +144,7 @@ public interface ReviewApi {
             description = """
                     내가 작성한 리뷰(ACTIVE)를 최신순(DESC)으로 무한 스크롤 조회합니다\n.
                     • 다음 페이지는 직전 응답의 nextId를 cursorId로 그대로 전달\n
+                    • 정렬 sort: DESC(최신순, 기본), ASC(오래된 순) \n
                     • limit: 1~100 (기본 6)
                     """,
             security = { @SecurityRequirement(name = "JWT") }
@@ -167,6 +168,7 @@ public interface ReviewApi {
     ResponseEntity<ResponseBody<PageResult<WrittenReviewResponse>>> getWrittenPage(
             @AuthenticationPrincipal Long memberId,
             @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "DESC") SortType sort,
             @RequestParam(defaultValue = "6") @Min(1) @Max(100) int limit
     );
 }
