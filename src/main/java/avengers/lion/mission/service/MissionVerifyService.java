@@ -44,14 +44,10 @@ public class MissionVerifyService {
             // Cloudinary Pre-signed URL 생성
             CloudinaryPreSignedService.CloudinaryUploadInfo uploadInfo = 
                 cloudinaryPreSignedService.generatePreSignedUrl(tempKey);
-            Mission mission = missionRepository.findById(missionId)
-                .orElseThrow(() -> new BusinessException(ExceptionType.MISSION_NOT_FOUND));
-            String imageUrl = mission.getImageUrl();
             return new UploadUrlResponse(
                 uploadInfo.uploadUrl(),
                 uploadInfo.publicId(),
-                "LetsGGu",// Unsigned upload preset (노출 안전)
-                imageUrl
+                "LetsGGu"// Unsigned upload preset (노출 안전)
             );
             
         } catch (Exception e) {
