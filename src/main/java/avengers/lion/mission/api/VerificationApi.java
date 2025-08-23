@@ -43,7 +43,7 @@ public interface VerificationApi {
             schema = @Schema(type = "integer", format = "int64"))
     @ApiResponse(responseCode = "200", description = "GPS 인증 성공")
     @SwaggerApiResponses(
-            success = @SwaggerApiSuccessResponse(response = Void.class, description = "GPS 인증 성공"),
+            success = @SwaggerApiSuccessResponse(response = String.class, description = "GPS 인증 성공"),
             errors = {
                     @SwaggerApiFailedResponse(value = ExceptionType.MISSION_NOT_FOUND, description = "해당 미션이 존재하지 않습니다."),
                     @SwaggerApiFailedResponse(value = ExceptionType.GPS_AUTH_FAILED, description = "허용 반경 밖입니다."),
