@@ -114,7 +114,7 @@ public class WalletService {
         PointTransaction pointTransaction = PointTransaction.builder()
                 .changeAmount(100)  // 리뷰 적립 포인트
                 .balanceAfter(Math.toIntExact(member.getPoint()))
-                .pointType(PointType.MISSION_SUCCESS)
+                .pointType(PointType.REVIEW)
                 .member(member)
                 .build();
         pointTransactionRepository.save(pointTransaction);
