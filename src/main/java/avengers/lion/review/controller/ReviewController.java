@@ -60,7 +60,7 @@ public class ReviewController implements ReviewApi {
         return ResponseEntity.ok(ResponseUtil.createSuccessResponse(reviewService.getUnwrittenPage(memberId, cursorId, limit, sort)));
     }
 
-    /** 작성한 리뷰 전체조회: 최신순만 (커서 쌍) */
+    /** 작성한 리뷰 전체조회: 무한스크롤 (커서 쌍) */
     @GetMapping("/written/page")
     public ResponseEntity<ResponseBody<PageResult<WrittenReviewResponse>>> getWrittenPage(
             @AuthenticationPrincipal Long memberId,
