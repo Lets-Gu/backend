@@ -21,5 +21,11 @@ public record UploadUrlResponse(
                 description = "Cloudinary unsigned 업로드 preset. 업로드 폼 필드 'upload_preset'으로 함께 전송",
                 example = "LetsGGu"
         )
-        String uploadPreset
+        String uploadPreset,
+
+        @Schema(
+                description = "미션 사진 가이드",
+                example = "https://res.cloudinary.com/do5bj2fie/image/upload/v1755961155/%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C_13_bk4q4r.jpg"
+        )
+        String imageUrl
 ) {}

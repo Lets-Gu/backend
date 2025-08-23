@@ -55,6 +55,9 @@ public class Mission extends BaseEntity {
     @JoinColumn(name = "template_id", nullable = false)
     private MissionTemplate sourceTemplate;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
 
     public Mission(Long id, String placeName, String address, String description, PlaceCategory placeCategory, MissionStatus status, Double latitude, Double longitude, MissionBatches missionBatches, MissionTemplate sourceTemplate) {
         this.id = id;
