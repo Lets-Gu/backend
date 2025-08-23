@@ -89,7 +89,7 @@ public class MissionService {
     /*
     미션 GPS 인증
      */
-    public void gpsAuthentication(Long missionId, GpsAuthenticationRequest gpsAuthenticationRequest) {
+    public String gpsAuthentication(Long missionId, GpsAuthenticationRequest gpsAuthenticationRequest) {
         double userLat = gpsAuthenticationRequest.latitude();
         double userLng = gpsAuthenticationRequest.longitude();
         Mission mission = missionRepository.findById(missionId)
@@ -97,6 +97,7 @@ public class MissionService {
         double dist = calcDistanceMeters(userLat, userLng, mission.getLatitude(), mission.getLongitude());
         if(dist > THRESHOLD_METERS)
             throw new BusinessException(ExceptionType.GPS_AUTH_FAILED);
+        return mission.getImageUrl();
     }
 
     private double calcDistanceMeters(

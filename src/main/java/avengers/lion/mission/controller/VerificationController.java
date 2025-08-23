@@ -35,11 +35,10 @@ public class VerificationController implements VerificationApi {
      */
     @PostMapping("/{missionId}/gps")
     @PreAuthorize( "hasAuthority('ROLE_USER')")
-    public ResponseEntity<ResponseBody<Void>> gpsAuthentication(
+    public ResponseEntity<ResponseBody<String>> gpsAuthentication(
             @PathVariable Long missionId,
             @Valid @RequestBody GpsAuthenticationRequest gpsAuthenticationRequest) {
-        missionService.gpsAuthentication(missionId, gpsAuthenticationRequest);
-        return ResponseEntity.ok(ResponseUtil.createSuccessResponse());
+        return ResponseEntity.ok(ResponseUtil.createSuccessResponse(missionService.gpsAuthentication(missionId, gpsAuthenticationRequest)));
     }
 
     /*

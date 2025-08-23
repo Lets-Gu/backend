@@ -52,7 +52,7 @@ public interface VerificationApi {
     )
     @PostMapping("/{missionId}/gps")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    ResponseEntity<ResponseBody<Void>> gpsAuthentication(
+    ResponseEntity<ResponseBody<String>> gpsAuthentication(
             @PathVariable Long missionId,
             @Valid @RequestBody GpsAuthenticationRequest gpsAuthenticationRequest
     );
