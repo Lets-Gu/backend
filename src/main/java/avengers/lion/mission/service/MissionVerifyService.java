@@ -1,8 +1,12 @@
 package avengers.lion.mission.service;
 
+import avengers.lion.global.exception.BusinessException;
+import avengers.lion.global.exception.ExceptionType;
+import avengers.lion.mission.domain.Mission;
 import avengers.lion.mission.dto.response.UploadUrlResponse;
 import avengers.lion.mission.dto.request.VerifyImageRequest;
 import avengers.lion.mission.dto.response.VerifyImageResponse;
+import avengers.lion.mission.repository.MissionRepository;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.reactive.function.client.WebClient;
 import java.util.Map;
@@ -20,7 +24,7 @@ public class MissionVerifyService {
     private final CloudinaryPreSignedService cloudinaryPreSignedService;
     private final VerificationCleanupService cleanupService;
     private final WebClient webClient;
-    
+    private final MissionRepository missionRepository;
     @Value("${app.fast-api.url}")
     private String fastApiUrl;
 
@@ -40,11 +44,14 @@ public class MissionVerifyService {
             // Cloudinary Pre-signed URL 생성
             CloudinaryPreSignedService.CloudinaryUploadInfo uploadInfo = 
                 cloudinaryPreSignedService.generatePreSignedUrl(tempKey);
-
+            Mission mission = missionRepository.findById(missionId)
+                .orElseThrow(() -> new BusinessException(ExceptionType.MISSION_NOT_FOUND));
+            String imageUrl = mission.getImageUrl();
             return new UploadUrlResponse(
                 uploadInfo.uploadUrl(),
                 uploadInfo.publicId(),
-                "LetsGGu" // Unsigned upload preset (노출 안전)
+                "LetsGGu",// Unsigned upload preset (노출 안전)
+                imageUrl
             );
             
         } catch (Exception e) {
