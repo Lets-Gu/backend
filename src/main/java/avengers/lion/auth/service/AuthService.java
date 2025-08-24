@@ -72,8 +72,6 @@ public class AuthService {
 
             return new LoginResponse(
                     member.getId(),
-                    member.getEmail(),
-                    member.getNickname(),
                     member.getProfileImageUrl()
             );
         } catch(BusinessException ex){
