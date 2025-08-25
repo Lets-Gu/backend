@@ -33,7 +33,7 @@ public class CompletedMission extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ReviewStatus reviewStatus;
 
-    @OneToMany(mappedBy = "completedMission")
+    @OneToMany(mappedBy = "completedMission", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews;
 
     @ManyToOne(fetch = FetchType.LAZY)
